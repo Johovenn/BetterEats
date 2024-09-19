@@ -7,6 +7,7 @@ import { Separator } from "./ui/separator";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { UserButton } from "@clerk/nextjs";
+import Image from "next/image";
 
 interface NavigationProps{
     title: string
@@ -52,7 +53,7 @@ export default function Sidebar(){
     return(
         <aside className="h-screen p-3 bg-[#fafafa] border-r flex flex-col items-center">
             <ul className="space-y-10 flex flex-col justify-center items-center pt-2">
-                <UtensilsCrossed className="text-2xl text-center font-bold" size={28} color="green"/>
+                <Image src="/BetterEats.png" alt="Logo" width={40} height={40}/>
                 {/* <h1 className="">BE</h1> */}
                 {
                     links.map((link) => (

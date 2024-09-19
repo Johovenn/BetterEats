@@ -43,6 +43,9 @@ export default function Navbar(){
                     <Button className="rounded-xl" onClick={() => router.push(`/sign-in`)}>Login</Button>
                 </div>
             </SignedOut>
+            <SignedIn>
+                <Button className="rounded-xl" onClick={() => router.push(`/home`)}>Go to Dashboard</Button>
+            </SignedIn>
         </nav>
     )
 }
