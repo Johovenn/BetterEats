@@ -1,11 +1,12 @@
 "use client"
 
 import { link } from "fs";
-import { Calculator, HomeIcon, SearchIcon, UsersIcon, UtensilsIcon } from "lucide-react";
+import { Calculator, HomeIcon, SearchIcon, UsersIcon, UtensilsCrossed, UtensilsIcon } from "lucide-react";
 import { ReactNode } from "react";
 import { Separator } from "./ui/separator";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { UserButton } from "@clerk/nextjs";
 
 interface NavigationProps{
     title: string
@@ -44,10 +45,15 @@ export default function Sidebar(){
         }
     ]
 
+    if(pathname.startsWith('/sign-in') || pathname.startsWith('/sign-up') || pathname === '/'){
+        return null
+    }
+
     return(
-        <aside className="h-screen p-3 bg-[#fafafa] border-r">
-            <ul className="space-y-10">
-                <h1 className="text-2xl text-center font-bold">BE</h1>
+        <aside className="h-screen p-3 bg-[#fafafa] border-r flex flex-col items-center">
+            <ul className="space-y-10 flex flex-col justify-center items-center pt-2">
+                <UtensilsCrossed className="text-2xl text-center font-bold" size={28} color="green"/>
+                {/* <h1 className="">BE</h1> */}
                 {
                     links.map((link) => (
                         <li key={link.title}>
@@ -59,6 +65,9 @@ export default function Sidebar(){
                     ))
                 }
             </ul>
+            <div className="mt-auto">
+                <UserButton />
+            </div>
         </aside>
     )
 }

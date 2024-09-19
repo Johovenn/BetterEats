@@ -9,8 +9,9 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
+  directUrl      = env("DIRECT_URL")
 }
 
 model Food {
@@ -23,3 +24,4 @@ model Food {
   food_ingredients String
   food_recipe String
 }
+

@@ -24,13 +24,17 @@ const config = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        paper: {
+          default: "#f9f9f9",
+          foreground: "#dadee1"
+        },
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "#CD5C08", // Example for green
+          foreground: "white", // Adjust foreground color if necessary
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: "#6A9C89",
+          foreground: "C1D8C3",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",

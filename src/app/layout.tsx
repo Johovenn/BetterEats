@@ -22,9 +22,7 @@ export default function RootLayout({
       <html lang="en">
         <body className="min-w-screen min-h-screen flex">
           <Sidebar />
-          <main className="py-10 px-20 ">
-            {children}
-          </main>
+          {children}  
         </body>
       </html>
     </ClerkProvider>
