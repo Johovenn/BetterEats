@@ -53,7 +53,7 @@ export default function Sidebar(){
     return(
         <aside className="h-screen p-3 bg-[#fafafa] border-r flex flex-col items-center">
             <ul className="space-y-10 flex flex-col justify-center items-center pt-2">
-                <Image src="/BetterEats.png" alt="Logo" width={40} height={40}/>
+                <Image src="/BetterEats.png" alt="Logo" width={40} height={40} className="w-auto h-auto" priority/>
                 {/* <h1 className="">BE</h1> */}
                 {
                     links.map((link) => (
