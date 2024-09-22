@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 export default function HomePage(){
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(false)
     const router = useRouter()
     const {user} = useUser()
 
@@ -26,7 +26,7 @@ export default function HomePage(){
     return(
         <>
             <Loading loading={isLoading} />
-            
+
             <main className="px-20 py-10 w-full">
                 <header className="flex justify-between items-start w-full">
                     <div>
