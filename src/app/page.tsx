@@ -1,9 +1,11 @@
 "use client"
 
+import Loading from "@/components/Loading";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function LandingPage(){
     const router = useRouter()
