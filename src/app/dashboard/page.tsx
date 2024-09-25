@@ -1,4 +1,5 @@
 "use client"
+import BMRCard from "@/components/dashboard/BMRCard"
 import Loading from "@/components/Loading"
 import SearchBar from "@/components/SearchBar"
 import { useUser } from "@clerk/nextjs"
@@ -8,6 +9,7 @@ import { useState } from "react"
 
 export default function HomePage(){
     const [isLoading, setIsLoading] = useState(false)
+    const [bmrValue, setBmrValue] = useState(1725)
     const router = useRouter()
     const {user} = useUser()
 
@@ -35,6 +37,11 @@ export default function HomePage(){
                     </div>
                     <SearchBar />
                 </header>
+                <section className="mt-7">
+                    <BMRCard 
+                        bmrValue={bmrValue}
+                    />
+                </section>
             </main>
         </>
     )

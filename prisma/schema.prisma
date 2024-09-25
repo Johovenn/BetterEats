@@ -14,14 +14,51 @@ datasource db {
   directUrl      = env("DIRECT_URL")
 }
 
-model Food {
-  id    Int     @id @default(autoincrement())
-  food_name String
-  food_calories Int
-  food_protein Int
-  food_carbohydrate Int
-  food_fat Int
-  food_ingredients String
-  food_recipe String
+model Meal {
+  meal_id             Int @id @default(autoincrement())
+  meal_name           String
+  meal_calories       Int
+  meal_protein        Int
+  meal_carbohydrate   Int
+  meal_fat            Int
+  meal_ingredients    String
+  meal_recipe         String
+  is_breakfast        Boolean @default(false)
+  is_lunch            Boolean @default(false)
+  is_dinner           Boolean @default(false)
+  is_snack            Boolean @default(false)
+  mealDetails         MealDetail[]
 }
 
+model MealPlan {
+  meal_plan_id    Int @id @default(autoincrement())
+  user_id         String
+  meal_plan_date  DateTime
+  mealDetails     MealDetail[]
+}
+
+model MealDetail {
+  meal_detail_id  Int @id @default(autoincrement())
+  meal_plan_id    Int
+  meal_type_id    Int 
+  meal_id         Int
+  mealType        MealType @relation(fields: [meal_type_id], references: [meal_type_id])
+  mealPlan        MealPlan  @relation(fields: [meal_plan_id], references: [meal_plan_id])
+  meal            Meal      @relation(fields: [meal_id], references: [meal_id])
+}
+
+model MealType {
+  meal_type_id      Int @id @default(autoincrement())
+  meal_type_name    String
+  mealDetails       MealDetail[]
+}
+
+model UserBMR {
+  user_bmr_id     Int @id @default(autoincrement())
+  user_id         String
+  user_bmr_date   DateTime
+  user_weight     Float
+  user_height     Float
+  user_age        Int
+  user_bmr_value  Float
+}
