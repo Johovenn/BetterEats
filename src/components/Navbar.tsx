@@ -10,6 +10,10 @@ import { UtensilsCrossed } from "lucide-react"
 export default function Navbar(){
     const router = useRouter()
 
+    const handleDashboardButton = () => {
+        router.push(`/dashboard`)
+    }
+
     return( 
         <nav className="py-4 px-20 flex justify-between items-center w-full border-b-2">
             <h1 className="text-2xl font-medium flex items-center gap-2">
@@ -40,11 +44,11 @@ export default function Navbar(){
             <SignedOut>
                 <div>
                     <Button className="rounded-xl border border-primary mr-2" variant={"outline"} onClick={() => router.push(`/sign-up`)}>Register</Button>
-                    <Button className="rounded-xl" onClick={() => router.push(`/sign-in`)}>Login</Button>
+                    <Button className="rounded-xl text-white" onClick={() => router.push(`/sign-in`)} >Login</Button>
                 </div>
             </SignedOut>
             <SignedIn>
-                <Button className="rounded-xl text-white" onClick={() => router.push(`/dashboard`)}>Go to Dashboard</Button>
+                <Button className="rounded-xl text-white" onClick={handleDashboardButton}>Go to Dashboard</Button>
             </SignedIn>
         </nav>
     )

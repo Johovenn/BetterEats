@@ -60,5 +60,8 @@ model UserBMR {
   user_weight     Float
   user_height     Float
   user_age        Int
-  user_bmr_value  Float
+  user_bmr_value  Int
+  protein Int
+  carbohydrate Int
+  fat Int
 }

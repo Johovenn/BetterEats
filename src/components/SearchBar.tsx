@@ -19,7 +19,7 @@ export default function SearchBar(){
     }
 
     return(
-        <div className="flex items-center bg-[#f2f2f2] p-2 rounded-xl gap-2">
+        <div className="flex items-center bg-[#f2f2f2] p-2 rounded-xl gap-2 shadow">
             <Search color="gray"/>
             <input 
                 type="text" 

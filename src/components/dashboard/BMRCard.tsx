@@ -1,13 +1,20 @@
-import { Info, InfoIcon } from "lucide-react"
+import { Info, InfoIcon, Router } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
 import { Button } from "../ui/button"
 import { Separator } from "../ui/separator"
+import { useRouter } from "next/navigation"
 
 interface BMRCardProps{
     bmrValue: number
 }
 
 export default function BMRCard(props: BMRCardProps){
+    const router = useRouter()
+
+    const handleUpdateButton = () => {
+        router.push(`/bmr-calculator`)
+    }
+
     return(
         <div className="w-[250px] h-[180px] bg-paper-default shadow-lg rounded-xl border p-3 flex flex-col">
             <div className="flex items-center justify-between gap-1">
@@ -33,7 +40,12 @@ export default function BMRCard(props: BMRCardProps){
 
             <p className="text-5xl font-semibold text-right">{props.bmrValue} <span className="text-lg font-medium">Calories</span></p>
 
-            <button className="ml-auto mt-auto   py-2 px-3 rounded-xl text-sm bg-primary hover:bg-primary-foreground transition-all text-white font-medium">Update</button>
+            <button 
+                className="ml-auto mt-auto   py-2 px-3 rounded-xl text-sm bg-primary hover:bg-primary-foreground transition-all text-white font-medium"
+                onClick={handleUpdateButton}
+            >
+                Update
+            </button>
         </div>
 
         

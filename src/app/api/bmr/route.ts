@@ -1,4 +1,5 @@
 import { createResponse } from "@/lib/api";
+import { calculateBMR, calculateCarbs, calculateFat, calculateProtein } from "@/lib/bmrUtils";
 import db from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
@@ -12,18 +13,21 @@ export async function POST(req: Request){ //create new bmr record
 
         const request = await req.json()
 
-        let bmrValue = 0
-        if(request.user_gender){
-            if(request.user_gender === 'M'){
-                bmrValue = 88.362 + (13.397 * request.user_weight) + (4.799 * request.user_height) - (5.677 * request.user_age)
-            }
-            else if(request.user_gender === 'F'){
-                bmrValue = 447.593 + (9.247 * request.user_weight) + (3.098 * request.user_height) - (4.330 * request.user_age)
-            }
-            else{
-                return NextResponse.json(createResponse(400, "Bad Request", null), {status: 400})
-            }
-        }
+        // let bmrValue = 0
+        // if(request.user_gender){
+        //     if(request.user_gender === 'M' || request.user_gender === 'F'){
+        //         bmrValue = calculateBMR({
+        //             user_age: request.user_age,
+        //             user_gender: request.user_gender,
+        //             user_height: request.user_height,
+        //             user_weight: request.user_weight,
+        //             activity_level_multiplier: request.activity_level_multiplier,
+        //         })
+        //     }
+        //     else{
+        //         return NextResponse.json(createResponse(400, "Invalid Gender", null), {status: 400})
+        //     }
+        // }
 
         const data = await db.userBMR.create({
             data: {
@@ -32,7 +36,10 @@ export async function POST(req: Request){ //create new bmr record
                 user_weight: request.user_weight,
                 user_age: request.user_age,
                 user_bmr_date: request.user_bmr_date,
-                user_bmr_value: bmrValue,
+                user_bmr_value: request.user_bmr_value,
+                protein: request.protein,
+                carbohydrate: request.carbohydrate,
+                fat: request.fat
             }
         })
 

@@ -10,7 +10,7 @@ export async function GET(req: Request){
         return NextResponse.json(createResponse(401, "Unauthorized", null), {status: 401})
     }
 
-    const data = db.food.findMany()
+    const data = db.meal.findMany()
     if(!data){
         return NextResponse.json(createResponse(500, "Internal Server Error", null), {status: 500})
     }
