@@ -15,3 +15,13 @@ export function createResponse(code: number, message: string, data: object | nul
         data: data
     }
 }
+
+export function createPaginationResponse(code: number, message: string, data: object[] | null, page: number, limit: number){
+    return {
+        status_code: code,
+        message: message,
+		page_limit: limit,
+		page: page,
+        data: data
+    }
+}

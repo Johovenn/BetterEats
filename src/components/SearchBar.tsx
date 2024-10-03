@@ -13,8 +13,10 @@ export default function SearchBar(){
     }
 
     const handleSearch = () => {
-        if (inputValue.trim()) {
+        if(inputValue.trim()){
             router.push(`/search?keyword=${encodeURIComponent(inputValue)}`)
+        } else {
+            router.push('/search')
         }
     }
 

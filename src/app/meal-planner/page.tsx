@@ -23,7 +23,7 @@ export default function MealPlannerPage(){
                 <section className="w-full">
                     <h2 className="text-2xl font-medium">Today&apos;s meal plan</h2>
                     <div className="flex justify-between p-5">
-                        <MealCard 
+                        {/* <MealCard 
                             title="Ayam Goreng"
                             calories={560}
                             mealType="Breakfast"
@@ -47,7 +47,7 @@ export default function MealPlannerPage(){
                             title="Ayam Goreng"
                             calories={560}
                             mealType="Dinner"
-                        />
+                        /> */}
                     </div>
                 </section>
             </main>
