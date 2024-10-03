@@ -5,11 +5,12 @@ import SearchBar from "@/components/SearchBar"
 import { useUser } from "@clerk/nextjs"
 import { Search } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { getUserBMR } from "../bmr-calculator/api/getUserBMR"
 
 export default function HomePage(){
     const [isLoading, setIsLoading] = useState(false)
-    const [bmrValue, setBmrValue] = useState(1725)
+    const [bmrValue, setBmrValue] = useState(0)
     const router = useRouter()
     const {user} = useUser()
 
@@ -20,6 +21,22 @@ export default function HomePage(){
         day: 'numeric' 
     }
     const formattedDate = today.toLocaleDateString('en-US', options)
+
+    useEffect(() => {
+        const getBMR = async () => {
+            setIsLoading(true)
+
+            await getUserBMR().then((response) => {
+                if(response.data.user_bmr_value){
+                    setBmrValue(response.data.user_bmr_value)
+                }
+            })
+
+            setIsLoading(false)
+        }
+
+        getBMR()
+    }, [])
     
     if(!user){
         return null

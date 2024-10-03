@@ -42,13 +42,13 @@ export default function Navbar(){
                 </li>
             </ul>
             <SignedOut>
-                <div>
-                    <Button className="rounded-xl border border-primary mr-2" variant={"outline"} onClick={() => router.push(`/sign-up`)}>Register</Button>
-                    <Button className="rounded-xl text-white" onClick={() => router.push(`/sign-in`)} >Login</Button>
+                <div className="gap-3">
+                    <Button className="mr-4" variant={"outline"} onClick={() => router.push(`/sign-up`)}>Register</Button>
+                    <Button onClick={() => router.push(`/sign-in`)} >Login</Button>
                 </div>
             </SignedOut>
             <SignedIn>
-                <Button className="rounded-xl text-white" onClick={handleDashboardButton}>Go to Dashboard</Button>
+                <Button onClick={handleDashboardButton}>Go to Dashboard</Button>
             </SignedIn>
         </nav>
     )

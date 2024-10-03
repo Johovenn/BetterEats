@@ -27,7 +27,7 @@ export default function NumericInput(props: NumericInputProps){
                             placeholder={props.placeholder} 
                             disabled={props.disabled} 
                             {...field}
-                            className={cn(props.className, "border border-gray-300 rounded-xl hover:border-primary transition-all focus:border-2 focus:border-orange focus:outline-none")} 
+                            className={cn(props.className, "border border-gray-300 rounded-xl hover:border-orange-default transition-all focus:border-2 focus:border-orange-default focus:outline-none")} 
                         />
                     </FormControl>
                     <FormMessage className="text-red-500 text-sm">{props.error}</FormMessage>

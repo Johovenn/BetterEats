@@ -13,28 +13,12 @@ export async function POST(req: Request){ //create new bmr record
 
         const request = await req.json()
 
-        // let bmrValue = 0
-        // if(request.user_gender){
-        //     if(request.user_gender === 'M' || request.user_gender === 'F'){
-        //         bmrValue = calculateBMR({
-        //             user_age: request.user_age,
-        //             user_gender: request.user_gender,
-        //             user_height: request.user_height,
-        //             user_weight: request.user_weight,
-        //             activity_level_multiplier: request.activity_level_multiplier,
-        //         })
-        //     }
-        //     else{
-        //         return NextResponse.json(createResponse(400, "Invalid Gender", null), {status: 400})
-        //     }
-        // }
-
         const data = await db.userBMR.create({
             data: {
                 user_id: userId,
-                user_height: request.user_height,
-                user_weight: request.user_weight,
-                user_age: request.user_age,
+                user_height: parseInt(request.user_height),
+                user_weight: parseInt(request.user_weight),
+                user_age: parseInt(request.user_age),
                 user_bmr_date: request.user_bmr_date,
                 user_bmr_value: request.user_bmr_value,
                 protein: request.protein,
@@ -61,7 +45,7 @@ export async function GET(req: Request){//get user latest bmr record
             return NextResponse.json(createResponse(401, "Unauthorized", null), {status: 401})
         }
 
-        const bmrData = db.userBMR.findFirst({
+        const bmrData = await db.userBMR.findFirst({
             where: {
                 user_id: userId,
             },
@@ -69,11 +53,12 @@ export async function GET(req: Request){//get user latest bmr record
                 user_bmr_date: 'desc'
             }
         })
+
         if(!bmrData){
-            return NextResponse.json(createResponse(204, "Internal Server Error", null), {status: 204}) //belum ada data user
+            return NextResponse.json(createResponse(204, "No existing data", null), {status: 204}) //belum ada data user
         }
         else{
-            return NextResponse.json(createResponse(200, "Create data succesful!", bmrData), {status: 200})
+            return NextResponse.json(createResponse(200, "Fetch data succesful!", bmrData), {status: 200})
         }
     } catch (error) {
         return NextResponse.json(createResponse(500, "Internal Server Error", null), {status: 500})

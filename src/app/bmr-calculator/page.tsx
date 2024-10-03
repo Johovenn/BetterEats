@@ -14,6 +14,9 @@ import { calculateBMR, calculateCarbs, calculateFat, calculateProtein } from "@/
 import NutritionCard from "@/components/bmr-calculator/NutritionCard";
 import { Beef, Wheat } from "lucide-react";
 import SaveBMRAlertModal from "@/components/bmr-calculator/SaveBMRAlertModal";
+import { postUserBMR } from "./api/postUserBMR";
+import { toast } from "sonner";
+import { useAuth } from "@clerk/nextjs";
 
 const validationSchema = z.object({
     user_weight: z.preprocess(value => parseInt(z.string().parse(value)), z.number().min(1, {message: "Weight must be more than 0kg."})),
@@ -32,6 +35,7 @@ const validationSchema = z.object({
 export default function BMRCalculator() {
     const [isLoading, setIsLoading] = useState(false)
     const [alertModal, setAlertModal] = useState(false)
+    const user = useAuth()
 
     const form = useForm<z.infer<typeof validationSchema>>({
         mode: 'onChange',
@@ -97,7 +101,18 @@ export default function BMRCalculator() {
     }
 
     const handleSaveBMR = async () => {
+        setIsLoading(true)
 
+        await postUserBMR(form.getValues()).then((response) => {
+            if(response.data){
+                toast('BMR data saved successfully!')
+            }
+        }).catch((error) => {
+            toast(error.response.data.message)
+        })
+
+        setIsLoading(false)
+        setAlertModal(false)
     }
 
     return (
@@ -176,7 +191,7 @@ export default function BMRCalculator() {
                         <h2 className="text-xl font-medium mb-5">
                             Your daily nutrition needs
                         </h2>
-                        <div className="rounded-full border-[20px] border-primary w-[200px] h-[200px] text-center flex flex-col justify-center">
+                        <div className="rounded-full border-[20px] border-orange-default w-[200px] h-[200px] text-center flex flex-col justify-center">
                             <span className="text-lg text-slate-500 font-medium">Total</span>
                             <span className="text-2xl font-bold">{form.watch('user_bmr_value')}</span>
                             <span className="text-md text-slate-500 font-medium">kCal</span>
@@ -199,7 +214,13 @@ export default function BMRCalculator() {
                             />
                         </div>
 
-                        <Button className="text-white rounded-xl mt-5" onClick={form.handleSubmit(() => setAlertModal(true))}>Save BMR</Button>
+                        <Button 
+                            disabled={!form.watch('user_bmr_value') || !form.getValues('protein') || !form.getValues('carbohydrate') || !form.getValues('fat')}
+                            className="text-white rounded-xl mt-5"
+                            onClick={form.handleSubmit(() => setAlertModal(true))}
+                        >
+                            Save BMR
+                        </Button>
                     </div>
                 </section>
             </main>
