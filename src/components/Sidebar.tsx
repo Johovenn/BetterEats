@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { UserButton } from "@clerk/nextjs";
 import Image from "next/image";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 
 interface NavigationProps{
     title: string
@@ -20,9 +21,9 @@ export default function Sidebar(){
 
     const links: NavigationProps[] = [
         {
-            title: 'Home',
+            title: 'Dashboard',
             icon: <HomeIcon/>,
-            link: '/home',
+            link: '/dashboard',
         },
         {
             title: 'Search',
@@ -30,9 +31,9 @@ export default function Sidebar(){
             link: '/search'
         },
         {
-            title: 'BMI Calculator',
+            title: 'BMR Calculator',
             icon: <Calculator />,
-            link: '/bmi-calculator'
+            link: '/bmr-calculator'
         },
         {
             title: 'Meal Planner',
@@ -51,20 +52,31 @@ export default function Sidebar(){
     }
 
     return(
-        <aside className="h-screen p-3 bg-[#fafafa] border-r flex flex-col items-center">
+        <aside className="h-screen p-3 border-r bg-white flex flex-col items-center">
             <ul className="space-y-10 flex flex-col justify-center items-center pt-2">
                 <Image src="/BetterEats.png" alt="Logo" width={40} height={40} className="w-auto h-auto" priority/>
-                {/* <h1 className="">BE</h1> */}
-                {
-                    links.map((link) => (
+                <TooltipProvider>
+                    {links.map((link) => (
                         <li key={link.title}>
-                            <a href={link.link}className={cn(
-                                "flex items-center justify-center p-2 rounded-xl transition-colors duration-200",
-                                pathname === link.link ? "bg-green-500 text-white" : "hover:bg-green-200"
-                            )}>{link.icon}</a>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <a
+                                    href={link.link}
+                                    className={cn(
+                                    "flex items-center justify-center p-2 rounded-xl transition-colors duration-200",
+                                    pathname === link.link ? "bg-green-500 text-white" : "hover:bg-green-200"
+                                    )}
+                                >
+                                    {link.icon}
+                                </a>
+                            </TooltipTrigger>
+                            <TooltipContent side="right" className="bg-[#fafafa] rounded-lg">
+                                <span>{link.title}</span>
+                            </TooltipContent>
+                        </Tooltip>
                         </li>
-                    ))
-                }
+                    ))}
+                </TooltipProvider>
             </ul>
             <div className="mt-auto">
                 <UserButton />

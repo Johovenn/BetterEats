@@ -8,10 +8,20 @@ export interface ResponseProps<T> {
 	data: T
 }
 
-export function createResponse(code: number, message: string, data: object | null){
+export function createResponse(code: number, message: string, data: object | object[] |  null){
     return {
         status_code: code,
         message: message,
+        data: data
+    }
+}
+
+export function createPaginationResponse(code: number, message: string, data: object[] | null, page: number, limit: number){
+    return {
+        status_code: code,
+        message: message,
+		page_limit: limit,
+		page: page,
         data: data
     }
 }

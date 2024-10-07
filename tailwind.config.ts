@@ -25,16 +25,24 @@ const config = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         paper: {
-          default: "#f9f9f9",
+          default: "#fafafa",
           foreground: "#dadee1"
         },
         primary: {
-          DEFAULT: "#CD5C08", // Example for green
-          foreground: "white", // Adjust foreground color if necessary
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
-          DEFAULT: "#6A9C89",
-          foreground: "C1D8C3",
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        orange: {
+          default: '#CD5C08',
+          foreground: '#bf5200',
+        },
+        green: {
+          default: '#22c55e',
+          foreground: '#37cc69',
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
