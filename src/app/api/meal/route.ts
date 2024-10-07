@@ -27,9 +27,13 @@ export async function GET(req: Request) {
             ...(is_lunch !== undefined && { is_lunch }),
             ...(is_dinner !== undefined && { is_dinner }),
             ...(is_snack !== undefined && { is_snack }),
-            ...(calorie_range_from !== undefined && calorie_range_to !== undefined && {
+            ...(calorie_range_from !== undefined && {
                 meal_calories: {
                     gte: calorie_range_from,
+                },
+            }),
+            ...(calorie_range_to !== undefined && {
+                meal_calories: {
                     lte: calorie_range_to,
                 },
             }),

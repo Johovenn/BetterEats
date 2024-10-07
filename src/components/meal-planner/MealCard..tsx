@@ -4,16 +4,10 @@ import MealBadge from "./MealBadge"
 import { Beef, Droplet, Flame, Wheat } from "lucide-react"
 import { Button } from "../ui/button"
 import { Separator } from "@radix-ui/react-separator"
-
+import { MealProps } from "@/app/search/api/getAllMeals"
 
 interface MealCardProps{
-    imageUrl?: string
-    mealName: string
-    calories: number
-    carbs: number
-    protein: number
-    fat: number
-    mealType?: string
+    meal: MealProps
 }
 
 export default function MealCard(props: MealCardProps){
@@ -21,7 +15,8 @@ export default function MealCard(props: MealCardProps){
         <div className="w-full h-[100px] bg-white shadow-lg flex items-center px-3 rounded-xl">
             <div className="relative w-[80px] h-[80px]">
                 <Image 
-                    src={props.imageUrl ? props.imageUrl : '/placeholder.jpeg'} 
+                    // src={props.meal.imageUrl ? props.meal.imageUrl : '/placeholder.jpeg'} 
+                    src={'/placeholder.jpeg'} 
                     alt="placeholder" 
                     layout="fill"
                     objectFit="cover"
@@ -30,13 +25,20 @@ export default function MealCard(props: MealCardProps){
             </div>
             <div className="ml-3 flex items-center justify-between w-full">
                 <div className="flex flex-col space-y-3">
-                    <p className="text-xl font-medium">{props.mealName}</p>
+                    <div className="flex items-center gap-3">
+                        <p className="text-xl font-medium">{props.meal.meal_name}</p>
+                        {/* <MealBadge text={props.meal.mealType ? props.meal.mealType : 'Unknown'}/> */}
+
+                        {props.meal.is_breakfast && <MealBadge text="Breakfast"/>}
+                        {props.meal.is_lunch && <MealBadge text="Lunch"/>}
+                        {props.meal.is_dinner && <MealBadge text="Dinner"/>}
+                        {props.meal.is_snack && <MealBadge text="Snack"/>}
+                    </div>
                     <div className="flex items-center">
-                        <p className="text-sm text-gray-600 flex item-center w-[130px] gap-1"><Flame size={18} color="red"  /> {props.calories} calories</p>
-                        <Separator orientation="vertical"></Separator>
-                        <p className="text-sm text-gray-600 flex item-center w-[110px] gap-1"><Beef size={18} color="orange"/> {props.protein} protein</p>
-                        <p className="text-sm text-gray-600 flex item-center w-[150px] gap-1"><Wheat size={18} color="green"/> {props.carbs} carbohyrate</p>
-                        <p className="text-sm text-gray-600 flex item-center w-[80px] gap-1"><Droplet size={18} color="blue"/> {props.fat} fat</p>
+                        <p className="text-sm text-gray-600 flex item-center w-[130px] gap-1"><Flame size={18} /> {props.meal.meal_calories} calories</p>
+                        <p className="text-sm text-gray-600 flex item-center w-[110px] gap-1"><Beef size={18} /> {props.meal.meal_protein} protein</p>
+                        <p className="text-sm text-gray-600 flex item-center w-[150px] gap-1"><Wheat size={18} /> {props.meal.meal_carbohydrate} carbohyrate</p>
+                        <p className="text-sm text-gray-600 flex item-center w-[80px] gap-1"><Droplet size={18} /> {props.meal.meal_fat} fat</p>
                     </div>
                 </div>
                 <div className="mr-1 flex items-center gap-3">

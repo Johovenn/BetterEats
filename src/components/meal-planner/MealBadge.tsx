@@ -14,7 +14,7 @@ export default function MealBadge(props: MealBadgeProps){
         color = 'bg-yellow-600 hover:bg-yellow-700'
     }
     else if(props.text === 'Dinner'){
-        color = 'bg-slate-700 hover:bg-slate-800 '
+        color = 'bg-blue-500 hover:bg-blue-600 '
     }
 
     return(

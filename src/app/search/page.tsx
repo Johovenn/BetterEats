@@ -7,7 +7,19 @@ import { useCallback, useEffect, useState } from "react";
 import { getAllMeals, MealProps } from "./api/getAllMeals";
 import { toast } from "sonner";
 import MealCard from "@/components/meal-planner/MealCard.";
+import CheckboxInput from "@/components/form/CheckboxInput";
+import { Form, FormProvider, useForm } from "react-hook-form";
+import NumericInput from "@/components/form/NumericInput";
+import { Button } from "@/components/ui/button";
 
+interface FormProps{
+    is_breakfast: boolean
+    is_lunch: boolean
+    is_dinner: boolean
+    is_snack: boolean
+    calorie_range_from: number
+    calorie_range_to: number
+}
 
 export default function SearchPage(){
     const [isLoading, setIsLoading] = useState(false)
@@ -18,6 +30,17 @@ export default function SearchPage(){
     const searchParams = useSearchParams()
     const keyword = searchParams.get('keyword')
 
+    const form = useForm<FormProps>({
+        defaultValues: {
+            is_breakfast: false,
+            is_dinner: false,
+            is_lunch: false,
+            is_snack: false,
+            calorie_range_from: undefined,
+            calorie_range_to: undefined,
+        }
+    })
+
     const getMeals = useCallback(async () => {
         setIsLoading(true)
 
@@ -25,19 +48,44 @@ export default function SearchPage(){
             page: page,
             limit: limit,
             meal_name: mealName,
+            is_breakfast: form.getValues('is_breakfast'),
+            is_lunch: form.getValues('is_lunch'),
+            is_dinner: form.getValues('is_dinner'),
+            is_snack: form.getValues('is_snack'),
+            calorie_range_from: form.getValues('calorie_range_from'),
+            calorie_range_to: form.getValues('calorie_range_to')
         }).then((response) => {
             if(response.data){
                 setSearchResults(response.data)
             }
-        }).catch((error) => toast(error.response.data.message))
+        }).catch((error) => {
+            setSearchResults([])
+        })
 
         setIsLoading(false)
-    }, [limit, mealName, page])
+    }, [form, limit, mealName, page])
 
     useEffect(() => {
         keyword ? setMealName(keyword) : setMealName('')
         getMeals()
     }, [getMeals, keyword])
+
+    const breakfast = form.watch('is_breakfast')
+    const lunch = form.watch('is_lunch')
+    const dinner = form.watch('is_dinner')
+    const snack = form.watch('is_snack')
+    useEffect(() => {
+        getMeals()
+    }, [breakfast, lunch, dinner, snack, getMeals])
+
+    const handleOnBlurFilter = async () => {
+        getMeals()
+    }
+
+    const handleClearFilterButton = async () => {
+        form.reset()
+        getMeals()
+    }
     
     return(
         <>
@@ -54,24 +102,80 @@ export default function SearchPage(){
                 <section className="mt-5 w-full">
                     <h2 className="text-xl font-medium">{mealName === '' ? 'Showing all search results' : `Showing search results for keyword \'${mealName}\'`}</h2>
                     <div className="flex gap-10 mt-3">
-                        <div className="w-[70%] space-y-3 max-h-[550px]">
+                        <div className="w-[65%] space-y-3 max-h-[550px]">
                             {
                                 searchResults.length > 0
-                                    &&
+                                    ?
                                 searchResults.map((meal) => (
                                     <MealCard 
                                         key={meal.meal_id}
-                                        mealName={meal.meal_name}
-                                        calories={meal.meal_calories}
-                                        carbs={meal.meal_carbohydrate}
-                                        protein={meal.meal_protein}
-                                        fat={meal.meal_fat}
+                                        meal={meal}
                                     />
                                 ))
+                                    :
+                                <h3>Food not found.</h3>
                             }
                         </div>
-                        <div className="w-[30%] px-4 py-2 bg-white shadow-xl rounded-xl">
-                            <h3 className="text-lg">Filter</h3>
+                        <div className="w-[35%] px-4 py-2 bg-white shadow-xl rounded-xl h-full">
+                            <div className="flex justify-between items-center">
+                                <h3 className="text-xl font-semibold">Filter</h3>
+                                <Button variant={"outline"} onClick={handleClearFilterButton}>Clear Filter</Button>
+                            </div>
+                            <div className="p-2">
+                                <FormProvider {...form}>
+                                    <form action="" className="">
+                                        <h2 className="text-lg font-medium mt-1">Meal Type</h2>
+                                        <div className="flex flex-wrap gap-3 justify-between mt-2">
+                                            <CheckboxInput 
+                                                control={form.control}
+                                                id="is_breakfast"
+                                                label="Breakfast"
+                                                classname="w-[110px]"
+                                            />
+                                            <CheckboxInput 
+                                                control={form.control}
+                                                id="is_lunch"
+                                                label="Dinner"
+                                                classname="w-[110px]"
+                                            />
+                                            <CheckboxInput 
+                                                control={form.control}
+                                                id="is_dinner"
+                                                label="Lunch"
+                                                classname="w-[110px]"
+                                            />
+                                            <CheckboxInput 
+                                                control={form.control}
+                                                id="is_snack"
+                                                label="Snack"
+                                                classname="w-[110px]"
+                                            />
+                                        </div>
+                                        <div className="mt-5">
+                                            <h2 className="text-lg font-medium">Calorie Range</h2>
+                                            <div className="flex items-end gap-5">
+                                                <NumericInput
+                                                    control={form.control}
+                                                    id="calorie_range_from"
+                                                    label="From"
+                                                    placeholder="Minimum Calorie"
+                                                    className=""
+                                                    onBlur={handleOnBlurFilter}
+                                                />
+                                                <span className="mb-3">To</span>
+                                                <NumericInput
+                                                    control={form.control}
+                                                    id="calorie_range_to"
+                                                    label="To"
+                                                    placeholder="Maximum Calorie"
+                                                    className=""
+                                                    onBlur={handleOnBlurFilter}
+                                                />
+                                            </div>
+                                        </div>
+                                    </form>
+                                </FormProvider>
+                            </div>
                         </div>
                     </div>
                 </section>
