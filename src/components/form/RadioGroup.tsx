@@ -1,18 +1,15 @@
 import { Control } from "react-hook-form";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
-
-export interface RadioInputValues{
-    label: string
-    value: string
-}
+import { cn } from "@/lib/utils";
 
 interface RadioInputProps{
     control: Control<any, any>
     id: string
     label: string
-    inputValues: RadioInputValues[]
-    orientation?: 'horizontal' | 'vertical'
+    inputValues: any[]
+    radioId: string
+    radioLabel: string
 }
 
 export default function RadioInput(props: RadioInputProps){
@@ -21,28 +18,38 @@ export default function RadioInput(props: RadioInputProps){
             control={props.control}
             name={props.id}
             render={({ field }) => (
-                <FormItem className="space-y-3">
+                <FormItem className="space-y-2">
                     <FormLabel>
                         {props.label}
                     </FormLabel>
                     <FormControl>
                         <RadioGroup
-                            onValueChange={field.onChange}
+                            value={field.value?.toString()}
+                            onValueChange={(val) => field.onChange(val)}
                             defaultValue={field.value}
-                            className="flex flex-col space-y-1"
-                            orientation={props.orientation ? props.orientation : 'horizontal'}
+                            className="flex"
                         >
                             {
+                                props.inputValues.length > 0
+                                    ?
                                 props.inputValues.map((radio) => (
-                                    <FormItem className="flex items-center space-x-3 space-y-0" key={radio.value}>
-                                        <FormControl>
-                                            <RadioGroupItem value={radio.value}/>
+                                    <FormItem className="flex items-center space-y-0" key={radio[props.radioId]}>
+                                        <FormControl className="hidden sr-only">
+                                            <RadioGroupItem value={radio[props.radioId]}/>
                                         </FormControl>
-                                        <FormLabel className="font-normal">
-                                            {radio.label}
+                                        <FormLabel 
+                                            className={cn(
+                                            "cursor-pointer px-4 py-2 border rounded-lg transition-colors duration-200",
+                                            field.value === radio[props.radioId] ? "bg-orange-default text-white hover:bg-orange-default/70" : "bg-gray-200 text-black hover:bg-orange-200",
+                                        )}>
+                                            {radio[props.radioLabel]}
                                         </FormLabel>
                                     </FormItem>
                                 ))
+                                    :
+                                <p className="text-lg font-medium">
+                                    Loading..
+                                </p>
                             }
                         </RadioGroup>
                     </FormControl>

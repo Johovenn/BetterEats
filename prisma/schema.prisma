@@ -54,14 +54,39 @@ model MealType {
 }
 
 model UserBMR {
-  user_bmr_id     Int @id @default(autoincrement())
-  user_id         String
-  user_bmr_date   DateTime
-  user_weight     Float
-  user_height     Float
-  user_age        Int
-  user_bmr_value  Int
-  protein Int
-  carbohydrate Int
-  fat Int
+  user_bmr_id       Int @id @default(autoincrement())
+  user_id           String
+  user_bmr_date     DateTime
+  user_weight       Float
+  user_height       Float
+  user_age          Int
+  user_bmr_value    Int
+  user_gender       String
+  activity_level_id Int
+  goal_id           Int
+  protein           Int
+  carbohydrate      Int
+  fat               Int
+
+  activityLevel ActivityLevel @relation(fields: [activity_level_id], references: [activity_level_id])
+  goal Goal @relation(fields: [goal_id], references: [goal_id])
+}
+
+model ActivityLevel {
+  activity_level_id           Int @id @default(autoincrement())
+  activity_level_multiplier   Float
+  activity_level_description  String
+
+  userBmrs UserBMR[]
+}
+
+model Goal {
+  goal_id                       Int @id @default(autoincrement())
+  goal_description              String
+  goal_calorie_multiplier       Float
+  goal_protein_multiplier       Float
+  goal_carbohydrate_multiplier  Float
+  goal_fat_multiplier           Float
+
+  userBmrs UserBMR[]
 }

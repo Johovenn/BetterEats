@@ -54,7 +54,7 @@ export default function SearchPage(){
                 <section className="mt-5 w-full">
                     <h2 className="text-xl font-medium">{mealName === '' ? 'Showing all search results' : `Showing search results for keyword \'${mealName}\'`}</h2>
                     <div className="flex gap-10 mt-3">
-                        <div className="w-[70%] space-y-3">
+                        <div className="w-[70%] space-y-3 max-h-[550px]">
                             {
                                 searchResults.length > 0
                                     &&

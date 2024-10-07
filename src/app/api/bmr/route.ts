@@ -23,7 +23,10 @@ export async function POST(req: Request){ //create new bmr record
                 user_bmr_value: request.user_bmr_value,
                 protein: request.protein,
                 carbohydrate: request.carbohydrate,
-                fat: request.fat
+                fat: request.fat,
+                activity_level_id: parseInt(request.activity_level_id),
+                goal_id: parseInt(request.goal_id),
+                user_gender: request.user_gender,
             }
         })
 

@@ -1,22 +1,24 @@
 "use client";
 
 import NumericInput from "@/components/form/NumericInput";
-import RadioInput, { RadioInputValues } from "@/components/form/RadioGroup";
 import Loading from "@/components/Loading";
 import SearchBar from "@/components/SearchBar";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { calculateBMR, calculateCarbs, calculateFat, calculateProtein } from "@/lib/bmrUtils";
 import NutritionCard from "@/components/bmr-calculator/NutritionCard";
 import { Beef, Wheat } from "lucide-react";
 import SaveBMRAlertModal from "@/components/bmr-calculator/SaveBMRAlertModal";
 import { postUserBMR } from "./api/postUserBMR";
 import { toast } from "sonner";
 import { useAuth } from "@clerk/nextjs";
+import { ActivityLevelProps, getActivityLevel } from "./api/getAllActivityLevel";
+import { getGoal, GoalProps } from "./api/getAllGoal";
+import RadioInput from "@/components/form/RadioGroup";
+import { getBMRValue } from "./api/calculateBMR";
 
 const validationSchema = z.object({
     user_weight: z.preprocess(value => parseInt(z.string().parse(value)), z.number().min(1, {message: "Weight must be more than 0kg."})),
@@ -25,17 +27,29 @@ const validationSchema = z.object({
     user_gender: z.enum(['M', 'F'], { errorMap: () => ({ message: "Gender is required!" }) }),
     user_bmr_date: z.date().nullable().default(() => new Date()),
     user_bmr_value: z.number().nullable().optional(),
-    activity_level_multiplier: z.preprocess(value => parseInt(z.string().parse(value)), z.number().min(0, {message: "Activity Level is required!"})),
+    activity_level_id: z.preprocess(value => parseInt(value as string), z.number().min(1, { message: "Activity Level is required!" })),
+    goal_id: z.preprocess(value => parseInt(value as string), z.number().min(1, { message: "Goal is required!" })),
     protein: z.number().nullable().optional(),
     carbohydrate: z.number().nullable().optional(),
     fat: z.number().nullable().optional(),
 })
 
+const genderInputValues = [
+    {
+        label: 'Male',
+        value: 'M'
+    },
+    {
+        label: 'Female',
+        value: 'F'
+    }
+]
 
 export default function BMRCalculator() {
     const [isLoading, setIsLoading] = useState(false)
     const [alertModal, setAlertModal] = useState(false)
-    const user = useAuth()
+    const [activityLevelInputValues, setActivityLevelInputValues] = useState<ActivityLevelProps[]>([])
+    const [goalInputValues, setGoalInputValues] = useState<GoalProps[]>([])
 
     const form = useForm<z.infer<typeof validationSchema>>({
         mode: 'onChange',
@@ -46,7 +60,8 @@ export default function BMRCalculator() {
             user_bmr_date: new Date(),
             user_gender: 'M',
             user_bmr_value: 0,
-            activity_level_multiplier: 1,
+            activity_level_id: undefined,
+            goal_id: undefined,
             protein: 0,
             carbohydrate: 0,
             fat: 0,
@@ -54,48 +69,37 @@ export default function BMRCalculator() {
         resolver: zodResolver(validationSchema),
     });
 
-    const genderInputValues: RadioInputValues[] = [
-        {
-            label: 'Male',
-            value: 'M'
-        },
-        {
-            label: 'Female',
-            value: 'F'
+    useEffect(() => {
+        const getRadioInputValues = async () => {
+            setIsLoading(true)
+
+            await getActivityLevel().then((response) => {
+                if(response.data){
+                    setActivityLevelInputValues(response.data)
+                }
+            }).catch((error) => toast(error.response.data.message))
+
+            await getGoal().then((response) => {
+                if(response.data){
+                    setGoalInputValues(response.data)
+                }
+            }).catch((error) => toast(error.response.data.message))
+            
+            setIsLoading(false)
         }
-    ]
-    
-    const activityLevelInputValues: RadioInputValues[] = [
-        {
-            label: 'Little to no exercise',
-            value: "1.2",
-        },
-        {
-            label: 'Light exercise (1-2 days a week)',
-            value: "1.375",
-        },
-        {
-            label: 'Moderate exercise (3-5 days a week)',
-            value: "1.55",
-        },
-        {
-            label: 'Very Active (6-7 days a week)',
-            value: "1.725",
-        },
-        {
-            label: 'Extra Active(Very active / physical job)',
-            value: "1.9",
-        },
-    ]
+
+        getRadioInputValues()
+    }, [form])
 
     const handleCalculateButton = async () => {
         setIsLoading(true)
 
-        const bmrValue = calculateBMR(form.getValues())
-        form.setValue('user_bmr_value', bmrValue)
-        form.setValue('protein', calculateProtein(bmrValue))
-        form.setValue('carbohydrate', calculateCarbs(bmrValue))
-        form.setValue('fat', calculateFat(bmrValue))
+        await getBMRValue(form.getValues()).then((response) => {
+            form.setValue('user_bmr_value', response.data.bmr_value)
+            form.setValue('protein', response.data.protein)
+            form.setValue('fat', response.data.fat)
+            form.setValue('carbohydrate', response.data.carbohydrate)
+        }).catch((error) => toast(error.response.data.message))
 
         setIsLoading(false)
     }
@@ -168,14 +172,24 @@ export default function BMRCalculator() {
                                         id="user_gender"
                                         label="Gender"
                                         inputValues={genderInputValues}
-                                        orientation="horizontal"
+                                        radioId="value"
+                                        radioLabel="label"
                                     />
                                     <RadioInput
                                         control={form.control}
-                                        id="activity_level_multiplier"
+                                        id="activity_level_id"
                                         label="Activity Level"
                                         inputValues={activityLevelInputValues}
-                                        orientation="horizontal"
+                                        radioId="activity_level_id"
+                                        radioLabel="activity_level_description"
+                                    />
+                                    <RadioInput
+                                        control={form.control}
+                                        id="goal_id"
+                                        label="Activity Level"
+                                        inputValues={goalInputValues}
+                                        radioId="goal_id"
+                                        radioLabel="goal_description"
                                     />
                                     <Button
                                         className="text-white rounded-xl py-2 px-4 ml-auto"
@@ -198,17 +212,17 @@ export default function BMRCalculator() {
                         </div>
                         <div className="flex justify-around gap-3 mt-3">
                             <NutritionCard 
-                                icon={<Beef size={30} className="text-secondary"/>}
+                                icon={<Beef size={30} className="text-gray-500"/>}
                                 title="Protein"
                                 value={form.watch('protein')}
                             />
                             <NutritionCard 
-                                icon={<Wheat size={30} className="text-secondary"/>}
+                                icon={<Wheat size={30} className="text-gray-500"/>}
                                 title="Carbs"
                                 value={form.watch('carbohydrate')}
                             />
                             <NutritionCard
-                                icon={<Beef size={30} className="text-secondary"/>}
+                                icon={<Beef size={30} className="text-gray-500"/>}
                                 title="Fat"
                                 value={form.watch('fat')}
                             />

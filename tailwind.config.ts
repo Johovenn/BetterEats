@@ -29,12 +29,12 @@ const config = {
           foreground: "#dadee1"
         },
         primary: {
-          DEFAULT: "#1e293b",
-          foreground: "#ffffff",
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
-          DEFAULT: "#334155",
-          foreground: "#ffffff",
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
         },
         orange: {
           default: '#CD5C08',

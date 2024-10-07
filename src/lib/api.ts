@@ -8,7 +8,7 @@ export interface ResponseProps<T> {
 	data: T
 }
 
-export function createResponse(code: number, message: string, data: object | null){
+export function createResponse(code: number, message: string, data: object | object[] |  null){
     return {
         status_code: code,
         message: message,
