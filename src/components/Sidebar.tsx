@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
+import HoverTooltip from "./Tooltip";
 
 interface NavigationProps{
     title: string
