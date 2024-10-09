@@ -5,12 +5,17 @@ import { Beef, Droplet, Flame, Wheat } from "lucide-react"
 import { Button } from "../ui/button"
 import { Separator } from "@radix-ui/react-separator"
 import { MealProps } from "@/app/search/api/getAllMeals"
+import { getMealPlanTotalNutrition } from "@/app/meal-planner/api/getMealPlanTotalNutrition"
 
 interface MealCardProps{
     meal: MealProps
 }
 
 export default function MealCard(props: MealCardProps){
+    const handleClick = async () => {
+        await getMealPlanTotalNutrition(new Date)
+    }
+
     return(
         <div className="w-full h-[100px] bg-white shadow-lg flex items-center px-3 rounded-xl">
             <div className="relative w-[80px] h-[80px]">
@@ -43,7 +48,7 @@ export default function MealCard(props: MealCardProps){
                 </div>
                 <div className="mr-1 flex items-center gap-3">
                     <Button className="" variant={"outline"}>Info</Button>
-                    <Button className="">Add to meal plan</Button>
+                    <Button className="" onClick={handleClick}>Add to meal plan</Button>
                 </div>
             </div>
         </div>

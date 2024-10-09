@@ -99,7 +99,7 @@ export default function BMRCalculator() {
             form.setValue('protein', response.data.protein)
             form.setValue('fat', response.data.fat)
             form.setValue('carbohydrate', response.data.carbohydrate)
-        }).catch((error) => toast(error.response.data.message))
+        }).catch((error) => {})
 
         setIsLoading(false)
     }

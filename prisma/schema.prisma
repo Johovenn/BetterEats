@@ -16,6 +16,7 @@ datasource db {
 
 model Meal {
   meal_id             Int @id @default(autoincrement())
+  meal_image          String @default("")
   meal_name           String
   meal_calories       Int
   meal_protein        Int
@@ -27,30 +28,36 @@ model Meal {
   is_lunch            Boolean @default(false)
   is_dinner           Boolean @default(false)
   is_snack            Boolean @default(false)
-  mealDetails         MealDetail[]
+  mealDetails         MealPlanDetail[]
 }
 
 model MealPlan {
-  meal_plan_id    Int @id @default(autoincrement())
-  user_id         String
-  meal_plan_date  DateTime
-  mealDetails     MealDetail[]
+  meal_plan_id                  Int @id @default(autoincrement())
+  user_id                       String
+  meal_plan_date                DateTime
+  meal_plan_total_calorie       Int
+  meal_plan_total_carbohydrate  Int
+  meal_plan_total_protein       Int
+  meal_plan_total_fat           Int
+  mealDetails     MealPlanDetail[]
+
+  @@index([meal_plan_id, meal_plan_date])
 }
 
-model MealDetail {
-  meal_detail_id  Int @id @default(autoincrement())
-  meal_plan_id    Int
-  meal_type_id    Int 
-  meal_id         Int
-  mealType        MealType @relation(fields: [meal_type_id], references: [meal_type_id])
-  mealPlan        MealPlan  @relation(fields: [meal_plan_id], references: [meal_plan_id])
-  meal            Meal      @relation(fields: [meal_id], references: [meal_id])
+model MealPlanDetail {
+  meal_plan_detail_id  Int @id @default(autoincrement())
+  meal_plan_id         Int
+  meal_type_id         Int 
+  meal_id              Int
+  mealType             MealType @relation(fields: [meal_type_id], references: [meal_type_id])
+  mealPlan             MealPlan @relation(fields: [meal_plan_id], references: [meal_plan_id])
+  meal                 Meal     @relation(fields: [meal_id], references: [meal_id])
 }
 
 model MealType {
   meal_type_id      Int @id @default(autoincrement())
   meal_type_name    String
-  mealDetails       MealDetail[]
+  mealDetails       MealPlanDetail[]
 }
 
 model UserBMR {
