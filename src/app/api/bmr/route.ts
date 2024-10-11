@@ -13,6 +13,32 @@ export async function POST(req: Request){ //create new bmr record
 
         const request = await req.json()
 
+        const activityLevelCode = request.activity_level_code
+        const goalCode = request.goal_code
+
+        if(!activityLevelCode || !goalCode){
+            return NextResponse.json(createResponse(400, "Bad Request", null), {status: 400})
+        }
+
+        const activityLevelData = await db.activityLevel.findFirst({
+            where: {
+                activity_level_code: activityLevelCode
+            }    
+        })
+
+        if(!activityLevelData){
+            return NextResponse.json(createResponse(400, "Activity Level Invalid", null), {status: 400})
+        }
+
+        const goalData = await db.goal.findFirst({
+            where: {
+                goal_code: goalCode
+            }
+        })
+        if(!goalData){
+            return NextResponse.json(createResponse(400, "Goal Invalid", null), {status: 400})
+        }
+
         const data = await db.userBMR.create({
             data: {
                 user_id: userId,
@@ -24,8 +50,8 @@ export async function POST(req: Request){ //create new bmr record
                 protein: request.protein,
                 carbohydrate: request.carbohydrate,
                 fat: request.fat,
-                activity_level_id: parseInt(request.activity_level_id),
-                goal_id: parseInt(request.goal_id),
+                activity_level_id: activityLevelData.activity_level_id,
+                goal_id: goalData.goal_id,
                 user_gender: request.user_gender,
             }
         })
@@ -52,19 +78,27 @@ export async function GET(req: Request){//get user latest bmr record
             where: {
                 user_id: userId,
             },
+            include: {
+                goal: true,
+                activityLevel: true
+            },
             orderBy:{
                 user_bmr_date: 'desc'
             }
         })
-
-        console.log(bmrData)
 
         if(!bmrData){
             console.log(`masuk bmr data null`)
             return NextResponse.json(createResponse(200, "No existing data", null), {status: 200}) //belum ada data user
         }
         else{
-            return NextResponse.json(createResponse(200, "Fetch data succesful!", bmrData), {status: 200})
+            let response = {
+                ...bmrData,
+                goal_code: bmrData.goal.goal_code,
+                activity_level_code: bmrData.activityLevel.activity_level_code
+            }
+
+            return NextResponse.json(createResponse(200, "Fetch data succesful!", response), {status: 200})
         }
     } catch (error) {
         console.error(error)

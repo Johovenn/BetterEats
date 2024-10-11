@@ -9,6 +9,14 @@ export interface UserBMRProps{
     user_height: number
     user_age: number
     user_bmr_value: number
+    user_gender: string
+    activity_level_id: number
+    activity_level_code: "AL1" | "AL2" | "AL3" | "AL4" | "AL5"
+    goal_id: number
+    goal_code: "GM" | "LW" | "MW"
+    protein: number
+    fat: number
+    carbohydrate: number
 }
 
 export async function getUserBMR(): Promise<ResponseProps<UserBMRProps>>{

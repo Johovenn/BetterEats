@@ -13,25 +13,26 @@ export async function POST(req: Request){ //create new bmr record
 
         const request = await req.json()
 
-        const activityLevelId = parseInt(request.activity_level_id)
-        const goalId = parseInt(request.goal_id)
+        const activityLevelCode = request.activity_level_code
+        const goalCode = request.goal_code
 
-        if(!activityLevelId || !goalId){
+        if(!activityLevelCode || !goalCode){
             return NextResponse.json(createResponse(400, "Bad Request", null), {status: 400})
         }
 
         const activityLevelData = await db.activityLevel.findFirst({
             where: {
-                activity_level_id: activityLevelId
-            }
+                activity_level_code: activityLevelCode
+            }    
         })
+
         if(!activityLevelData){
             return NextResponse.json(createResponse(400, "Activity Level Invalid", null), {status: 400})
         }
 
         const goalData = await db.goal.findFirst({
             where: {
-                goal_id: goalId
+                goal_code: goalCode
             }
         })
         if(!goalData){

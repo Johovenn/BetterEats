@@ -7,8 +7,8 @@ export interface CalculateBMRProps{
     user_weight: number
     user_age: number
     user_gender: string
-    activity_level_id: number
-    goal_id: number
+    activity_level_code: any
+    goal_code: any
 }
 
 export interface BMRCalculationProps{

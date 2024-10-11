@@ -38,3 +38,66 @@ export async function GET(req: Request){
         }
     }
 }
+
+export async function POST(req: Request){
+    try {
+        const {userId} = auth()
+        if(!userId){
+            return NextResponse.json(createResponse(401, "Unauthorized", null), {status: 401})
+        }
+
+        const { meal_plan_date, meal_type_id, meal_id } = await req.json()
+
+        const meal = await db.meal.findFirst({
+            where: {
+                meal_id: meal_id,
+            }
+        })
+
+        if(!meal){
+            return NextResponse.json(createResponse(400, "Invalid meal", null), {status: 400})
+        }
+    
+        let mealPlan = await db.mealPlan.findFirst({
+            where: {
+                user_id: userId,
+                meal_plan_date: new Date(meal_plan_date),
+            }
+        })
+    
+        if (!mealPlan) {
+            mealPlan = await db.mealPlan.create({
+                data: {
+                    user_id: userId,
+                    meal_plan_date: new Date(meal_plan_date),
+                    meal_plan_total_calorie: 0,
+                    meal_plan_total_carbohydrate: 0,
+                    meal_plan_total_protein: 0,
+                    meal_plan_total_fat: 0,
+                }
+            })
+        } else {
+            mealPlan = await db.mealPlan.update({
+                where: { meal_plan_id: mealPlan.meal_plan_id },
+                data: {
+                    meal_plan_total_calorie: mealPlan.meal_plan_total_calorie + meal.meal_calories,
+                    meal_plan_total_carbohydrate: mealPlan.meal_plan_total_carbohydrate + meal.meal_carbohydrate,
+                    meal_plan_total_protein: mealPlan.meal_plan_total_protein + meal.meal_protein,
+                    meal_plan_total_fat: mealPlan.meal_plan_total_fat + meal.meal_fat,
+                }
+            })
+        }
+    
+        const mealPlanDetail = await db.mealPlanDetail.create({
+            data: {
+                meal_plan_id: mealPlan.meal_plan_id,
+                meal_type_id: meal_type_id,
+                meal_id: meal_id,
+            }
+        })
+    
+        return NextResponse.json(createResponse(200, "Create Meal Plan successful!", mealPlanDetail), {status: 200})
+    } catch (error) {
+        return NextResponse.json(createResponse(500, "Error creating meal plan", null), {status: 500})
+    }
+}

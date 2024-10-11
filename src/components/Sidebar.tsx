@@ -53,7 +53,7 @@ export default function Sidebar(){
     }
 
     return(
-        <aside className="h-screen p-3 border-r bg-white flex flex-col items-center">
+        <aside className="h-screen p-3 border-r bg-white flex flex-col items-center fixed">
             <ul className="space-y-10 flex flex-col justify-center items-center pt-2">
                 <Image src="/BetterEats.png" alt="Logo" width={40} height={40} className="w-auto h-auto" priority/>
                 <TooltipProvider>

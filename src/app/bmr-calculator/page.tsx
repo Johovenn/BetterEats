@@ -7,32 +7,45 @@ import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import NutritionCard from "@/components/bmr-calculator/NutritionCard";
 import { Beef, Wheat } from "lucide-react";
 import SaveBMRAlertModal from "@/components/bmr-calculator/SaveBMRAlertModal";
 import { postUserBMR } from "./api/postUserBMR";
 import { toast } from "sonner";
-import { useAuth } from "@clerk/nextjs";
-import { ActivityLevelProps, getActivityLevel } from "./api/getAllActivityLevel";
-import { getGoal, GoalProps } from "./api/getAllGoal";
 import RadioInput from "@/components/form/RadioGroup";
 import { getBMRValue } from "./api/calculateBMR";
+import { getUserBMR } from "./api/getUserBMR";
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup'
 
-const validationSchema = z.object({
-    user_weight: z.preprocess(value => parseInt(z.string().parse(value)), z.number().min(1, {message: "Weight must be more than 0kg."})),
-    user_height: z.preprocess(value => parseInt(z.string().parse(value)), z.number().min(1, {message: "Height must be more than 0cm."})),
-    user_age: z.preprocess(value => parseInt(z.string().parse(value)), z.number().min(15, {message: "Age must at least be 15 years old."})),
-    user_gender: z.enum(['M', 'F'], { errorMap: () => ({ message: "Gender is required!" }) }),
-    user_bmr_date: z.date().nullable().default(() => new Date()),
-    user_bmr_value: z.number().nullable().optional(),
-    activity_level_id: z.preprocess(value => parseInt(value as string), z.number().min(1, { message: "Activity Level is required!" })),
-    goal_id: z.preprocess(value => parseInt(value as string), z.number().min(1, { message: "Goal is required!" })),
-    protein: z.number().nullable().optional(),
-    carbohydrate: z.number().nullable().optional(),
-    fat: z.number().nullable().optional(),
-})
+interface FormProps{
+    user_height: number
+    user_weight: number
+    user_age: number
+    user_bmr_date: Date
+    user_gender: string
+    user_bmr_value: number
+    activity_level_code: string
+    goal_code: string
+    protein: number
+    carbohydrate: number
+    fat: number
+}
+
+const validationSchema = yup.object().shape({
+    user_height: yup.number().required().min(1, "Height must be more than 0cm"),
+    user_weight: yup.number().required().min(1, "Weight must be more than 0kg"),
+    user_age: yup.number().required().min(15, "Age must at least be 15 years old"),
+    user_gender: yup.string().required("Gender is required"),
+    user_bmr_date: yup.date().default(() => new Date()),
+    user_bmr_value: yup.number().required("BMR value is required"), // Now required
+    activity_level_code: yup.string().required("Activity Level is required"),
+    goal_code: yup.string().required("Goal is required"),
+    protein: yup.number().optional(),
+    carbohydrate: yup.number().optional(),
+    fat: yup.number().optional(),
+});
+
 
 const genderInputValues = [
     {
@@ -45,13 +58,49 @@ const genderInputValues = [
     }
 ]
 
+const activityLevelInputValues = [
+    {
+        label: 'Little to no exercise',
+        value: 'AL1'
+    },
+    {
+        label: 'Light exercise (1-2 days a week)',
+        value: 'AL2'
+    },
+    {
+        label: 'Moderate exercise (3-5 days a week)',
+        value: 'AL3'
+    },
+    {
+        label: 'Very Active (6-7 days a week)',
+        value: 'AL4'
+    },
+    {
+        label: 'Extra Active (Very active / physical job)',
+        value: 'AL5'
+    }
+]
+
+const goalInputValues = [
+    {
+        label: 'Gain Muscle',
+        value: 'GM'
+    },
+    {
+        label: 'Maintain Weight',
+        value: 'MW'
+    },
+    {
+        label: 'Lose Weight',
+        value: 'LW'
+    },
+]
+
 export default function BMRCalculator() {
     const [isLoading, setIsLoading] = useState(false)
     const [alertModal, setAlertModal] = useState(false)
-    const [activityLevelInputValues, setActivityLevelInputValues] = useState<ActivityLevelProps[]>([])
-    const [goalInputValues, setGoalInputValues] = useState<GoalProps[]>([])
 
-    const form = useForm<z.infer<typeof validationSchema>>({
+    const form = useForm<FormProps>({
         mode: 'onChange',
         defaultValues: {
             user_height: 0,
@@ -60,35 +109,39 @@ export default function BMRCalculator() {
             user_bmr_date: new Date(),
             user_gender: 'M',
             user_bmr_value: 0,
-            activity_level_id: undefined,
-            goal_id: undefined,
+            activity_level_code: "AL1",
+            goal_code: "GM",
             protein: 0,
             carbohydrate: 0,
             fat: 0,
         },
-        resolver: zodResolver(validationSchema),
+        resolver: yupResolver<any>(validationSchema),
     });
 
     useEffect(() => {
-        const getRadioInputValues = async () => {
+        const getUserData = async () => {
             setIsLoading(true)
 
-            await getActivityLevel().then((response) => {
+            await getUserBMR().then((response) => {
                 if(response.data){
-                    setActivityLevelInputValues(response.data)
+                    form.setValue('user_height', response.data.user_height)
+                    form.setValue('user_weight', response.data.user_weight)
+                    form.setValue('user_age', response.data.user_age)
+                    form.setValue('activity_level_code', response.data.activity_level_code)
+                    form.setValue('goal_code', response.data.goal_code)
+                    form.setValue('user_bmr_value', response.data.user_bmr_value)
+                    form.setValue('protein', response.data.protein)
+                    form.setValue('carbohydrate', response.data.carbohydrate)
+                    form.setValue('fat', response.data.fat)
                 }
-            }).catch((error) => toast(error.response.data.message))
+            }).catch((error) => [
+                toast("Error retrieving user BMR data.")
+            ])
 
-            await getGoal().then((response) => {
-                if(response.data){
-                    setGoalInputValues(response.data)
-                }
-            }).catch((error) => toast(error.response.data.message))
-            
             setIsLoading(false)
         }
 
-        getRadioInputValues()
+        getUserData()
     }, [form])
 
     const handleCalculateButton = async () => {
@@ -130,7 +183,7 @@ export default function BMRCalculator() {
                 onConfirm={form.handleSubmit(handleSaveBMR)}
             />
 
-            <main className="px-20 py-10 w-full h-full">
+            <main className="px-20 py-10 w-full">
                 <header className="flex justify-between items-start w-full">
                     <div>
                         <h1 className="text-2xl font-bold text-gray-700">Basal Metabolic Rate Calculator</h1>
@@ -140,10 +193,10 @@ export default function BMRCalculator() {
                 </header>
                 <section className="mt-7 h-full flex gap-5 w-full">
                     <div className="h-full w-[60%] shadow bg-white p-5">
-                        <h1 className="text-xl font-medium">
+                        {/* <h1 className="text-xl font-medium">
                             Calculate your BMR here
-                        </h1>
-                        <div className="mt-5 w-full flex flex-col">
+                        </h1> */}
+                        <div className="w-full flex flex-col">
                             <Form {...form} >
                                 <form action="" onSubmit={form.handleSubmit(handleCalculateButton)} className="space-y-4 flex flex-col">
                                     <NumericInput
@@ -177,19 +230,19 @@ export default function BMRCalculator() {
                                     />
                                     <RadioInput
                                         control={form.control}
-                                        id="activity_level_id"
+                                        id="activity_level_code"
                                         label="Activity Level"
                                         inputValues={activityLevelInputValues}
-                                        radioId="activity_level_id"
-                                        radioLabel="activity_level_description"
+                                        radioId="value"
+                                        radioLabel="label"
                                     />
                                     <RadioInput
                                         control={form.control}
-                                        id="goal_id"
+                                        id="goal_code"
                                         label="Activity Level"
                                         inputValues={goalInputValues}
-                                        radioId="goal_id"
-                                        radioLabel="goal_description"
+                                        radioId="value"
+                                        radioLabel="label"
                                     />
                                     <Button
                                         className="text-white rounded-xl py-2 px-4 ml-auto"

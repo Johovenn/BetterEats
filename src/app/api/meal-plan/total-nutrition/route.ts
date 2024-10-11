@@ -32,7 +32,7 @@ export async function GET(req: Request){
     })
 
     const response = {
-        meal_plan_date: mealPlanData ? mealPlanData.meal_plan_date : null,
+        meal_plan_date: mealPlanData ? mealPlanData.meal_plan_date : mealPlanDate,
         meal_plan_total_calorie: mealPlanData ? mealPlanData.meal_plan_total_calorie : 0,
         meal_plan_total_protein: mealPlanData ? mealPlanData.meal_plan_total_protein : 0,
         meal_plan_total_carbohydrate: mealPlanData ? mealPlanData.meal_plan_total_carbohydrate : 0,
