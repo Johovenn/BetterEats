@@ -18,9 +18,9 @@ export default function MealPlanNutritionProgress(props: MealPlanNutritionProgre
                 <HoverTooltip
                     tooltipContent={
                         props.nutritionValue > props.maxValue
-                        ? `The total amount of ${props.nutritionName} in the meal plan has surpassed your daily needs. It is recommended to reduce this.`
+                        ? `The total amount of ${props.nutritionName} in the meal plan has surpassed your daily needs`
                         : props.nutritionValue * 100 / props.maxValue < 80
-                        ? `The total amount of ${props.nutritionName} in the meal plan is not enough for your daily needs. It is recommended to add another meal to the plan to fulfill this.`
+                        ? `The total amount of ${props.nutritionName} in the meal plan is not enough for your daily needs.`
                         : `The total amount of ${props.nutritionName} in the meal plan is already enough for your daily needs.` 
                     }
                 >

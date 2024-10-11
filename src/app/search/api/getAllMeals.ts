@@ -4,6 +4,7 @@ import axios from "axios"
 export interface MealProps{
     meal_id: number
     meal_name: string
+    meal_image: string
     meal_calories: number
     meal_protein: number
     meal_carbohydrate: number

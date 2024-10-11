@@ -5,7 +5,7 @@ import SearchBar from "@/components/SearchBar"
 import { useUser } from "@clerk/nextjs"
 import { Search } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { getUserBMR } from "../bmr-calculator/api/getUserBMR"
 import MealPlanValueCard from "@/components/meal-planner/MealPlanValueCard"
 import { getMealPlanTotalNutrition } from "../meal-planner/api/getMealPlanTotalNutrition"
@@ -52,29 +52,34 @@ export default function HomePage(){
         }
     })
 
-    useEffect(() => {
+    const getTotalNutrition = useCallback(async () => {
+        setIsLoading(true)
 
-        const getTotalNutrition = async () => {
-            setIsLoading(true)
+        await getMealPlanTotalNutrition(form.getValues('meal_plan_date')).then((response) => {
+            if(response.data){
+                form.setValue('meal_plan_total_calorie', response.data.meal_plan_total_calorie)
+                form.setValue('meal_plan_total_carbohydrate', response.data.meal_plan_total_carbohydrate)
+                form.setValue('meal_plan_total_fat', response.data.meal_plan_total_fat)
+                form.setValue('meal_plan_total_protein', response.data.meal_plan_total_protein)
+                form.setValue('user_calorie_requirement', response.data.user_calorie_requirement)
+                form.setValue('user_protein_requirement', response.data.user_protein_requirement)
+                form.setValue('user_fat_requirement', response.data.user_fat_requirement)
+                form.setValue('user_carbohydrate_requirement', response.data.user_carbohydrate_requirement)
+            }
+        })
 
-            await getMealPlanTotalNutrition(form.getValues('meal_plan_date')).then((response) => {
-                if(response.data){
-                    form.setValue('meal_plan_total_calorie', response.data.meal_plan_total_calorie)
-                    form.setValue('meal_plan_total_carbohydrate', response.data.meal_plan_total_carbohydrate)
-                    form.setValue('meal_plan_total_fat', response.data.meal_plan_total_fat)
-                    form.setValue('meal_plan_total_protein', response.data.meal_plan_total_protein)
-                    form.setValue('user_calorie_requirement', response.data.user_calorie_requirement)
-                    form.setValue('user_protein_requirement', response.data.user_protein_requirement)
-                    form.setValue('user_fat_requirement', response.data.user_fat_requirement)
-                    form.setValue('user_carbohydrate_requirement', response.data.user_carbohydrate_requirement)
-                }
-            })
-
-            setIsLoading(false)
-        }
-
-        getTotalNutrition()
+        setIsLoading(false)
     }, [form])
+
+    const handleChangeDate = async (date: Date) => {
+        form.setValue('meal_plan_date', date)
+        
+        getTotalNutrition()
+    }
+
+    useEffect(() => {
+        getTotalNutrition()
+    }, [form, getTotalNutrition])
     
     if(!user){
         return null
@@ -97,7 +102,7 @@ export default function HomePage(){
                         bmrValue={form.watch('user_calorie_requirement')}
                     />
                     <MealPlanValueCard 
-                        date={new Date}
+                        date={form.watch('meal_plan_date')}
                         calorieValue={form.watch('meal_plan_total_calorie')}
                         maxCalorie={form.watch('user_calorie_requirement')}
                         proteinValue={form.watch('meal_plan_total_protein')}
@@ -106,6 +111,7 @@ export default function HomePage(){
                         maxCarbohydrate={form.watch('user_carbohydrate_requirement')}
                         fatValue={form.watch('meal_plan_total_fat')}
                         maxFat={form.watch('user_fat_requirement')}
+                        handleChangeDate={handleChangeDate}
                     />
                 </section>
             </main>

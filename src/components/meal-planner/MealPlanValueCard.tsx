@@ -1,6 +1,7 @@
 import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react"
 import MealPlanNutritionProgress from "./MealPlanNutritionProgress"
 import { Button } from "../ui/button"
+import { cn } from "@/lib/utils"
 
 interface MealPlanValueProps{
     date: Date
@@ -12,6 +13,8 @@ interface MealPlanValueProps{
     carbohydrateValue: number
     maxFat: number
     fatValue: number
+    disableChangeDate?: boolean
+    handleChangeDate?: (date: Date) => void
 }
 
 export default function MealPlanValueCard(props: MealPlanValueProps){
@@ -23,23 +26,39 @@ export default function MealPlanValueCard(props: MealPlanValueProps){
     }
     const formattedDate = props.date.toLocaleDateString('en-US', options)
 
+    const handleOnClickPreviousDate = () => {
+        if (props.handleChangeDate) {
+            const previousDate = new Date(props.date)
+            previousDate.setDate(previousDate.getDate() - 1)
+            props.handleChangeDate(previousDate)
+        }
+    }
+    
+    const handleOnClickNextDate = () => {
+        if (props.handleChangeDate) {
+            const nextDate = new Date(props.date)
+            nextDate.setDate(nextDate.getDate() + 1)
+            props.handleChangeDate(nextDate)
+        }
+    }
+
     return(
         <div className="w-[500px] h-[310px] shadow-lg bg-white rounded-xl px-7 py-5">
             <div className="flex justify-between">
                 <h3 className="font-medium text-xl">Meal Plan Value</h3>
                 <div className="flex items-center gap-2">
-                    {/* <Button variant={"outline"}> */}
+                    <Button variant={"outline"} size={"icon"} onClick={handleOnClickPreviousDate} className={cn(props.disableChangeDate ? "hidden" : "")}>
                         <ChevronLeft size={20} color="gray"/>
-                    {/* </Button> */}
+                    </Button>
                     {formattedDate}
-                    {/* <Button variant={"outline"}> */}
+                    <Button variant={"outline"} size={"icon"} onClick={handleOnClickNextDate} className={cn(props.disableChangeDate ? "hidden" : "")}>
                         <ChevronRight size={20} color="gray"/>
-                    {/* </Button> */}
+                    </Button>
                 </div>
             </div>
             <div className="mt-5 flex flex-col gap-4">
                 <MealPlanNutritionProgress 
-                    nutritionName="Calories"
+                    nutritionName="Calories"    
                     nutritionValue={props.calorieValue}
                     maxValue={props.maxCalorie}
                 />

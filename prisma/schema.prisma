@@ -18,10 +18,10 @@ model Meal {
   meal_id             Int @id @default(autoincrement())
   meal_image          String @default("")
   meal_name           String
-  meal_calories       Int
-  meal_protein        Int
-  meal_carbohydrate   Int
-  meal_fat            Int
+  meal_calories       Int @default(0)
+  meal_protein        Int @default(0)
+  meal_carbohydrate   Int @default(0)
+  meal_fat            Int @default(0)
   meal_ingredients    String
   meal_recipe         String
   is_breakfast        Boolean @default(false)
@@ -35,10 +35,10 @@ model MealPlan {
   meal_plan_id                  Int @id @default(autoincrement())
   user_id                       String
   meal_plan_date                DateTime
-  meal_plan_total_calorie       Int
-  meal_plan_total_carbohydrate  Int
-  meal_plan_total_protein       Int
-  meal_plan_total_fat           Int
+  meal_plan_total_calorie       Int @default(0)
+  meal_plan_total_carbohydrate  Int @default(0)
+  meal_plan_total_protein       Int @default(0)
+  meal_plan_total_fat           Int @default(0)
   mealDetails     MealPlanDetail[]
 
   @@index([meal_plan_id, meal_plan_date])
@@ -81,6 +81,7 @@ model UserBMR {
 
 model ActivityLevel {
   activity_level_id           Int @id @default(autoincrement())
+  activity_level_code         String @default("")
   activity_level_multiplier   Float
   activity_level_description  String
 
@@ -89,6 +90,7 @@ model ActivityLevel {
 
 model Goal {
   goal_id                       Int @id @default(autoincrement())
+  goal_code                     String @default("")
   goal_description              String
   goal_calorie_multiplier       Float
   goal_protein_multiplier       Float
