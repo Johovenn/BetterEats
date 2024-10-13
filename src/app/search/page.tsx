@@ -11,6 +11,7 @@ import CheckboxInput from "@/components/form/CheckboxInput";
 import { Form, FormProvider, useForm } from "react-hook-form";
 import NumericInput from "@/components/form/NumericInput";
 import { Button } from "@/components/ui/button";
+import AddMealModal from "@/components/meal-planner/AddMealModal";
 
 interface FormProps{
     is_breakfast: boolean
@@ -27,6 +28,8 @@ export default function SearchPage(){
     const [limit, setLimit] = useState(10)
     const [mealName, setMealName] = useState('')
     const [searchResults, setSearchResults] = useState<MealProps[]>([])
+    const [addMealModal, setAddMealModal] = useState(false)
+    const [selectedMealId, setSelectedMealId] = useState<any>()
     const searchParams = useSearchParams()
     const keyword = searchParams.get('keyword')
 
@@ -86,10 +89,22 @@ export default function SearchPage(){
         form.reset()
         getMeals()
     }
+
+    const handleAddMealButton = (meal_id: number) => {
+        setAddMealModal(true)
+        setSelectedMealId(meal_id)
+    } 
     
     return(
         <>
             <Loading loading={isLoading} />
+
+            <AddMealModal 
+                isOpen={addMealModal}
+                handleClose={() => setAddMealModal(false)}
+                setIsOpen={setAddMealModal}
+                mealId={selectedMealId}
+            />
 
             <main className="px-20 py-10 w-full">
                 <header className="flex justify-between items-start w-full">
@@ -99,7 +114,7 @@ export default function SearchPage(){
                     <SearchBar />
                 </header>
 
-                <section className="mt-5 w-full">
+                <section className="mt-5 min-w-full">
                     <h2 className="text-xl font-medium">{mealName === '' ? 'Showing all search results' : `Showing search results for keyword \'${mealName}\'`}</h2>
                     <div className="flex gap-10 mt-3">
                         <div className="w-[65%] space-y-3 max-h-[550px]">
@@ -110,13 +125,14 @@ export default function SearchPage(){
                                     <MealCard 
                                         key={meal.meal_id}
                                         meal={meal}
+                                        handleAddMealButton={handleAddMealButton}
                                     />
                                 ))
                                     :
                                 <h3>Food not found.</h3>
                             }
                         </div>
-                        <div className="w-[35%] px-4 py-2 bg-white shadow-xl rounded-xl h-full">
+                        <div className="w-[35%] px-4 py-2 bg-white shadow-xl rounded-xl h-full max-lg:hidden">
                             <div className="flex justify-between items-center">
                                 <h3 className="text-xl font-semibold">Filter</h3>
                                 <Button variant={"outline"} onClick={handleClearFilterButton}>Clear Filter</Button>

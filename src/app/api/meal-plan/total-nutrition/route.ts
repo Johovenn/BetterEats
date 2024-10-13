@@ -15,12 +15,27 @@ export async function GET(req: Request){
         return NextResponse.json(createResponse(400, "Bad Request", null), {status: 400})
     }
 
+    const startOfDay = new Date(mealPlanDate)
+    startOfDay.setUTCHours(0, 0, 0, 0)
+
+    const endOfDay = new Date(mealPlanDate)
+    endOfDay.setUTCHours(23, 59, 59, 999)
+
+
     const mealPlanData = await db.mealPlan.findFirst({
         where: {
             user_id: userId,
-            meal_plan_date: new Date(mealPlanDate)
+            meal_plan_date: {
+                gte: startOfDay,
+                lte: endOfDay
+            }
         }
     })
+
+    console.log(mealPlanData?.meal_plan_date)
+    console.log(startOfDay)
+    console.log(endOfDay)
+
 
     const userData=  await db.userBMR.findFirst({
         where: {

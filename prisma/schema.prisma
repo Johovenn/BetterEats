@@ -55,9 +55,9 @@ model MealPlanDetail {
 }
 
 model MealType {
-  meal_type_id      Int @id @default(autoincrement())
-  meal_type_name    String
-  mealDetails       MealPlanDetail[]
+  meal_type_id             Int @id @default(autoincrement())
+  meal_type_description    String
+  mealDetails              MealPlanDetail[]
 }
 
 model UserBMR {

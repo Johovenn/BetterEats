@@ -70,10 +70,10 @@ export async function POST(req: Request){
                 data: {
                     user_id: userId,
                     meal_plan_date: new Date(meal_plan_date),
-                    meal_plan_total_calorie: 0,
-                    meal_plan_total_carbohydrate: 0,
-                    meal_plan_total_protein: 0,
-                    meal_plan_total_fat: 0,
+                    meal_plan_total_calorie: meal.meal_calories,
+                    meal_plan_total_carbohydrate: meal.meal_carbohydrate,
+                    meal_plan_total_protein: meal.meal_protein,
+                    meal_plan_total_fat: meal.meal_fat,
                 }
             })
         } else {

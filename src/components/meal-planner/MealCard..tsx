@@ -10,15 +10,13 @@ import { CldImage } from 'next-cloudinary'
 
 interface MealCardProps{
     meal: MealProps
+    handleAddMealButton: (meal_id: number) => void
 }
 
 export default function MealCard(props: MealCardProps){
-    const handleClick = async () => {
-        await getMealPlanTotalNutrition(new Date)
-    }
 
     return(
-        <div className="w-full h-[100px] bg-white shadow-lg flex items-center px-3 rounded-xl">
+        <div className="w-full min-w-[700px] h-[100px] bg-white shadow-lg flex items-center px-3 rounded-xl">
             <div className="relative w-[80px] h-[80px]">
                 <CldImage 
                     src={props.meal.meal_image}
@@ -48,7 +46,7 @@ export default function MealCard(props: MealCardProps){
                 </div>
                 <div className="mr-1 flex items-center gap-3">
                     <Button className="" variant={"outline"}>Info</Button>
-                    <Button className="" onClick={handleClick}>Add to meal plan</Button>
+                    <Button className="" onClick={() => props.handleAddMealButton(props.meal.meal_id)}>Add to meal plan</Button>
                 </div>
             </div>
         </div>
