@@ -29,7 +29,7 @@ export default function SearchPage(){
     const [mealName, setMealName] = useState('')
     const [searchResults, setSearchResults] = useState<MealProps[]>([])
     const [addMealModal, setAddMealModal] = useState(false)
-    const [selectedMealId, setSelectedMealId] = useState<any>()
+    const [selectedMeal, setSelectedMeal] = useState<MealProps>()
     const searchParams = useSearchParams()
     const keyword = searchParams.get('keyword')
 
@@ -90,9 +90,9 @@ export default function SearchPage(){
         getMeals()
     }
 
-    const handleAddMealButton = (meal_id: number) => {
+    const handleAddMealButton = (meal: MealProps) => {
         setAddMealModal(true)
-        setSelectedMealId(meal_id)
+        setSelectedMeal(meal)
     } 
     
     return(
@@ -103,7 +103,7 @@ export default function SearchPage(){
                 isOpen={addMealModal}
                 handleClose={() => setAddMealModal(false)}
                 setIsOpen={setAddMealModal}
-                mealId={selectedMealId}
+                meal={selectedMeal || {} as MealProps}
             />
 
             <main className="px-20 py-10 w-full">

@@ -20,7 +20,6 @@ interface AddMealModalProps{
     isOpen: boolean
     handleClose: () => void
     setIsOpen: (value: boolean) => void
-    mealId: number
     meal: MealProps
 }
 
@@ -115,7 +114,7 @@ export default function AddMealModal(props: AddMealModalProps){
     const handleConfirmButton = async () => {
         setIsLoading(true)
 
-        form.setValue('meal_id', props.mealId)
+        form.setValue('meal_id', props.meal.meal_id)
         await postMealPlan({
             meal_id: form.getValues('meal_id'),
             meal_plan_date: form.getValues('meal_plan_date'),
@@ -158,13 +157,13 @@ export default function AddMealModal(props: AddMealModalProps){
                                 </span>
                             }
                             date={form.watch('meal_plan_date')}
-                            calorieValue={form.watch('meal_plan_total_calorie')}
+                            calorieValue={form.watch('meal_plan_total_calorie') + props.meal.meal_calories}
                             maxCalorie={form.watch('user_calorie_requirement')}
-                            proteinValue={form.watch('meal_plan_total_protein')}
+                            proteinValue={form.watch('meal_plan_total_protein') + props.meal.meal_protein}
                             maxProtein={form.watch('user_protein_requirement')}
-                            carbohydrateValue={form.watch('meal_plan_total_carbohydrate')}
+                            carbohydrateValue={form.watch('meal_plan_total_carbohydrate') + props.meal.meal_carbohydrate}
                             maxCarbohydrate={form.watch('user_carbohydrate_requirement')}
-                            fatValue={form.watch('meal_plan_total_fat')}
+                            fatValue={form.watch('meal_plan_total_fat') + props.meal.meal_fat}
                             maxFat={form.watch('user_fat_requirement')}
                             handleChangeDate={handleChangeDate}
                             disableChangeDate
