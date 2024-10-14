@@ -63,6 +63,8 @@ export async function POST(req: Request){
 
         const endOfDay = new Date(meal_plan_date)
         endOfDay.setUTCHours(23, 59, 59, 999)
+
+        let mealPlanDate = new Date(meal_plan_date).toISOString()
     
         let mealPlan = await db.mealPlan.findFirst({
             where: {
@@ -78,7 +80,7 @@ export async function POST(req: Request){
             mealPlan = await db.mealPlan.create({
                 data: {
                     user_id: userId,
-                    meal_plan_date: new Date(meal_plan_date),
+                    meal_plan_date: mealPlanDate,
                     meal_plan_total_calorie: meal.meal_calories,
                     meal_plan_total_carbohydrate: meal.meal_carbohydrate,
                     meal_plan_total_protein: meal.meal_protein,

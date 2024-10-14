@@ -14,12 +14,14 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
+import { MealProps } from "@/app/search/api/getAllMeals";
 
 interface AddMealModalProps{
     isOpen: boolean
     handleClose: () => void
     setIsOpen: (value: boolean) => void
     mealId: number
+    meal: MealProps
 }
 
 interface FormProps {
