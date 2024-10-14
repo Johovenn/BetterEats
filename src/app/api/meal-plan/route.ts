@@ -57,11 +57,20 @@ export async function POST(req: Request){
         if(!meal){
             return NextResponse.json(createResponse(400, "Invalid meal", null), {status: 400})
         }
+        
+        const startOfDay = new Date(meal_plan_date)
+        startOfDay.setUTCHours(0, 0, 0, 0)
+
+        const endOfDay = new Date(meal_plan_date)
+        endOfDay.setUTCHours(23, 59, 59, 999)
     
         let mealPlan = await db.mealPlan.findFirst({
             where: {
                 user_id: userId,
-                meal_plan_date: new Date(meal_plan_date),
+                meal_plan_date: {
+                    gte: startOfDay,
+                    lte: endOfDay,
+                },
             }
         })
     

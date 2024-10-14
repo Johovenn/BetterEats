@@ -21,7 +21,6 @@ export async function GET(req: Request){
     const endOfDay = new Date(mealPlanDate)
     endOfDay.setUTCHours(23, 59, 59, 999)
 
-
     const mealPlanData = await db.mealPlan.findFirst({
         where: {
             user_id: userId,
@@ -31,11 +30,6 @@ export async function GET(req: Request){
             }
         }
     })
-
-    console.log(mealPlanData?.meal_plan_date)
-    console.log(startOfDay)
-    console.log(endOfDay)
-
 
     const userData=  await db.userBMR.findFirst({
         where: {
