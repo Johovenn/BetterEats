@@ -106,96 +106,94 @@ export default function SearchPage(){
                 meal={selectedMeal || {} as MealProps}
             />
 
-            <main className="px-20 py-10 w-full">
-                <header className="flex justify-between items-start w-full">
-                    <div>
-                        <h1 className="text-2xl font-bold">Search for Food</h1>
-                    </div>
-                    <SearchBar />
-                </header>
+            <header className="flex justify-between items-start w-full">
+                <div>
+                    <h1 className="text-2xl font-bold">Search for Food</h1>
+                </div>
+                <SearchBar />
+            </header>
 
-                <section className="mt-5 min-w-full">
-                    <h2 className="text-xl font-medium">{mealName === '' ? 'Showing all search results' : `Showing search results for keyword \'${mealName}\'`}</h2>
-                    <div className="flex gap-10 mt-3">
-                        <div className="w-[65%] space-y-3 max-h-[550px]">
-                            {
-                                searchResults.length > 0
-                                    ?
-                                searchResults.map((meal) => (
-                                    <MealCard 
-                                        key={meal.meal_id}
-                                        meal={meal}
-                                        handleAddMealButton={handleAddMealButton}
-                                    />
-                                ))
-                                    :
-                                <h3>Food not found.</h3>
-                            }
+            <section className="mt-5 min-w-full">
+                <h2 className="text-xl font-medium">{mealName === '' ? 'Showing all search results' : `Showing search results for keyword \'${mealName}\'`}</h2>
+                <div className="flex gap-10 mt-3">
+                    <div className="w-[65%] space-y-3 max-h-[550px]">
+                        {
+                            searchResults.length > 0
+                                ?
+                            searchResults.map((meal) => (
+                                <MealCard 
+                                    key={meal.meal_id}
+                                    meal={meal}
+                                    handleAddMealButton={handleAddMealButton}
+                                />
+                            ))
+                                :
+                            <h3>Food not found.</h3>
+                        }
+                    </div>
+                    <div className="w-[35%] px-4 py-2 bg-white shadow-xl rounded-xl h-full max-lg:hidden">
+                        <div className="flex justify-between items-center">
+                            <h3 className="text-xl font-semibold">Filter</h3>
+                            <Button variant={"outline"} onClick={handleClearFilterButton}>Clear Filter</Button>
                         </div>
-                        <div className="w-[35%] px-4 py-2 bg-white shadow-xl rounded-xl h-full max-lg:hidden">
-                            <div className="flex justify-between items-center">
-                                <h3 className="text-xl font-semibold">Filter</h3>
-                                <Button variant={"outline"} onClick={handleClearFilterButton}>Clear Filter</Button>
-                            </div>
-                            <div className="p-2">
-                                <FormProvider {...form}>
-                                    <form action="" className="">
-                                        <h2 className="text-lg font-medium mt-1">Meal Type</h2>
-                                        <div className="flex flex-wrap gap-3 justify-between mt-2">
-                                            <CheckboxInput 
+                        <div className="p-2">
+                            <FormProvider {...form}>
+                                <form action="" className="">
+                                    <h2 className="text-lg font-medium mt-1">Meal Type</h2>
+                                    <div className="flex flex-wrap gap-3 justify-between mt-2">
+                                        <CheckboxInput 
+                                            control={form.control}
+                                            id="is_breakfast"
+                                            label="Breakfast"
+                                            classname="w-[110px]"
+                                        />
+                                        <CheckboxInput 
+                                            control={form.control}
+                                            id="is_lunch"
+                                            label="Dinner"
+                                            classname="w-[110px]"
+                                        />
+                                        <CheckboxInput 
+                                            control={form.control}
+                                            id="is_dinner"
+                                            label="Lunch"
+                                            classname="w-[110px]"
+                                        />
+                                        <CheckboxInput 
+                                            control={form.control}
+                                            id="is_snack"
+                                            label="Snack"
+                                            classname="w-[110px]"
+                                        />
+                                    </div>
+                                    <div className="mt-5">
+                                        <h2 className="text-lg font-medium">Calorie Range</h2>
+                                        <div className="flex items-end gap-5">
+                                            <NumericInput
                                                 control={form.control}
-                                                id="is_breakfast"
-                                                label="Breakfast"
-                                                classname="w-[110px]"
+                                                id="calorie_range_from"
+                                                label="From"
+                                                placeholder="Minimum Calorie"
+                                                className=""
+                                                onBlur={handleOnBlurFilter}
                                             />
-                                            <CheckboxInput 
+                                            <span className="mb-3">To</span>
+                                            <NumericInput
                                                 control={form.control}
-                                                id="is_lunch"
-                                                label="Dinner"
-                                                classname="w-[110px]"
-                                            />
-                                            <CheckboxInput 
-                                                control={form.control}
-                                                id="is_dinner"
-                                                label="Lunch"
-                                                classname="w-[110px]"
-                                            />
-                                            <CheckboxInput 
-                                                control={form.control}
-                                                id="is_snack"
-                                                label="Snack"
-                                                classname="w-[110px]"
+                                                id="calorie_range_to"
+                                                label="To"
+                                                placeholder="Maximum Calorie"
+                                                className=""
+                                                onBlur={handleOnBlurFilter}
                                             />
                                         </div>
-                                        <div className="mt-5">
-                                            <h2 className="text-lg font-medium">Calorie Range</h2>
-                                            <div className="flex items-end gap-5">
-                                                <NumericInput
-                                                    control={form.control}
-                                                    id="calorie_range_from"
-                                                    label="From"
-                                                    placeholder="Minimum Calorie"
-                                                    className=""
-                                                    onBlur={handleOnBlurFilter}
-                                                />
-                                                <span className="mb-3">To</span>
-                                                <NumericInput
-                                                    control={form.control}
-                                                    id="calorie_range_to"
-                                                    label="To"
-                                                    placeholder="Maximum Calorie"
-                                                    className=""
-                                                    onBlur={handleOnBlurFilter}
-                                                />
-                                            </div>
-                                        </div>
-                                    </form>
-                                </FormProvider>
-                            </div>
+                                    </div>
+                                </form>
+                            </FormProvider>
                         </div>
                     </div>
-                </section>
-            </main>
+                </div>
+            </section>
         </>
     )
 }

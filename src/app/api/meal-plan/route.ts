@@ -34,8 +34,60 @@ export async function GET(req: Request){
         })
 
         const response = {
-            
-        }
+            meal_plan_id: mealPlanData.meal_plan_id,
+            meal_plan_date: mealPlanData.meal_plan_date,
+            meals: {
+                breakfast: mealPlanDetailData
+                    .filter(detail => detail.mealType.meal_type_description === "Breakfast")
+                    .map(detail => ({
+                        meal_id: detail.meal.meal_id,
+                        meal_image: detail.meal.meal_image,
+                        meal_name: detail.meal.meal_name,
+                        calories: detail.meal.meal_calories,
+                        protein: detail.meal.meal_protein,
+                        carbohydrate: detail.meal.meal_carbohydrate,
+                        fat: detail.meal.meal_fat,
+                    })),
+                lunch: mealPlanDetailData
+                    .filter(detail => detail.meal_type_id === 2)
+                    .map(detail => ({
+                        meal_id: detail.meal.meal_id,
+                        meal_image: detail.meal.meal_image,
+                        meal_name: detail.meal.meal_name,
+                        calories: detail.meal.meal_calories,
+                        protein: detail.meal.meal_protein,
+                        carbohydrate: detail.meal.meal_carbohydrate,
+                        fat: detail.meal.meal_fat,
+                    })),
+                dinner: mealPlanDetailData
+                    .filter(detail => detail.meal_type_id === 3)
+                    .map(detail => ({
+                        meal_id: detail.meal.meal_id,
+                        meal_image: detail.meal.meal_image,
+                        meal_name: detail.meal.meal_name,
+                        calories: detail.meal.meal_calories,
+                        protein: detail.meal.meal_protein,
+                        carbohydrate: detail.meal.meal_carbohydrate,
+                        fat: detail.meal.meal_fat,
+                    })),
+                snack: mealPlanDetailData
+                    .filter(detail => detail.meal_type_id === 4)
+                    .map(detail => ({
+                        meal_id: detail.meal.meal_id,
+                        meal_image: detail.meal.meal_image,
+                        meal_name: detail.meal.meal_name,
+                        calories: detail.meal.meal_calories,
+                        protein: detail.meal.meal_protein,
+                        carbohydrate: detail.meal.meal_carbohydrate,
+                        fat: detail.meal.meal_fat,
+                    })),
+                }
+        };
+        
+        return NextResponse.json(createResponse(200, "Get Meal Plan successful!", response), {status: 200})
+    }
+    else {
+        return NextResponse.json(createResponse(200, "Get Meal Plan successful!", null), {status: 200})
     }
 }
 

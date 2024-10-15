@@ -27,7 +27,7 @@ export default function RootLayout({
       <html lang="en" className={kanit.variable}>
         <body className="min-w-screen min-h-screen flex bg-paper-default">
           <Sidebar />
-            <main className="ml-10 w-full">
+            <main className="ml-10 w-full px-20 py-10 ">
               {children}
             </main>
           <Toaster />
