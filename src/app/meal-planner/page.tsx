@@ -5,10 +5,15 @@ import MealCard from "@/components/meal-planner/MealCard.";
 import SearchBar from "@/components/SearchBar";
 import { useEffect, useState } from "react";
 import { getMealPlan } from "./api/getMealPlan";
+import { MealProps } from "../search/api/getAllMeals";
 
 
 export default function MealPlannerPage(){
     const [isLoading, setIsLoading] = useState(false)
+    const [breakfastData, setBreakfastData] = useState<MealProps[]>([])
+    const [lunchData, setLunchData] = useState<MealProps[]>([])
+    const [dinnerData, setDinnerData] = useState<MealProps[]>([])
+    const [snackData, setSnackData] = useState<MealProps[]>([])
 
     useEffect(() => {
         const getData = async () => {
@@ -32,10 +37,11 @@ export default function MealPlannerPage(){
                 </div>
                 <SearchBar />
             </header>
-            
+
             <section className="w-full">
                 <h2 className="text-2xl font-medium">Today&apos;s meal plan</h2>
-                    <div className="flex justify-between p-5">
+                <div className="flex justify-between p-5">
+
                 </div>
             </section>
         </>
