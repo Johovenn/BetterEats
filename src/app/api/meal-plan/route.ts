@@ -15,14 +15,15 @@ export async function GET(req: Request){
         return NextResponse.json(createResponse(400, "Bad Request", null), {status: 400})
     }
 
-    const utcMealPlanDate = new Date(mealPlanDate)
-
-    const startOfDay = new Date(utcMealPlanDate)
+    const startOfDay = new Date(mealPlanDate)
     startOfDay.setUTCHours(0, 0, 0, 0)
 
-    const endOfDay = new Date(utcMealPlanDate)
+    const endOfDay = new Date(mealPlanDate)
     endOfDay.setUTCHours(23, 59, 59, 999)
 
+    console.log(mealPlanDate)
+    console.log(startOfDay)
+    console.log(endOfDay)
 
     const mealPlanData = await db.mealPlan.findFirst({
         where: {
@@ -34,7 +35,16 @@ export async function GET(req: Request){
         }
     })
 
-    if(mealPlanData?.meal_plan_id){
+    const userData=  await db.userBMR.findFirst({
+        where: {
+            user_id: userId,
+        },
+        orderBy: {
+            user_bmr_date: 'desc'
+        },
+    })
+
+    if(mealPlanData){
         const mealPlanDetailData = await db.mealPlanDetail.findMany({
             where: {
                 meal_plan_id: mealPlanData?.meal_plan_id,
@@ -47,7 +57,15 @@ export async function GET(req: Request){
 
         const response = {
             meal_plan_id: mealPlanData.meal_plan_id,
-            meal_plan_date: mealPlanData.meal_plan_date,
+            meal_plan_date: mealPlanDate,
+            meal_plan_total_calorie: mealPlanData.meal_plan_total_calorie,
+            meal_plan_total_protein: mealPlanData.meal_plan_total_protein,
+            meal_plan_total_fat: mealPlanData.meal_plan_total_fat,
+            meal_plan_total_carbohydrate: mealPlanData.meal_plan_total_carbohydrate,
+            user_calorie_requirement: userData?.user_bmr_value,
+            user_protein_requirement: userData?.protein,
+            user_carbohydrate_requirement: userData?.carbohydrate,
+            user_fat_requirement: userData?.fat,
             meals: {
                 breakfast: mealPlanDetailData
                     .filter(detail => detail.mealType.meal_type_description === "Breakfast")
@@ -99,7 +117,26 @@ export async function GET(req: Request){
         return NextResponse.json(createResponse(200, "Get Meal Plan successful!", response), {status: 200})
     }
     else {
-        return NextResponse.json(createResponse(200, "Get Meal Plan successful!", null), {status: 200})
+        const response = {
+            meal_plan_id: null,
+            meal_plan_date: mealPlanDate,
+            meal_plan_total_calorie: 0,
+            meal_plan_total_protein: 0,
+            meal_plan_total_fat: 0,
+            meal_plan_total_carbohydrate: 0,
+            user_calorie_requirement: userData?.user_bmr_value,
+            user_protein_requirement: userData?.protein,
+            user_carbohydrate_requirement: userData?.carbohydrate,
+            user_fat_requirement: userData?.fat,
+            meals: {
+                breakfast: null,
+                lunch: null,
+                dinner: null,
+                snack: null,
+            }
+        }
+
+        return NextResponse.json(createResponse(200, "Get Meal Plan successful!", response), {status: 200})
     }
 }
 

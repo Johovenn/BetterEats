@@ -96,7 +96,7 @@ export default function HomePage(){
                 </div>
                 <SearchBar />
             </header>
-            
+
             <section className="mt-7 space-y-5">
                 <BMRCard 
                     bmrValue={form.watch('user_calorie_requirement')}

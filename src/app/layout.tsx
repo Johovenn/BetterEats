@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import { Work_Sans } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
-import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import { Toaster } from "@/components/ui/sonner";
 
 const kanit = Work_Sans({ 
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-  variable: '--font-kanit' 
+  variable: '--font-kanit',
+  display: 'swap'
 });
 
 export const metadata: Metadata = {
