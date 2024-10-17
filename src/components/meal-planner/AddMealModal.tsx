@@ -3,18 +3,18 @@ import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
 import MealPlanValueCard from "./MealPlanValueCard";
 import { useCallback, useEffect, useState } from "react";
-import { getMealPlanTotalNutrition } from "@/app/meal-planner/api/getMealPlanTotalNutrition";
 import HoverTooltip from "../Tooltip";
 import { Info, Router } from "lucide-react";
 import DatePicker from "../form/DatePicker";
 import DropdownInput from "../form/DropdownInput";
-import { getMealType, MealTypeProps } from "@/app/search/api/getMealType";
-import { postMealPlan } from "@/app/meal-planner/api/postMealPlan";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
-import { MealProps } from "@/app/search/api/getAllMeals";
+import { MealProps } from "@/app/(app)/search/api/getAllMeals";
+import { getMealType, MealTypeProps } from "@/app/(app)/search/api/getMealType";
+import { getMealPlanTotalNutrition } from "@/app/(app)/meal-planner/api/getMealPlanTotalNutrition";
+import { postMealPlan } from "@/app/(app)/meal-planner/api/postMealPlan";
 
 interface AddMealModalProps{
     isOpen: boolean

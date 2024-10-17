@@ -4,9 +4,8 @@ import MealBadge from "./MealBadge"
 import { Beef, Droplet, Flame, Wheat } from "lucide-react"
 import { Button } from "../ui/button"
 import { Separator } from "@radix-ui/react-separator"
-import { MealProps } from "@/app/search/api/getAllMeals"
-import { getMealPlanTotalNutrition } from "@/app/meal-planner/api/getMealPlanTotalNutrition"
 import { CldImage } from 'next-cloudinary'
+import { MealProps } from "@/app/(app)/search/api/getAllMeals"
 
 interface MealCardProps{
     meal: MealProps
