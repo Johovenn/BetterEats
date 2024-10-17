@@ -183,114 +183,112 @@ export default function BMRCalculator() {
                 onConfirm={form.handleSubmit(handleSaveBMR)}
             />
 
-            <main className="px-20 py-10 w-full">
-                <header className="flex justify-between items-start w-full">
-                    <div>
-                        <h1 className="text-2xl font-bold text-gray-700">Basal Metabolic Rate Calculator</h1>
-                        <p className="text-gray-500">Find out how many calories you burn everyday.</p>
+            <header className="flex justify-between items-start w-full">
+                <div>
+                    <h1 className="text-2xl font-bold text-gray-700">Basal Metabolic Rate Calculator</h1>
+                    <p className="text-gray-500">Find out how many calories you burn everyday.</p>
+                </div>
+                <SearchBar />
+            </header>
+            <section className="mt-7 h-full flex gap-5 w-full">
+                <div className="h-full w-[60%] shadow bg-white p-5">
+                    {/* <h1 className="text-xl font-medium">
+                        Calculate your BMR here
+                    </h1> */}
+                    <div className="w-full flex flex-col">
+                        <Form {...form} >
+                            <form action="" onSubmit={form.handleSubmit(handleCalculateButton)} className="space-y-4 flex flex-col">
+                                <NumericInput
+                                    control={form.control}
+                                    id="user_height"
+                                    label="Height (cm)"
+                                    placeholder="Input your height in cm"
+                                    className="w-full"
+                                />
+                                <NumericInput
+                                    control={form.control}
+                                    id="user_weight"
+                                    label="Weight (kg)"
+                                    placeholder="Input your weight in kg"
+                                    className="w-full"
+                                />
+                                <NumericInput
+                                    control={form.control}
+                                    id="user_age"
+                                    label="Age"
+                                    placeholder="Input your Age"
+                                    className="w-full"
+                                />
+                                <RadioInput
+                                    control={form.control}
+                                    id="user_gender"
+                                    label="Gender"
+                                    inputValues={genderInputValues}
+                                    radioId="value"
+                                    radioLabel="label"
+                                />
+                                <RadioInput
+                                    control={form.control}
+                                    id="activity_level_code"
+                                    label="Activity Level"
+                                    inputValues={activityLevelInputValues}
+                                    radioId="value"
+                                    radioLabel="label"
+                                />
+                                <RadioInput
+                                    control={form.control}
+                                    id="goal_code"
+                                    label="Activity Level"
+                                    inputValues={goalInputValues}
+                                    radioId="value"
+                                    radioLabel="label"
+                                />
+                                <Button
+                                    className="text-white rounded-xl py-2 px-4 ml-auto"
+                                    type="submit"
+                                >
+                                    Calculate
+                                </Button>
+                            </form>
+                        </Form>
                     </div>
-                    <SearchBar />
-                </header>
-                <section className="mt-7 h-full flex gap-5 w-full">
-                    <div className="h-full w-[60%] shadow bg-white p-5">
-                        {/* <h1 className="text-xl font-medium">
-                            Calculate your BMR here
-                        </h1> */}
-                        <div className="w-full flex flex-col">
-                            <Form {...form} >
-                                <form action="" onSubmit={form.handleSubmit(handleCalculateButton)} className="space-y-4 flex flex-col">
-                                    <NumericInput
-                                        control={form.control}
-                                        id="user_height"
-                                        label="Height (cm)"
-                                        placeholder="Input your height in cm"
-                                        className="w-full"
-                                    />
-                                    <NumericInput
-                                        control={form.control}
-                                        id="user_weight"
-                                        label="Weight (kg)"
-                                        placeholder="Input your weight in kg"
-                                        className="w-full"
-                                    />
-                                    <NumericInput
-                                        control={form.control}
-                                        id="user_age"
-                                        label="Age"
-                                        placeholder="Input your Age"
-                                        className="w-full"
-                                    />
-                                    <RadioInput
-                                        control={form.control}
-                                        id="user_gender"
-                                        label="Gender"
-                                        inputValues={genderInputValues}
-                                        radioId="value"
-                                        radioLabel="label"
-                                    />
-                                    <RadioInput
-                                        control={form.control}
-                                        id="activity_level_code"
-                                        label="Activity Level"
-                                        inputValues={activityLevelInputValues}
-                                        radioId="value"
-                                        radioLabel="label"
-                                    />
-                                    <RadioInput
-                                        control={form.control}
-                                        id="goal_code"
-                                        label="Activity Level"
-                                        inputValues={goalInputValues}
-                                        radioId="value"
-                                        radioLabel="label"
-                                    />
-                                    <Button
-                                        className="text-white rounded-xl py-2 px-4 ml-auto"
-                                        type="submit"
-                                    >
-                                        Calculate
-                                    </Button>
-                                </form>
-                            </Form>
-                        </div>
+                </div>
+                <div className="h-fit w-[40%] shadow bg-white p-5 flex flex-col justify-center items-center">
+                    <h2 className="text-xl font-medium mb-5">
+                        Your daily nutrition needs
+                    </h2>
+                    <div className="rounded-full border-[20px] border-orange-default w-[200px] h-[200px] text-center flex flex-col justify-center">
+                        <span className="text-lg text-slate-500 font-medium">Total</span>
+                        <span className="text-2xl font-bold">{form.watch('user_bmr_value')}</span>
+                        <span className="text-md text-slate-500 font-medium">kCal</span>
                     </div>
-                    <div className="h-full w-[40%] shadow bg-white p-5 flex flex-col justify-center items-center">
-                        <h2 className="text-xl font-medium mb-5">
-                            Your daily nutrition needs
-                        </h2>
-                        <div className="rounded-full border-[20px] border-orange-default w-[200px] h-[200px] text-center flex flex-col justify-center">
-                            <span className="text-lg text-slate-500 font-medium">Total</span>
-                            <span className="text-2xl font-bold">{form.watch('user_bmr_value')}</span>
-                            <span className="text-md text-slate-500 font-medium">kCal</span>
-                        </div>
-                        <div className="flex justify-around gap-3 mt-3">
-                            <NutritionCard 
-                                icon={<Beef size={30} className="text-gray-500"/>}
-                                title="Protein"
-                                value={form.watch('protein')}
-                            />
-                            <NutritionCard 
-                                icon={<Wheat size={30} className="text-gray-500"/>}
-                                title="Carbs"
-                                value={form.watch('carbohydrate')}
-                            />
-                            <NutritionCard
-                                icon={<Beef size={30} className="text-gray-500"/>}
-                                title="Fat"
-                                value={form.watch('fat')}
-                            />
-                        </div>
+                    <div className="flex justify-around gap-3 mt-3">
+                        <NutritionCard 
+                            icon={<Beef size={30} className="text-gray-500"/>}
+                            title="Protein"
+                            value={form.watch('protein')}
+                        />
+                        <NutritionCard 
+                            icon={<Wheat size={30} className="text-gray-500"/>}
+                            title="Carbs"
+                            value={form.watch('carbohydrate')}
+                        />
+                        <NutritionCard
+                            icon={<Beef size={30} className="text-gray-500"/>}
+                            title="Fat"
+                            value={form.watch('fat')}
+                        />
+                    </div>
 
-                        <Button 
-                            disabled={!form.watch('user_bmr_value') || !form.getValues('protein') || !form.getValues('carbohydrate') || !form.getValues('fat')}
-                            className="text-white rounded-xl mt-5"
-                            onClick={form.handleSubmit(() => setAlertModal(true))}
-                        >
-                            Save BMR
-                        </Button>
-                    </div>
-                </section>
-            </main>
+                    <Button 
+                        disabled={!form.watch('user_bmr_value') || !form.getValues('protein') || !form.getValues('carbohydrate') || !form.getValues('fat')}
+                        className="text-white rounded-xl mt-5"
+                        onClick={form.handleSubmit(() => setAlertModal(true))}
+                    >
+                        Save BMR
+                    </Button>
+                </div>
+            </section>
         </>
     )
 }

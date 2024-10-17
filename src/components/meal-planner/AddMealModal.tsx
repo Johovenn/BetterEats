@@ -137,14 +137,6 @@ export default function AddMealModal(props: AddMealModalProps){
                 </DialogHeader>
                 <div className="flex flex-col items-center">
                     <FormProvider {...form}>
-                        <DatePicker
-                            dateValue={form.watch('meal_plan_date')}
-                            onDateChange={(date) => {
-                                form.setValue('meal_plan_date', date)
-                                getTotalNutrition()
-                            }}
-                            className="w-[500px] mb-4"
-                        />
                         <MealPlanValueCard 
                             title={
                                 <span className="text-lg flex items-center gap-2">

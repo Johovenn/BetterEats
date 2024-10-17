@@ -10,7 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 interface DateInputProps {
   dateValue: Date
   onDateChange: (date: Date) => void
-  className: string
+  className?: string
 }
 
 export default function DatePicker(props: DateInputProps) {

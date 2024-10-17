@@ -15,14 +15,36 @@ export async function GET(req: Request){
         return NextResponse.json(createResponse(400, "Bad Request", null), {status: 400})
     }
 
+    const startOfDay = new Date(mealPlanDate)
+    startOfDay.setUTCHours(0, 0, 0, 0)
+
+    const endOfDay = new Date(mealPlanDate)
+    endOfDay.setUTCHours(23, 59, 59, 999)
+
+    console.log(mealPlanDate)
+    console.log(startOfDay)
+    console.log(endOfDay)
+
     const mealPlanData = await db.mealPlan.findFirst({
         where: {
             user_id: userId,
-            meal_plan_date: new Date(mealPlanDate)
+            meal_plan_date: {
+                gte: startOfDay,
+                lte: endOfDay
+            }
         }
     })
 
-    if(mealPlanData?.meal_plan_id){
+    const userData=  await db.userBMR.findFirst({
+        where: {
+            user_id: userId,
+        },
+        orderBy: {
+            user_bmr_date: 'desc'
+        },
+    })
+
+    if(mealPlanData){
         const mealPlanDetailData = await db.mealPlanDetail.findMany({
             where: {
                 meal_plan_id: mealPlanData?.meal_plan_id,
@@ -34,8 +56,87 @@ export async function GET(req: Request){
         })
 
         const response = {
-            
+            meal_plan_id: mealPlanData.meal_plan_id,
+            meal_plan_date: mealPlanDate,
+            meal_plan_total_calorie: mealPlanData.meal_plan_total_calorie,
+            meal_plan_total_protein: mealPlanData.meal_plan_total_protein,
+            meal_plan_total_fat: mealPlanData.meal_plan_total_fat,
+            meal_plan_total_carbohydrate: mealPlanData.meal_plan_total_carbohydrate,
+            user_calorie_requirement: userData?.user_bmr_value,
+            user_protein_requirement: userData?.protein,
+            user_carbohydrate_requirement: userData?.carbohydrate,
+            user_fat_requirement: userData?.fat,
+            meals: {
+                breakfast: mealPlanDetailData
+                    .filter(detail => detail.mealType.meal_type_description === "Breakfast")
+                    .map(detail => ({
+                        meal_id: detail.meal.meal_id,
+                        meal_image: detail.meal.meal_image,
+                        meal_name: detail.meal.meal_name,
+                        calories: detail.meal.meal_calories,
+                        protein: detail.meal.meal_protein,
+                        carbohydrate: detail.meal.meal_carbohydrate,
+                        fat: detail.meal.meal_fat,
+                    })),
+                lunch: mealPlanDetailData
+                    .filter(detail => detail.meal_type_id === 2)
+                    .map(detail => ({
+                        meal_id: detail.meal.meal_id,
+                        meal_image: detail.meal.meal_image,
+                        meal_name: detail.meal.meal_name,
+                        calories: detail.meal.meal_calories,
+                        protein: detail.meal.meal_protein,
+                        carbohydrate: detail.meal.meal_carbohydrate,
+                        fat: detail.meal.meal_fat,
+                    })),
+                dinner: mealPlanDetailData
+                    .filter(detail => detail.meal_type_id === 3)
+                    .map(detail => ({
+                        meal_id: detail.meal.meal_id,
+                        meal_image: detail.meal.meal_image,
+                        meal_name: detail.meal.meal_name,
+                        calories: detail.meal.meal_calories,
+                        protein: detail.meal.meal_protein,
+                        carbohydrate: detail.meal.meal_carbohydrate,
+                        fat: detail.meal.meal_fat,
+                    })),
+                snack: mealPlanDetailData
+                    .filter(detail => detail.meal_type_id === 4)
+                    .map(detail => ({
+                        meal_id: detail.meal.meal_id,
+                        meal_image: detail.meal.meal_image,
+                        meal_name: detail.meal.meal_name,
+                        calories: detail.meal.meal_calories,
+                        protein: detail.meal.meal_protein,
+                        carbohydrate: detail.meal.meal_carbohydrate,
+                        fat: detail.meal.meal_fat,
+                    })),
+                }
+        };
+        
+        return NextResponse.json(createResponse(200, "Get Meal Plan successful!", response), {status: 200})
+    }
+    else {
+        const response = {
+            meal_plan_id: null,
+            meal_plan_date: mealPlanDate,
+            meal_plan_total_calorie: 0,
+            meal_plan_total_protein: 0,
+            meal_plan_total_fat: 0,
+            meal_plan_total_carbohydrate: 0,
+            user_calorie_requirement: userData?.user_bmr_value,
+            user_protein_requirement: userData?.protein,
+            user_carbohydrate_requirement: userData?.carbohydrate,
+            user_fat_requirement: userData?.fat,
+            meals: {
+                breakfast: null,
+                lunch: null,
+                dinner: null,
+                snack: null,
+            }
         }
+
+        return NextResponse.json(createResponse(200, "Get Meal Plan successful!", response), {status: 200})
     }
 }
 

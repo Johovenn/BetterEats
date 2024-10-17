@@ -89,32 +89,31 @@ export default function HomePage(){
         <>
             <Loading loading={isLoading} />
 
-            <main className="px-20 py-10 w-full">
-                <header className="flex justify-between items-start w-full">
-                    <div>
-                        <h1 className="text-2xl font-medium">Hello, {user.fullName}</h1>
-                        <p>It&apos;s {formattedDate}</p>
-                    </div>
-                    <SearchBar />
-                </header>
-                <section className="mt-7 space-y-5">
-                    <BMRCard 
-                        bmrValue={form.watch('user_calorie_requirement')}
-                    />
-                    <MealPlanValueCard 
-                        date={form.watch('meal_plan_date')}
-                        calorieValue={form.watch('meal_plan_total_calorie')}
-                        maxCalorie={form.watch('user_calorie_requirement')}
-                        proteinValue={form.watch('meal_plan_total_protein')}
-                        maxProtein={form.watch('user_protein_requirement')}
-                        carbohydrateValue={form.watch('meal_plan_total_carbohydrate')}
-                        maxCarbohydrate={form.watch('user_carbohydrate_requirement')}
-                        fatValue={form.watch('meal_plan_total_fat')}
-                        maxFat={form.watch('user_fat_requirement')}
-                        handleChangeDate={handleChangeDate}
-                    />
-                </section>
-            </main>
+            <header className="flex justify-between items-start w-full">
+                <div>
+                    <h1 className="text-2xl font-medium">Hello, {user.fullName}</h1>
+                    <p>It&apos;s {formattedDate}</p>
+                </div>
+                <SearchBar />
+            </header>
+
+            <section className="mt-7 space-y-5">
+                <BMRCard 
+                    bmrValue={form.watch('user_calorie_requirement')}
+                />
+                <MealPlanValueCard 
+                    date={form.watch('meal_plan_date')}
+                    calorieValue={form.watch('meal_plan_total_calorie')}
+                    maxCalorie={form.watch('user_calorie_requirement')}
+                    proteinValue={form.watch('meal_plan_total_protein')}
+                    maxProtein={form.watch('user_protein_requirement')}
+                    carbohydrateValue={form.watch('meal_plan_total_carbohydrate')}
+                    maxCarbohydrate={form.watch('user_carbohydrate_requirement')}
+                    fatValue={form.watch('meal_plan_total_fat')}
+                    maxFat={form.watch('user_fat_requirement')}
+                    handleChangeDate={handleChangeDate}
+                />
+            </section>
         </>
     )
 }
