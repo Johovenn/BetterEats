@@ -1,15 +1,19 @@
 import Image from "next/image"
 import { Badge } from "../ui/badge"
 import MealBadge from "./MealBadge"
-import { Beef, Droplet, Flame, Wheat } from "lucide-react"
+import { Beef, Droplet, Ellipsis, Flame, Wheat } from "lucide-react"
 import { Button } from "../ui/button"
 import { Separator } from "@radix-ui/react-separator"
 import { CldImage } from 'next-cloudinary'
 import { MealProps } from "@/app/(app)/search/api/getAllMeals"
+import Menu from "../Menu"
+import { MealPlanDetailProps } from "@/app/(app)/meal-planner/api/getMealPlan"
 
 interface MealCardProps{
-    meal: MealProps
-    handleAddMealButton: (meal: MealProps) => void
+    meal: MealProps | MealPlanDetailProps
+    mode: "search" | "meal-plan"
+    handleAddMealButton?: (meal: MealProps) => void
+    handleDeleteButton?: (meal_plan_detail_id: number) => void
 }
 
 export default function MealCard(props: MealCardProps){
@@ -44,8 +48,30 @@ export default function MealCard(props: MealCardProps){
                     </div>
                 </div>
                 <div className="mr-1 flex items-center gap-3">
-                    <Button className="" variant={"outline"}>Info</Button>
-                    <Button className="" onClick={() => props.handleAddMealButton(props.meal)}>Add to meal plan</Button>
+                    {
+                        props.mode === "search"
+                        ?
+                        <>
+                            <Button className="" variant={"outline"}>Info</Button>
+                            <Button className="" onClick={() => props.handleAddMealButton ? props.handleAddMealButton(props.meal) : () => {}}>Add to meal plan</Button>
+                        </>
+                            :
+                        <>
+                            <Menu 
+                                label={<Ellipsis color="gray" size={16}/>}
+                                items={[
+                                    {
+                                        label: "Info",
+                                        onClick: () => console.log('info')
+                                    },
+                                    {
+                                        label: "Remove",
+                                        onClick: () => props.handleDeleteButton ? props.handleDeleteButton(props.meal.meal_plan_detail_id) : () => {}
+                                    }
+                                ]}
+                            />
+                        </>
+                    }
                 </div>
             </div>
         </div>

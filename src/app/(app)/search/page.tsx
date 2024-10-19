@@ -12,6 +12,7 @@ import { Form, FormProvider, useForm } from "react-hook-form";
 import NumericInput from "@/components/form/NumericInput";
 import { Button } from "@/components/ui/button";
 import AddMealModal from "@/components/meal-planner/AddMealModal";
+import PageHeader from "@/components/PageHeader";
 
 interface FormProps{
     is_breakfast: boolean
@@ -91,8 +92,8 @@ export default function SearchPage(){
     }
 
     const handleAddMealButton = (meal: MealProps) => {
-        setAddMealModal(true)
         setSelectedMeal(meal)
+        setAddMealModal(true)
     } 
     
     return(
@@ -106,12 +107,9 @@ export default function SearchPage(){
                 meal={selectedMeal || {} as MealProps}
             />
 
-            <header className="flex justify-between items-start w-full">
-                <div>
-                    <h1 className="text-2xl font-bold">Search for Food</h1>
-                </div>
-                <SearchBar />
-            </header>
+            <PageHeader 
+                title="Search for Food"
+            />
 
             <section className="mt-5 min-w-full">
                 <h2 className="text-xl font-medium">{mealName === '' ? 'Showing all search results' : `Showing search results for keyword \'${mealName}\'`}</h2>
@@ -124,6 +122,7 @@ export default function SearchPage(){
                                 <MealCard 
                                     key={meal.meal_id}
                                     meal={meal}
+                                    mode="search"
                                     handleAddMealButton={handleAddMealButton}
                                 />
                             ))

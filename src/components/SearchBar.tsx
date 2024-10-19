@@ -7,7 +7,7 @@ export default function SearchBar(){
     const [inputValue, setInputValue] = useState("")
 
     const handleEnterKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === 'Enter') {
+        if (event.key === 'Enter' && inputValue.trim() !== "") {
             handleSearch()
         }
     }

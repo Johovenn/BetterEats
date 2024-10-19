@@ -10,6 +10,7 @@ import { getUserBMR } from "../bmr-calculator/api/getUserBMR"
 import MealPlanValueCard from "@/components/meal-planner/MealPlanValueCard"
 import { getMealPlanTotalNutrition } from "../meal-planner/api/getMealPlanTotalNutrition"
 import { useForm } from "react-hook-form"
+import PageHeader from "@/components/PageHeader"
 
 interface FormProps {
     meal_plan_date: Date;
@@ -89,13 +90,10 @@ export default function HomePage(){
         <>
             <Loading loading={isLoading} />
 
-            <header className="flex justify-between items-start w-full">
-                <div>
-                    <h1 className="text-2xl font-medium">Hello, {user.fullName}</h1>
-                    <p>It&apos;s {formattedDate}</p>
-                </div>
-                <SearchBar />
-            </header>
+            <PageHeader 
+                title={`Hello, ${user.fullName}`}
+                subtitle={`It's ${formattedDate}`}
+            />
 
             <section className="mt-7 space-y-5">
                 <BMRCard 

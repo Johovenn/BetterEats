@@ -1,6 +1,6 @@
-import { MealProps } from "@/app/search/api/getAllMeals";
 import { ResponseProps } from "@/lib/api";
 import axios from "axios";
+import { MealProps } from "../../search/api/getAllMeals";
 
 export interface MealPlanProps{
     meal_plan_id: number
@@ -14,11 +14,15 @@ export interface MealPlanProps{
     user_carbohydrate_requirement: number
     user_fat_requirement: number
     meals: {
-        breakfast: MealProps[]
-        lunch: MealProps[]
-        dinner: MealProps[]
-        snack: MealProps[]
+        breakfast: MealPlanDetailProps[]
+        lunch: MealPlanDetailProps[]
+        dinner: MealPlanDetailProps[]
+        snack: MealPlanDetailProps[]
     }
+}
+
+export interface MealPlanDetailProps extends MealProps {
+    meal_plan_detail_id: number
 }
 
 export async function getMealPlan(meal_plan_date: Date): Promise<ResponseProps<MealPlanProps>>{

@@ -149,16 +149,15 @@ export default function AddMealModal(props: AddMealModalProps){
                                 </span>
                             }
                             date={form.watch('meal_plan_date')}
-                            calorieValue={form.watch('meal_plan_total_calorie') + props.meal.meal_calories}
+                            calorieValue={isLoading ? 0 : form.watch('meal_plan_total_calorie') + props.meal.meal_calories}
                             maxCalorie={form.watch('user_calorie_requirement')}
-                            proteinValue={form.watch('meal_plan_total_protein') + props.meal.meal_protein}
+                            proteinValue={isLoading ? 0 : form.watch('meal_plan_total_protein') + props.meal.meal_protein}
                             maxProtein={form.watch('user_protein_requirement')}
-                            carbohydrateValue={form.watch('meal_plan_total_carbohydrate') + props.meal.meal_carbohydrate}
+                            carbohydrateValue={isLoading ? 0 : form.watch('meal_plan_total_carbohydrate') + props.meal.meal_carbohydrate}
                             maxCarbohydrate={form.watch('user_carbohydrate_requirement')}
-                            fatValue={form.watch('meal_plan_total_fat') + props.meal.meal_fat}
+                            fatValue={isLoading ? 0 : form.watch('meal_plan_total_fat') + props.meal.meal_fat}
                             maxFat={form.watch('user_fat_requirement')}
                             handleChangeDate={handleChangeDate}
-                            disableChangeDate
                             className="w-[500px] border mb-4"
                         />
                         <DropdownInput

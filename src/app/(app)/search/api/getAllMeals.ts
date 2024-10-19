@@ -16,6 +16,7 @@ export interface MealProps{
     is_dinner: boolean
     is_snack: boolean
     meal_type_description: string
+    meal_plan_detail_id: number
 }
 
 interface GetAllMealRequest{

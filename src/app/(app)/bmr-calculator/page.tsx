@@ -17,6 +17,7 @@ import { getBMRValue } from "./api/calculateBMR";
 import { getUserBMR } from "./api/getUserBMR";
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup'
+import PageHeader from "@/components/PageHeader";
 
 interface FormProps{
     user_height: number
@@ -183,13 +184,11 @@ export default function BMRCalculator() {
                 onConfirm={form.handleSubmit(handleSaveBMR)}
             />
 
-            <header className="flex justify-between items-start w-full">
-                <div>
-                    <h1 className="text-2xl font-bold text-gray-700">Basal Metabolic Rate Calculator</h1>
-                    <p className="text-gray-500">Find out how many calories you burn everyday.</p>
-                </div>
-                <SearchBar />
-            </header>
+            <PageHeader 
+                title="Basal Metabolic Rate Calculator"
+                subtitle="Find out how many calories you burn everyday."
+            />
+            
             <section className="mt-7 h-full flex gap-5 w-full">
                 <div className="h-full w-[60%] shadow bg-white p-5">
                     {/* <h1 className="text-xl font-medium">

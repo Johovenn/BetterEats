@@ -21,10 +21,6 @@ export async function GET(req: Request){
     const endOfDay = new Date(mealPlanDate)
     endOfDay.setUTCHours(23, 59, 59, 999)
 
-    console.log(mealPlanDate)
-    console.log(startOfDay)
-    console.log(endOfDay)
-
     const mealPlanData = await db.mealPlan.findFirst({
         where: {
             user_id: userId,
@@ -70,46 +66,50 @@ export async function GET(req: Request){
                 breakfast: mealPlanDetailData
                     .filter(detail => detail.mealType.meal_type_description === "Breakfast")
                     .map(detail => ({
+                        meal_plan_detail_id: detail.meal_plan_detail_id,
                         meal_id: detail.meal.meal_id,
                         meal_image: detail.meal.meal_image,
                         meal_name: detail.meal.meal_name,
-                        calories: detail.meal.meal_calories,
-                        protein: detail.meal.meal_protein,
-                        carbohydrate: detail.meal.meal_carbohydrate,
-                        fat: detail.meal.meal_fat,
+                        meal_calories: detail.meal.meal_calories,
+                        meal_protein: detail.meal.meal_protein,
+                        meal_carbohydrate: detail.meal.meal_carbohydrate,
+                        meal_fat: detail.meal.meal_fat,
                     })),
                 lunch: mealPlanDetailData
-                    .filter(detail => detail.meal_type_id === 2)
-                    .map(detail => ({
-                        meal_id: detail.meal.meal_id,
-                        meal_image: detail.meal.meal_image,
-                        meal_name: detail.meal.meal_name,
-                        calories: detail.meal.meal_calories,
-                        protein: detail.meal.meal_protein,
-                        carbohydrate: detail.meal.meal_carbohydrate,
-                        fat: detail.meal.meal_fat,
-                    })),
-                dinner: mealPlanDetailData
                     .filter(detail => detail.meal_type_id === 3)
                     .map(detail => ({
+                        meal_plan_detail_id: detail.meal_plan_detail_id,
                         meal_id: detail.meal.meal_id,
                         meal_image: detail.meal.meal_image,
                         meal_name: detail.meal.meal_name,
-                        calories: detail.meal.meal_calories,
-                        protein: detail.meal.meal_protein,
-                        carbohydrate: detail.meal.meal_carbohydrate,
-                        fat: detail.meal.meal_fat,
+                        meal_calories: detail.meal.meal_calories,
+                        meal_protein: detail.meal.meal_protein,
+                        meal_carbohydrate: detail.meal.meal_carbohydrate,
+                        meal_fat: detail.meal.meal_fat,
                     })),
-                snack: mealPlanDetailData
+                dinner: mealPlanDetailData
                     .filter(detail => detail.meal_type_id === 4)
                     .map(detail => ({
+                        meal_plan_detail_id: detail.meal_plan_detail_id,
                         meal_id: detail.meal.meal_id,
                         meal_image: detail.meal.meal_image,
                         meal_name: detail.meal.meal_name,
-                        calories: detail.meal.meal_calories,
-                        protein: detail.meal.meal_protein,
-                        carbohydrate: detail.meal.meal_carbohydrate,
-                        fat: detail.meal.meal_fat,
+                        meal_calories: detail.meal.meal_calories,
+                        meal_protein: detail.meal.meal_protein,
+                        meal_carbohydrate: detail.meal.meal_carbohydrate,
+                        meal_fat: detail.meal.meal_fat,
+                    })),
+                snack: mealPlanDetailData
+                    .filter(detail => detail.meal_type_id === 2)
+                    .map(detail => ({
+                        meal_plan_detail_id: detail.meal_plan_detail_id,
+                        meal_id: detail.meal.meal_id,
+                        meal_image: detail.meal.meal_image,
+                        meal_name: detail.meal.meal_name,
+                        meal_calories: detail.meal.meal_calories,
+                        meal_protein: detail.meal.meal_protein,
+                        meal_carbohydrate: detail.meal.meal_carbohydrate,
+                        meal_fat: detail.meal.meal_fat,
                     })),
                 }
         };
