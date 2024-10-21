@@ -1,7 +1,7 @@
 "use client"
 
 import { link } from "fs";
-import { Calculator, HomeIcon, SearchIcon, UsersIcon, UtensilsCrossed, UtensilsIcon } from "lucide-react";
+import { Calculator, HomeIcon, Newspaper, SearchIcon, UsersIcon, UtensilsCrossed, UtensilsIcon } from "lucide-react";
 import { ReactNode } from "react";
 import { Separator } from "./ui/separator";
 import { usePathname } from "next/navigation";
@@ -42,9 +42,9 @@ export default function Sidebar(){
             link: '/meal-planner'
         },
         {
-            title: 'Community',
-            icon: <UsersIcon/>,
-            link: '/community'
+            title: 'Articles',
+            icon: <Newspaper/>,
+            link: '/articles'
         }
     ]
 

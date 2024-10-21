@@ -12,12 +12,12 @@ import { MealPlanDetailProps } from "@/app/(app)/meal-planner/api/getMealPlan"
 interface MealCardProps{
     meal: MealProps | MealPlanDetailProps
     mode: "search" | "meal-plan"
+    handleInfoButton: (id: number) => void
     handleAddMealButton?: (meal: MealProps) => void
     handleDeleteButton?: (meal_plan_detail_id: number) => void
 }
 
 export default function MealCard(props: MealCardProps){
-
     return(
         <div className="w-full min-w-[700px] h-[100px] bg-white shadow-lg flex items-center px-3 rounded-xl">
             <div className="relative w-[80px] h-[80px]">
@@ -52,7 +52,7 @@ export default function MealCard(props: MealCardProps){
                         props.mode === "search"
                         ?
                         <>
-                            <Button className="" variant={"outline"}>Info</Button>
+                            <Button className="" variant={"outline"} onClick={() => props.handleInfoButton(props.meal.meal_id)}>Info</Button>
                             <Button className="" onClick={() => props.handleAddMealButton ? props.handleAddMealButton(props.meal) : () => {}}>Add to meal plan</Button>
                         </>
                             :
@@ -62,7 +62,7 @@ export default function MealCard(props: MealCardProps){
                                 items={[
                                     {
                                         label: "Info",
-                                        onClick: () => console.log('info')
+                                        onClick: () => props.handleInfoButton(props.meal.meal_id)
                                     },
                                     {
                                         label: "Remove",

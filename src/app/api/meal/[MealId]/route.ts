@@ -15,13 +15,13 @@ export async function GET(req: Request, { params }: { params: { MealId: string }
         return NextResponse.json(createResponse(400, "Invalid Meal ID", null), { status: 400 });
     }
 
-    const meal = await db.meal.findUnique({
+    const meal = await db.meal.findFirst({
         where: { meal_id: mealId },
-    });
+    })
 
     if (!meal) {
         return NextResponse.json(createResponse(404, "Meal not found", null), { status: 404 });
     }
 
-    return NextResponse.json(createResponse(200, "Meal retrieved successfully", meal), { status: 200 });
+    return NextResponse.json(createResponse(200, "Fetch data successful", meal), { status: 200 });
 }
