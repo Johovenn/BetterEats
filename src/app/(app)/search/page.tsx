@@ -13,6 +13,7 @@ import NumericInput from "@/components/form/NumericInput";
 import { Button } from "@/components/ui/button";
 import AddMealModal from "@/components/meal-planner/AddMealModal";
 import PageHeader from "@/components/PageHeader";
+import MealDetailModal from "@/components/meal-planner/MealDetailModal";
 
 interface FormProps{
     is_breakfast: boolean
@@ -31,6 +32,8 @@ export default function SearchPage(){
     const [searchResults, setSearchResults] = useState<MealProps[]>([])
     const [addMealModal, setAddMealModal] = useState(false)
     const [selectedMeal, setSelectedMeal] = useState<MealProps>()
+    const [selectedMealId, setSelectedMealId] = useState<number>()
+    const [detailModal, setDetailModal] = useState(false)
     const searchParams = useSearchParams()
     const keyword = searchParams.get('keyword')
 
@@ -95,6 +98,11 @@ export default function SearchPage(){
         setSelectedMeal(meal)
         setAddMealModal(true)
     } 
+
+    const handleInfoButton = (meal_id: number) => {
+        setSelectedMealId(meal_id)
+        setDetailModal(true)
+    }
     
     return(
         <>
@@ -105,6 +113,13 @@ export default function SearchPage(){
                 handleClose={() => setAddMealModal(false)}
                 setIsOpen={setAddMealModal}
                 meal={selectedMeal || {} as MealProps}
+            />
+
+            <MealDetailModal 
+                isOpen={detailModal}
+                setIsOpen={setDetailModal}
+                handleClose={() => setDetailModal(false)}
+                mealId={selectedMealId}
             />
 
             <PageHeader 
@@ -123,6 +138,7 @@ export default function SearchPage(){
                                     key={meal.meal_id}
                                     meal={meal}
                                     mode="search"
+                                    handleInfoButton={handleInfoButton}
                                     handleAddMealButton={handleAddMealButton}
                                 />
                             ))

@@ -13,6 +13,7 @@ import AlertModal from "@/components/AlertModal";
 import { deleteMealPlan } from "./api/deleteMealPlan";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import MealDetailModal from "@/components/meal-planner/MealDetailModal";
 
 interface FormProps {
     meal_plan_date: Date;
@@ -35,6 +36,8 @@ export default function MealPlannerPage(){
     const [lunchData, setLunchData] = useState<MealPlanDetailProps[]>([])
     const [dinnerData, setDinnerData] = useState<MealPlanDetailProps[]>([])
     const [snackData, setSnackData] = useState<MealPlanDetailProps[]>([])
+    const [selectedMealId, setSelectedMealId] = useState<number>()
+    const [detailModal, setDetailModal] = useState(false)
     
     const form = useForm<FormProps>({
         defaultValues: {
@@ -63,10 +66,10 @@ export default function MealPlannerPage(){
                 form.setValue('user_carbohydrate_requirement', response.data.user_carbohydrate_requirement)
                 form.setValue('user_protein_requirement', response.data.user_protein_requirement)
                 form.setValue('user_fat_requirement', response.data.user_fat_requirement)
-                response.data.meals.breakfast ? setBreakfastData(response.data.meals.breakfast) : null
-                response.data.meals.lunch ? setLunchData(response.data.meals.lunch) : null
-                response.data.meals.dinner ? setDinnerData(response.data.meals.dinner) : null
-                response.data.meals.snack ? setSnackData(response.data.meals.snack) : null
+                response.data.meals.breakfast ? setBreakfastData(response.data.meals.breakfast) : setBreakfastData([])
+                response.data.meals.lunch ? setLunchData(response.data.meals.lunch) : setLunchData([])
+                response.data.meals.dinner ? setDinnerData(response.data.meals.dinner) : setDinnerData([])
+                response.data.meals.snack ? setSnackData(response.data.meals.snack) : setSnackData([])
             }
         })
 
@@ -102,9 +105,21 @@ export default function MealPlannerPage(){
         setIsLoading(false)
     }
 
+    const handleInfoButton = (meal_id: number) => {
+        setSelectedMealId(meal_id)
+        setDetailModal(true)
+    }
+
     return (
         <>
             <Loading loading={isLoading} />
+
+            <MealDetailModal
+                isOpen={detailModal}
+                setIsOpen={setDetailModal}
+                handleClose={() => setDetailModal(false)}
+                mealId={1}
+            />
 
             <PageHeader 
                 title="Meal Planner"
@@ -133,6 +148,7 @@ export default function MealPlannerPage(){
                                         meal={meal}
                                         mode="meal-plan"
                                         handleDeleteButton={handleDeleteButton}
+                                        handleInfoButton={handleInfoButton}
                                     />
                                 ))
                                     :
@@ -153,6 +169,7 @@ export default function MealPlannerPage(){
                                         meal={meal}
                                         mode="meal-plan"
                                         handleDeleteButton={handleDeleteButton}
+                                        handleInfoButton={handleInfoButton}
                                     />
                                 ))
                                     :
@@ -173,6 +190,7 @@ export default function MealPlannerPage(){
                                         meal={meal}
                                         mode="meal-plan"
                                         handleDeleteButton={handleDeleteButton}
+                                        handleInfoButton={handleInfoButton}
                                     />
                                 ))
                                     :
@@ -193,6 +211,7 @@ export default function MealPlannerPage(){
                                         meal={meal}
                                         mode="meal-plan"
                                         handleDeleteButton={handleDeleteButton}
+                                        handleInfoButton={handleInfoButton}
                                     />
                                 ))
                                     :
