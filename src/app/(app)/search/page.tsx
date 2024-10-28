@@ -127,9 +127,9 @@ export default function SearchPage(){
             />
 
             <section className="mt-5 min-w-full">
-                <h2 className="text-xl font-medium">{mealName === '' ? 'Showing all search results' : `Showing search results for keyword \'${mealName}\'`}</h2>
-                <div className="flex gap-10 mt-3">
-                    <div className="w-[65%] space-y-3 max-h-[550px]">
+                <h2 className="text-lg font-medium">{mealName === '' ? 'Showing all search results' : `Showing search results for keyword \'${mealName}\'`}</h2>
+                <div className="mt-3">
+                    <div className="w-full space-y-3 max-h-[550px]">
                         {
                             searchResults.length > 0
                                 ?
@@ -146,7 +146,7 @@ export default function SearchPage(){
                             <h3>Food not found.</h3>
                         }
                     </div>
-                    <div className="w-[35%] px-4 py-2 bg-white shadow-xl rounded-xl h-full max-lg:hidden">
+                    {/* <div className="w-[35%] px-4 py-2 bg-white shadow-xl rounded-xl h-full max-lg:hidden">
                         <div className="flex justify-between items-center">
                             <h3 className="text-xl font-semibold">Filter</h3>
                             <Button variant={"outline"} onClick={handleClearFilterButton}>Clear Filter</Button>
@@ -206,7 +206,7 @@ export default function SearchPage(){
                                 </form>
                             </FormProvider>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </section>
         </>

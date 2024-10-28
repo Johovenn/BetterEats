@@ -1,12 +1,12 @@
 "use client"
 
 import { link } from "fs";
-import { Calculator, HomeIcon, Newspaper, SearchIcon, UsersIcon, UtensilsCrossed, UtensilsIcon } from "lucide-react";
+import { Calculator, HomeIcon, Newspaper, NewspaperIcon, SearchIcon, UsersIcon, UtensilsCrossed, UtensilsIcon } from "lucide-react";
 import { ReactNode } from "react";
 import { Separator } from "./ui/separator";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { UserButton } from "@clerk/nextjs";
+import { useAuth, UserButton, useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 import HoverTooltip from "./Tooltip";
@@ -19,32 +19,51 @@ interface NavigationProps{
 
 export default function Sidebar(){
     const pathname = usePathname()
+    const {user} = useUser()
 
     const links: NavigationProps[] = [
         {
             title: 'Dashboard',
-            icon: <HomeIcon/>,
+            icon: <HomeIcon size={20}/>,
             link: '/dashboard',
         },
         {
             title: 'Search',
-            icon: <SearchIcon />,
+            icon: <SearchIcon size={20}/>,
             link: '/search'
         },
         {
             title: 'BMR Calculator',
-            icon: <Calculator />,
+            icon: <Calculator size={20}/>,
             link: '/bmr-calculator'
         },
         {
             title: 'Meal Planner',
-            icon: <UtensilsIcon />,
+            icon: <UtensilsIcon size={20}/>,
             link: '/meal-planner'
         },
         {
             title: 'Articles',
-            icon: <Newspaper/>,
+            icon: <Newspaper size={20}/>,
             link: '/articles'
+        }
+    ]
+    
+    const adminLinks: NavigationProps[] = [
+        {
+            title: 'Dashboard',
+            icon: <HomeIcon size={20}/>,
+            link: '/admin/dashboard',
+        },
+        {
+            title: 'Add Meal',
+            icon: <UtensilsIcon size={20}/>,
+            link: '/admin/add-meal',
+        },
+        {
+            title: 'Add Article',
+            icon: <NewspaperIcon size={20}/>,
+            link: '/admin/add-article'
         }
     ]
 
@@ -55,28 +74,53 @@ export default function Sidebar(){
     return(
         <aside className="h-screen p-3 border-r bg-white flex flex-col items-center fixed">
             <ul className="space-y-10 flex flex-col justify-center items-center pt-2">
-                <Image src="/BetterEats.png" alt="Logo" width={40} height={40} className="w-auto h-auto" priority/>
+                <Image src="/BetterEats.png" alt="Logo" width={30} height={30} className="w-auto h-auto" priority/>
                 <TooltipProvider>
-                    {links.map((link) => (
-                        <li key={link.title}>
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <a
-                                    href={link.link}
-                                    className={cn(
-                                    "flex items-center justify-center p-2 rounded-xl transition-colors duration-200",
-                                    pathname === link.link ? "bg-green-500 text-white" : "hover:bg-green-200"
-                                    )}
-                                >
-                                    {link.icon}
-                                </a>
-                            </TooltipTrigger>
-                            <TooltipContent side="right" className="bg-[#fafafa] rounded-lg">
-                                <span>{link.title}</span>
-                            </TooltipContent>
-                        </Tooltip>
-                        </li>
-                    ))}
+                    {
+                        user?.publicMetadata?.role !== 'admin'
+                            ?
+                        links.map((link) => (
+                            <li key={link.title}>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <a
+                                        href={link.link}
+                                        className={cn(
+                                        "flex items-center justify-center p-2 rounded-xl transition-colors duration-200",
+                                        pathname === link.link ? "bg-green-500 text-white" : "hover:bg-green-200"
+                                        )}
+                                    >
+                                        {link.icon}
+                                    </a>
+                                </TooltipTrigger>
+                                <TooltipContent side="right" className="bg-[#fafafa] rounded-lg">
+                                    <span>{link.title}</span>
+                                </TooltipContent>
+                            </Tooltip>
+                            </li>
+                        ))
+                            :
+                        adminLinks.map((link) => (
+                            <li key={link.title}>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <a
+                                        href={link.link}
+                                        className={cn(
+                                        "flex items-center justify-center p-2 rounded-xl transition-colors duration-200",
+                                        pathname === link.link ? "bg-green-500 text-white" : "hover:bg-green-200"
+                                        )}
+                                    >
+                                        {link.icon}
+                                    </a>
+                                </TooltipTrigger>
+                                <TooltipContent side="right" className="bg-[#fafafa] rounded-lg">
+                                    <span>{link.title}</span>
+                                </TooltipContent>
+                            </Tooltip>
+                            </li>
+                        ))
+                    }
                 </TooltipProvider>
             </ul>
             <div className="mt-auto">

@@ -24,11 +24,10 @@ interface FormProps {
     user_fat_requirement: number;
 }
 
-export default function HomePage(){
+export default function DashboardPage(){
     const [isLoading, setIsLoading] = useState(false)
     const [bmrValue, setBmrValue] = useState(0)
 
-    const router = useRouter()
     const {user} = useUser()
 
     const today = new Date()

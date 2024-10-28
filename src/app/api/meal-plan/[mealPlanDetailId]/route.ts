@@ -21,8 +21,6 @@ export async function DELETE(req: Request, { params }: { params: { mealPlanDetai
             }
         });
 
-        console.log(mealPlanDetail)
-
         if (!mealPlanDetail) {
             return NextResponse.json(createResponse(404, "Meal Plan Detail not found", null), { status: 404 });
         }

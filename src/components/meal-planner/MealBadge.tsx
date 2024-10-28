@@ -18,6 +18,6 @@ export default function MealBadge(props: MealBadgeProps){
     }
 
     return(
-        <Badge className={cn(color, "text-white")}>{props.text}</Badge>
+        <Badge className={cn(color, "text-white text-[10px]")}>{props.text}</Badge>
     )
 }
