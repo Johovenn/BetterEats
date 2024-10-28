@@ -21,12 +21,12 @@ export default function SearchBar(){
     }
 
     return(
-        <div className="flex items-center bg-[#f2f2f2] p-2 rounded-xl gap-2 shadow">
+        <div className="flex items-center bg-white p-2 rounded-xl gap-2 shadow">
             <Search color="gray" size={20}/>
             <input 
                 type="text" 
                 placeholder="Search for food" 
-                className="bg-[#f2f2f2] focus:outline-none text-sm"
+                className="bg-white focus:outline-none text-sm"
                 onChange={(e) => setInputValue(e.target.value)} 
                 onBlur={handleSearch}
                 onKeyDown={handleEnterKeyDown}
