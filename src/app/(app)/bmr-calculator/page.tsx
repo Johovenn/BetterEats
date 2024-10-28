@@ -39,7 +39,7 @@ const validationSchema = yup.object().shape({
     user_age: yup.number().required().min(15, "Age must at least be 15 years old"),
     user_gender: yup.string().required("Gender is required"),
     user_bmr_date: yup.date().default(() => new Date()),
-    user_bmr_value: yup.number().required("BMR value is required"), // Now required
+    user_bmr_value: yup.number().required("BMR value is required"),
     activity_level_code: yup.string().required("Activity Level is required"),
     goal_code: yup.string().required("Goal is required"),
     protein: yup.number().optional(),
@@ -243,8 +243,9 @@ export default function BMRCalculator() {
                                     radioLabel="label"
                                 />
                                 <Button
-                                    className="text-white rounded-xl py-2 px-4 ml-auto"
+                                    className="text-white rounded-lg py-2 px-4 ml-auto"
                                     type="submit"
+                                    size={'lg'}
                                 >
                                     Calculate
                                 </Button>
@@ -261,19 +262,19 @@ export default function BMRCalculator() {
                         <span className="text-2xl font-bold">{form.watch('user_bmr_value')}</span>
                         <span className="text-md text-slate-500 font-medium">kCal</span>
                     </div>
-                    <div className="flex justify-around gap-3 mt-3">
+                    <div className="flex justify-around gap-3 mt-5">
                         <NutritionCard 
-                            icon={<Beef size={30} className="text-gray-500"/>}
+                            icon={<Beef size={28} className="mt-[-20px]"/>}
                             title="Protein"
                             value={form.watch('protein')}
                         />
                         <NutritionCard 
-                            icon={<Wheat size={30} className="text-gray-500"/>}
+                            icon={<Wheat size={28} className="mt-[-20px]"/>}
                             title="Carbs"
                             value={form.watch('carbohydrate')}
                         />
                         <NutritionCard
-                            icon={<Beef size={30} className="text-gray-500"/>}
+                            icon={<Beef size={28} className="mt-[-20px]"/>}
                             title="Fat"
                             value={form.watch('fat')}
                         />
@@ -281,8 +282,9 @@ export default function BMRCalculator() {
 
                     <Button 
                         disabled={!form.watch('user_bmr_value') || !form.getValues('protein') || !form.getValues('carbohydrate') || !form.getValues('fat')}
-                        className="text-white rounded-xl mt-5"
+                        className="text-white rounded-xl mt-6"
                         onClick={form.handleSubmit(() => setAlertModal(true))}
+                        size={'sm'}
                     >
                         Save BMR
                     </Button>

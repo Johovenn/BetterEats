@@ -45,11 +45,11 @@ export async function GET(req: Request){
         meal_plan_total_calorie: mealPlanData ? mealPlanData.meal_plan_total_calorie : 0,
         meal_plan_total_protein: mealPlanData ? mealPlanData.meal_plan_total_protein : 0,
         meal_plan_total_carbohydrate: mealPlanData ? mealPlanData.meal_plan_total_carbohydrate : 0,
-        meal_plan_total_fat: mealPlanData ? mealPlanData.meal_plan_total_fat : 0,
-        user_calorie_requirement: userData?.user_bmr_value,
-        user_protein_requirement: userData?.protein,
-        user_carbohydrate_requirement: userData?.carbohydrate,
-        user_fat_requirement: userData?.fat,
+        meal_plan_total_fat: mealPlanData ? mealPlanData.meal_plan_total_fat : 0,   
+        user_calorie_requirement: userData ? userData.user_bmr_value : 0,
+        user_protein_requirement: userData ? userData.protein : 0,
+        user_carbohydrate_requirement: userData ? userData.carbohydrate : 0,
+        user_fat_requirement: userData ? userData.fat : 0,
     }
 
     return NextResponse.json(createResponse(200, "Fetch data successful!", response), {status: 200})

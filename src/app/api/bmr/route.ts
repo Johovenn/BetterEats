@@ -88,7 +88,6 @@ export async function GET(req: Request){//get user latest bmr record
         })
 
         if(!bmrData){
-            console.log(`masuk bmr data null`)
             return NextResponse.json(createResponse(200, "No existing data", null), {status: 200}) //belum ada data user
         }
         else{
@@ -101,7 +100,6 @@ export async function GET(req: Request){//get user latest bmr record
             return NextResponse.json(createResponse(200, "Fetch data succesful!", response), {status: 200})
         }
     } catch (error) {
-        console.error(error)
         return NextResponse.json(createResponse(500, "Internal Server Error", null), {status: 500})
     }
 }

@@ -14,6 +14,8 @@ import { Button } from "@/components/ui/button";
 import AddMealModal from "@/components/meal-planner/AddMealModal";
 import PageHeader from "@/components/PageHeader";
 import MealDetailModal from "@/components/meal-planner/MealDetailModal";
+import { FilterIcon, SlidersHorizontal } from "lucide-react";
+import SearchMealFilter from "@/components/search/SearchMealFilter";
 
 interface FormProps{
     is_breakfast: boolean
@@ -34,6 +36,7 @@ export default function SearchPage(){
     const [selectedMeal, setSelectedMeal] = useState<MealProps>()
     const [selectedMealId, setSelectedMealId] = useState<number>()
     const [detailModal, setDetailModal] = useState(false)
+    const [openFilter, setOpenFilter] = useState(false)
     const searchParams = useSearchParams()
     const keyword = searchParams.get('keyword')
 
@@ -77,13 +80,13 @@ export default function SearchPage(){
         getMeals()
     }, [getMeals, keyword])
 
-    const breakfast = form.watch('is_breakfast')
-    const lunch = form.watch('is_lunch')
-    const dinner = form.watch('is_dinner')
-    const snack = form.watch('is_snack')
-    useEffect(() => {
-        getMeals()
-    }, [breakfast, lunch, dinner, snack, getMeals])
+    // const breakfast = form.watch('is_breakfast')
+    // const lunch = form.watch('is_lunch')
+    // const dinner = form.watch('is_dinner')
+    // const snack = form.watch('is_snack')
+    // useEffect(() => {
+    //     getMeals()
+    // }, [breakfast, lunch, dinner, snack, getMeals])
 
     const handleOnBlurFilter = async () => {
         getMeals()
@@ -127,9 +130,16 @@ export default function SearchPage(){
             />
 
             <section className="mt-5 min-w-full">
-                <h2 className="text-xl font-medium">{mealName === '' ? 'Showing all search results' : `Showing search results for keyword \'${mealName}\'`}</h2>
-                <div className="flex gap-10 mt-3">
-                    <div className="w-[65%] space-y-3 max-h-[550px]">
+                <div className="flex justify-between">
+                    <h2 className="text-lg font-medium">{mealName === '' ? 'Showing all search results' : `Showing search results for keyword \'${mealName}\'`}</h2>
+                    <SearchMealFilter
+                        form={form}
+                        onConfirm={getMeals}
+                        onClear={() => form.reset()}
+                    />
+                </div>
+                <div className="mt-3">
+                    <div className="w-full space-y-3 max-h-[550px]">
                         {
                             searchResults.length > 0
                                 ?
@@ -146,7 +156,8 @@ export default function SearchPage(){
                             <h3>Food not found.</h3>
                         }
                     </div>
-                    <div className="w-[35%] px-4 py-2 bg-white shadow-xl rounded-xl h-full max-lg:hidden">
+
+                    {/* <div className="w-[35%] px-4 py-2 bg-white shadow-xl rounded-xl h-full max-lg:hidden">
                         <div className="flex justify-between items-center">
                             <h3 className="text-xl font-semibold">Filter</h3>
                             <Button variant={"outline"} onClick={handleClearFilterButton}>Clear Filter</Button>
@@ -206,7 +217,7 @@ export default function SearchPage(){
                                 </form>
                             </FormProvider>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </section>
         </>

@@ -12,8 +12,8 @@ export default function MealPlanNutritionProgress(props: MealPlanNutritionProgre
     return(
         <div>
             <div className="mb-1 flex items-center">
-                <p className="mr-2">
-                    <span className="font-semibold">{props.nutritionName}</span>: {props.nutritionValue} / {props.maxValue}
+                <p className="mr-2 text-sm">
+                    <span className="font-medium">{props.nutritionName}</span>: {props.nutritionValue} / {props.maxValue}
                 </p>
                 <HoverTooltip
                     tooltipContent={

@@ -34,7 +34,7 @@ export default function MealCard(props: MealCardProps){
             <div className="ml-3 flex items-center justify-between w-full">
                 <div className="flex flex-col space-y-3">
                     <div className="flex items-center gap-3">
-                        <p className="text-xl font-medium">{props.meal.meal_name}</p>
+                        <p className="text-lg font-medium">{props.meal.meal_name}</p>
                         {props.meal.is_breakfast && <MealBadge text="Breakfast"/>}
                         {props.meal.is_lunch && <MealBadge text="Lunch"/>}
                         {props.meal.is_dinner && <MealBadge text="Dinner"/>}
