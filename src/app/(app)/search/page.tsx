@@ -30,6 +30,7 @@ export default function SearchPage(){
     const [isLoading, setIsLoading] = useState(false)
     const [page, setPage] = useState(0)
     const [limit, setLimit] = useState(10)
+    const [totalRows, setTotalRows] = useState(0)
     const [mealName, setMealName] = useState('')
     const [searchResults, setSearchResults] = useState<MealProps[]>([])
     const [addMealModal, setAddMealModal] = useState(false)
@@ -67,9 +68,37 @@ export default function SearchPage(){
         }).then((response) => {
             if(response.data){
                 setSearchResults(response.data)
+                setTotalRows(Number(response.total_rows))
             }
         }).catch((error) => {
             setSearchResults([])
+            setTotalRows(0)
+        })
+
+        setIsLoading(false)
+    }, [form, limit, mealName, page])
+
+    const loadMoreMeals = useCallback(async () => {
+        setIsLoading(true)
+
+        await getAllMeals({
+            page: page,
+            limit: limit,
+            meal_name: mealName,
+            is_breakfast: form.getValues('is_breakfast'),
+            is_lunch: form.getValues('is_lunch'),
+            is_dinner: form.getValues('is_dinner'),
+            is_snack: form.getValues('is_snack'),
+            calorie_range_from: form.getValues('calorie_range_from'),
+            calorie_range_to: form.getValues('calorie_range_to')
+        }).then((response) => {
+            if(response.data){
+                setSearchResults(prev => [...prev, ...response.data])
+                setTotalRows(Number(response.total_rows))
+            }
+        }).catch((error) => {
+            setSearchResults([])
+            setTotalRows(0)
         })
 
         setIsLoading(false)
@@ -106,6 +135,11 @@ export default function SearchPage(){
         setSelectedMealId(meal_id)
         setDetailModal(true)
     }
+
+    const handleLoadMoreButton = () => {
+        setPage((prev) => prev + 1)
+        loadMoreMeals()
+    }
     
     return(
         <>
@@ -139,7 +173,7 @@ export default function SearchPage(){
                     />
                 </div>
                 <div className="mt-3">
-                    <div className="w-full space-y-3 max-h-[550px]">
+                    <div className="w-full space-y-3">
                         {
                             searchResults.length > 0
                                 ?
@@ -156,68 +190,19 @@ export default function SearchPage(){
                             <h3>Food not found.</h3>
                         }
                     </div>
-
-                    {/* <div className="w-[35%] px-4 py-2 bg-white shadow-xl rounded-xl h-full max-lg:hidden">
-                        <div className="flex justify-between items-center">
-                            <h3 className="text-xl font-semibold">Filter</h3>
-                            <Button variant={"outline"} onClick={handleClearFilterButton}>Clear Filter</Button>
+                    {
+                        (page + 1) * limit < totalRows
+                            &&
+                        <div className="w-full mt-3">
+                            <Button 
+                                variant={'outline'} 
+                                className="w-full hover:bg-orange-default/10"
+                                onClick={handleLoadMoreButton}
+                            >
+                                Load More
+                            </Button>
                         </div>
-                        <div className="p-2">
-                            <FormProvider {...form}>
-                                <form action="" className="">
-                                    <h2 className="text-lg font-medium mt-1">Meal Type</h2>
-                                    <div className="flex flex-wrap gap-3 justify-between mt-2">
-                                        <CheckboxInput 
-                                            control={form.control}
-                                            id="is_breakfast"
-                                            label="Breakfast"
-                                            classname="w-[110px]"
-                                        />
-                                        <CheckboxInput 
-                                            control={form.control}
-                                            id="is_lunch"
-                                            label="Dinner"
-                                            classname="w-[110px]"
-                                        />
-                                        <CheckboxInput 
-                                            control={form.control}
-                                            id="is_dinner"
-                                            label="Lunch"
-                                            classname="w-[110px]"
-                                        />
-                                        <CheckboxInput 
-                                            control={form.control}
-                                            id="is_snack"
-                                            label="Snack"
-                                            classname="w-[110px]"
-                                        />
-                                    </div>
-                                    <div className="mt-5">
-                                        <h2 className="text-lg font-medium">Calorie Range</h2>
-                                        <div className="flex items-end gap-5">
-                                            <NumericInput
-                                                control={form.control}
-                                                id="calorie_range_from"
-                                                label="From"
-                                                placeholder="Minimum Calorie"
-                                                className=""
-                                                onBlur={handleOnBlurFilter}
-                                            />
-                                            <span className="mb-3">To</span>
-                                            <NumericInput
-                                                control={form.control}
-                                                id="calorie_range_to"
-                                                label="To"
-                                                placeholder="Maximum Calorie"
-                                                className=""
-                                                onBlur={handleOnBlurFilter}
-                                            />
-                                        </div>
-                                    </div>
-                                </form>
-                            </FormProvider>
-                        </div>
-                    </div> */}
+                    }
                 </div>
             </section>
         </>

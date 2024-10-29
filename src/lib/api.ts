@@ -16,12 +16,14 @@ export function createResponse(code: number, message: string, data: object | obj
     }
 }
 
-export function createPaginationResponse(code: number, message: string, data: object[] | null, page: number, limit: number){
+export function createPaginationResponse(code: number, message: string, data: object[] | null, page: number, limit: number, totalRows: number){
     return {
         status_code: code,
         message: message,
 		page_limit: limit,
 		page: page,
+        total_rows: totalRows,
+        total_pages: Math.ceil(totalRows / limit),
         data: data
     }
 }
