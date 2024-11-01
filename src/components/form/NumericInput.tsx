@@ -1,4 +1,4 @@
-import { Control } from "react-hook-form"
+import { Control, Controller } from "react-hook-form"
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import { Input } from "../ui/input"
 import { cn } from "@/lib/utils"
@@ -13,28 +13,34 @@ interface NumericInputProps{
     className?: string
     onBlur?: () => void
 }
-
-export default function NumericInput(props: NumericInputProps){
-    return(
-        <FormField
+export default function NumericInput(props: NumericInputProps) {
+    return (
+        <Controller
             control={props.control}
             name={props.id}
-            render={({field}) => (
+            render={({ field }) => (
                 <FormItem>
                     <FormLabel>{props.label}</FormLabel>
                     <FormControl>
-                        <Input 
-                            type="number" 
-                            placeholder={props.placeholder} 
-                            disabled={props.disabled} 
+                        <Input
+                            type="number"
+                            placeholder={props.placeholder}
+                            disabled={props.disabled}
                             {...field}
-                            className={cn(props.className, "border border-gray-300 rounded-xl hover:border-orange-default transition-all focus:border-2 focus:border-orange-default focus:outline-none")}
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                field.onChange(value === '' ? value : Number(value));
+                            }}
+                            className={cn(
+                                props.className,
+                                "border border-gray-300 rounded-xl hover:border-orange-default transition-all focus:border-2 focus:border-orange-default focus:outline-none"
+                            )}
                             onBlur={props.onBlur}
                         />
                     </FormControl>
-                    <FormMessage className="text-red-500 text-sm">{props.error}</FormMessage>
+                    <FormMessage className="text-red-500 text-xs">{props.error}</FormMessage>
                 </FormItem>
             )}
         />
-    )
+    );
 }

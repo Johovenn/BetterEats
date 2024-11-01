@@ -1,5 +1,10 @@
-import { SignIn } from "@clerk/nextjs";
+"use client"
+
+import { SignIn, useUser } from "@clerk/nextjs";
 
 export default function Page() {
-  return <SignIn afterSignOutUrl={'/'} />;
+  const {user} = useUser()
+  const role = user?.publicMetadata?.role
+
+  return <SignIn afterSignOutUrl={'/'} signUpFallbackRedirectUrl={role === 'admin' ? '/admin/dashboard' : '/dashboard'}/>;
 }

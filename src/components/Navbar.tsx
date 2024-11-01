@@ -1,7 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs"
+import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/nextjs"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { Button } from "./ui/button"
@@ -9,9 +9,11 @@ import { UtensilsCrossed } from "lucide-react"
 
 export default function Navbar(){
     const router = useRouter()
+    const {user} = useUser()
+    const role = user?.publicMetadata?.role
 
     const handleDashboardButton = () => {
-        router.push(`/dashboard`)
+        role !== 'admin' ? router.push(`/dashboard`) : router.push(`/admin/dashboard`)
     }
 
     return( 

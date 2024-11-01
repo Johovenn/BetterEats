@@ -4,6 +4,7 @@ import SearchBar from "./SearchBar";
 interface PageHeaderProps{
     title: string | ReactNode
     subtitle?: string | ReactNode
+    hideSearchBar?: boolean
 }
 
 export default function PageHeader(props: PageHeaderProps){
@@ -17,7 +18,11 @@ export default function PageHeader(props: PageHeaderProps){
                     <p className="text-gray-600">{props.subtitle}</p>
                 }
             </div>
-            <SearchBar />
+            {
+                !props.hideSearchBar
+                    &&
+                <SearchBar />
+            }
         </header>
     )
 }

@@ -24,9 +24,9 @@ export default function CheckboxInput(props: CheckboxInputProps){
                         />
                     </FormControl>
                     <div className="space-y-1 leading-none">
-                    <FormLabel>
-                        {props.label}
-                    </FormLabel>
+                        <FormLabel>
+                            {props.label}
+                        </FormLabel>
                     </div>
                 </FormItem>
             )}

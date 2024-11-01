@@ -1,22 +1,36 @@
+import { useUser } from "@clerk/nextjs";
 import { Search } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function SearchBar(){
     const router = useRouter()
+    const pathname = usePathname()
+    const {user} = useUser()
+    const role = user?.publicMetadata?.role
     const [inputValue, setInputValue] = useState("")
 
     const handleEnterKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === 'Enter' && inputValue.trim() !== "") {
+        if (event.key === 'Enter') {
             handleSearch()
         }
     }
 
     const handleSearch = () => {
         if(inputValue.trim()){
-            router.push(`/search?keyword=${encodeURIComponent(inputValue)}`)
+            if(role !== 'admin'){
+                router.push(`/search?keyword=${encodeURIComponent(inputValue)}`)
+            }
+            else {
+                router.push(`/admin/meal?keyword=${encodeURIComponent(inputValue)}`)
+            }
         } else {
-            router.push('/search')
+            if(pathname === '/search'){
+                router.push('/search')
+            }
+            else if(pathname === '/admin/meal'){
+                router.push('/admin/meal')
+            }
         }
     }
 

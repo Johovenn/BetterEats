@@ -11,10 +11,11 @@ import { MealPlanDetailProps } from "@/app/(app)/meal-planner/api/getMealPlan"
 
 interface MealCardProps{
     meal: MealProps | MealPlanDetailProps
-    mode: "search" | "meal-plan"
+    mode: "search" | "meal-plan" | "admin"
     handleInfoButton: (id: number) => void
     handleAddMealButton?: (meal: MealProps) => void
     handleDeleteButton?: (meal_plan_detail_id: number) => void
+    handleEditButton?: (meal_id: number) => void
 }
 
 export default function MealCard(props: MealCardProps){
@@ -50,27 +51,49 @@ export default function MealCard(props: MealCardProps){
                 <div className="mr-1 flex items-center gap-3">
                     {
                         props.mode === "search"
-                        ?
+                            &&
                         <>
                             <Button className="" variant={"outline"} onClick={() => props.handleInfoButton(props.meal.meal_id)}>Info</Button>
                             <Button className="" onClick={() => props.handleAddMealButton ? props.handleAddMealButton(props.meal) : () => {}}>Add to meal plan</Button>
                         </>
-                            :
-                        <>
-                            <Menu 
-                                label={<Ellipsis color="gray" size={16}/>}
-                                items={[
-                                    {
-                                        label: "Info",
-                                        onClick: () => props.handleInfoButton(props.meal.meal_id)
-                                    },
-                                    {
-                                        label: "Remove",
-                                        onClick: () => props.handleDeleteButton ? props.handleDeleteButton(props.meal.meal_plan_detail_id) : () => {}
-                                    }
-                                ]}
-                            />
-                        </>
+                    }
+                    {
+                        props.mode === "meal-plan"
+                            &&
+                        <Menu 
+                            label={<Ellipsis color="gray" size={16}/>}
+                            items={[
+                                {
+                                    label: "Info",
+                                    onClick: () => props.handleInfoButton(props.meal.meal_id)
+                                },
+                                {
+                                    label: "Remove",
+                                    onClick: () => props.handleDeleteButton ? props.handleDeleteButton(props.meal.meal_plan_detail_id) : () => {}
+                                }
+                            ]}
+                        />
+                    }
+                    {
+                        props.mode === "admin"
+                            &&
+                        <Menu 
+                            label={<Ellipsis color="gray" size={16}/>}
+                            items={[
+                                {
+                                    label: "Info",
+                                    onClick: () => props.handleInfoButton(props.meal.meal_id)
+                                },
+                                {
+                                    label: "Edit",
+                                    onClick: () => props.handleEditButton ? props.handleEditButton(props.meal.meal_id) : () => {}
+                                },
+                                {
+                                    label: "Remove",
+                                    onClick: () => props.handleDeleteButton ? props.handleDeleteButton(props.meal.meal_id) : () => {}
+                                }
+                            ]}
+                        />
                     }
                 </div>
             </div>

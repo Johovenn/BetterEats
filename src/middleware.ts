@@ -19,13 +19,19 @@ export default clerkMiddleware(async (auth, req) => {
     if (!userId) {
       return NextResponse.redirect(new URL('/sign-in', req.url));
     }
+    const user = await clerkClient.users.getUser(userId);
+
+    const role = user.publicMetadata.role || user.privateMetadata.role;
+
+    if (role === 'admin') {
+      return NextResponse.redirect(new URL('/', req.url));
+    }
   }
 
   if (isAdminRoute(req)) {
-    if(!userId){
+    if (!userId) {
       return NextResponse.redirect(new URL('/sign-in', req.url));
     }
-
     const user = await clerkClient.users.getUser(userId);
 
     const role = user.publicMetadata.role || user.privateMetadata.role;

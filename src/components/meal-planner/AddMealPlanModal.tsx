@@ -37,13 +37,7 @@ interface FormProps {
     meal_type_id: number
 }
 
-const validationSchema = yup.object().shape({
-    meal_type_id: yup.number().nullable().required('Meal Type is required!'),
-    meal_id: yup.number().nullable().required('Meal is required!'),
-    meal_plan_date: yup.date().nullable().required('Date is required!'),
-})
-
-export default function AddMealModal(props: AddMealModalProps){
+export default function AddMealPlanModal(props: AddMealModalProps){
     const [isLoading, setIsLoading] = useState(false)
     const [mealTypeOptions, setMealTypeOptions] = useState<MealTypeProps[]>([])
     const [date, setDate] = useState(new Date)
@@ -52,6 +46,7 @@ export default function AddMealModal(props: AddMealModalProps){
     const form = useForm<FormProps>({
         mode: 'onChange',
         defaultValues: {
+            meal_id: undefined,
             meal_plan_date: new Date,
             meal_plan_total_calorie: 0,
             meal_plan_total_carbohydrate: 0,
@@ -63,7 +58,6 @@ export default function AddMealModal(props: AddMealModalProps){
             user_protein_requirement: 0,
             meal_type_id: undefined
         },
-        resolver: yupResolver<any>(validationSchema)
     })
 
     const getTotalNutrition = useCallback(async () => {
@@ -114,6 +108,15 @@ export default function AddMealModal(props: AddMealModalProps){
     const handleConfirmButton = async () => {
         setIsLoading(true)
 
+        if(!form.getValues('meal_type_id')){
+            form.setError('meal_type_id', {
+                type: 'manual',
+                message: 'Meal Type is required!'
+            })
+            setIsLoading(false)
+            return
+        }
+
         form.setValue('meal_id', props.meal.meal_id)
         await postMealPlan({
             meal_id: form.getValues('meal_id'),
@@ -122,7 +125,7 @@ export default function AddMealModal(props: AddMealModalProps){
         }).then((response) => {
             toast("Add new meal plan successful!")
             router.push(`/meal-planner`)
-        })
+        }).catch((error) => toast('Something went wrong, add meal plan failed!'))
 
         props.setIsOpen(false)
         
@@ -175,7 +178,10 @@ export default function AddMealModal(props: AddMealModalProps){
                 <DialogFooter>
                     <Button
                         disabled={isLoading} 
-                        onClick={handleConfirmButton}
+                        onClick={() => {
+                            console.log(form.getValues())
+                            handleConfirmButton()
+                        }}
                     >
                         Confirm
                     </Button>
