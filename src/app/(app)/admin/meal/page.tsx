@@ -2,9 +2,8 @@
 
 import Loading from "@/components/Loading";
 import SearchBar from "@/components/SearchBar";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { getAllMeals, MealProps } from "./api/getAllMeals";
 import { toast } from "sonner";
 import MealCard from "@/components/meal-planner/MealCard.";
 import CheckboxInput from "@/components/form/CheckboxInput";
@@ -13,9 +12,12 @@ import NumericInput from "@/components/form/NumericInput";
 import { Button } from "@/components/ui/button";
 import PageHeader from "@/components/PageHeader";
 import MealDetailModal from "@/components/meal-planner/MealDetailModal";
-import { FilterIcon, SlidersHorizontal } from "lucide-react";
+import { FilterIcon, Plus, Router, SlidersHorizontal } from "lucide-react";
 import SearchMealFilter from "@/components/search/SearchMealFilter";
+import { getAllMeals, MealProps } from "../../search/api/getAllMeals";
 import AddMealPlanModal from "@/components/meal-planner/AddMealPlanModal";
+import AlertModal from "@/components/AlertModal";
+import { deleteMeal } from "./api/deleteMeal";
 
 interface FormProps{
     is_breakfast: boolean
@@ -26,17 +28,18 @@ interface FormProps{
     calorie_range_to: number
 }
 
-export default function SearchPage(){
+export default function AdminMealPage(){
     const [isLoading, setIsLoading] = useState(false)
+    const router = useRouter()
     const [page, setPage] = useState(0)
     const [limit, setLimit] = useState(10)
     const [totalRows, setTotalRows] = useState(0)
     const [mealName, setMealName] = useState('')
     const [searchResults, setSearchResults] = useState<MealProps[]>([])
-    const [addMealModal, setAddMealModal] = useState(false)
-    const [selectedMeal, setSelectedMeal] = useState<MealProps>()
-    const [selectedMealId, setSelectedMealId] = useState<number>()
+    const [deleteMealId, setDeleteMealId] = useState<number>()
+    const [selectedMealDetailId, setSelectedMealDetailId] = useState<number>()
     const [detailModal, setDetailModal] = useState(false)
+    const [alertModal, setAlertModal] = useState(false)
     const searchParams = useSearchParams()
     const keyword = searchParams.get('keyword')
 
@@ -54,6 +57,7 @@ export default function SearchPage(){
     const getMeals = useCallback(async () => {
         setIsLoading(true)
 
+        setPage(0)
         await getAllMeals({
             page: page,
             limit: limit,
@@ -65,10 +69,8 @@ export default function SearchPage(){
             calorie_range_from: form.getValues('calorie_range_from'),
             calorie_range_to: form.getValues('calorie_range_to')
         }).then((response) => {
-            if(response.data){
-                setSearchResults(response.data)
-                setTotalRows(Number(response.total_rows))
-            }
+            setSearchResults(response.data)
+            setTotalRows(Number(response.total_rows))
         }).catch((error) => {
             setSearchResults([])
             setTotalRows(0)
@@ -108,68 +110,83 @@ export default function SearchPage(){
         getMeals()
     }, [getMeals, keyword])
 
-    // const breakfast = form.watch('is_breakfast')
-    // const lunch = form.watch('is_lunch')
-    // const dinner = form.watch('is_dinner')
-    // const snack = form.watch('is_snack')
-    // useEffect(() => {
-    //     getMeals()
-    // }, [breakfast, lunch, dinner, snack, getMeals])
-
-    // const handleOnBlurFilter = async () => {
-    //     getMeals()
-    // }
-
-    // const handleClearFilterButton = async () => {
-    //     form.reset()
-    //     getMeals()
-    // }
-
-    const handleAddMealButton = (meal: MealProps) => {
-        setSelectedMeal(meal)
-        setAddMealModal(true)
-    } 
-
     const handleInfoButton = (meal_id: number) => {
-        setSelectedMealId(meal_id)
+        setSelectedMealDetailId(meal_id)
         setDetailModal(true)
+    }
+    
+    const handleEditButton = (meal_id: number) => {
+        router.push(`/admin/meal/${meal_id}`)
+    }
+
+    const handleAddMealButton = () => {
+        router.push(`/admin/meal/new`)
     }
 
     const handleLoadMoreButton = () => {
         setPage((prev) => prev + 1)
         loadMoreMeals()
     }
+
+    const handleDeleteButton = async (meal_id: number) => {
+        setDeleteMealId(meal_id)
+        setAlertModal(true)
+    } 
+
+    const handleConfirmDeleteMeal = async () => {
+        setIsLoading(true)
+
+        if(deleteMealId){
+            await deleteMeal(deleteMealId).then((response) => {
+                getMeals()
+                toast('Delete meal successful!')
+            }).catch((error) => toast(error.response.data.message))
+        }
+
+        setIsLoading(false)
+    }
     
     return(
         <>
             <Loading loading={isLoading} />
 
-            <AddMealPlanModal 
-                isOpen={addMealModal}
-                handleClose={() => setAddMealModal(false)}
-                setIsOpen={setAddMealModal}
-                meal={selectedMeal || {} as MealProps}
-            />
-
             <MealDetailModal 
                 isOpen={detailModal}
                 setIsOpen={setDetailModal}
                 handleClose={() => setDetailModal(false)}
-                mealId={selectedMealId}
+                mealId={selectedMealDetailId}
+            />
+
+            <AlertModal
+                isOpen={alertModal}
+                setIsOpen={setAlertModal}
+                title="Delete Meal"
+                description="Are you sure you want to delete this meal? You can only delete meals that haven't been included in a user's meal plan. This action cannot be undone."
+                handleClose={() => setAlertModal(true)}
+                onConfirm={handleConfirmDeleteMeal}
             />
 
             <PageHeader 
-                title="Search for Food"
+                title="Manage meals in the database"
             />
 
             <section className="mt-5 min-w-full">
                 <div className="flex justify-between">
-                    <h2 className="text-lg font-medium">{mealName === '' ? 'Showing all search results' : `Showing search results for keyword \'${mealName}\'`}</h2>
-                    <SearchMealFilter
-                        form={form}
-                        onConfirm={getMeals}
-                        onClear={() => form.reset()}
-                    />
+                    <div className="flex gap-2">
+                        <h2 className="text-lg font-medium">{mealName === '' ? 'Showing all existing meals' : `Showing search results for keyword \'${mealName}\'`}</h2>
+                        <SearchMealFilter
+                            form={form}
+                            onConfirm={getMeals}
+                            onClear={() => form.reset()}
+                        />
+                    </div>
+                    <Button 
+                        className="flex items-center gap-1"
+                        onClick={handleAddMealButton}
+                    >
+                        <Plus size={18}/>
+                        Add Meal
+                    </Button>
                 </div>
                 <div className="mt-3">
                     <div className="w-full space-y-3">
@@ -180,9 +197,10 @@ export default function SearchPage(){
                                 <MealCard 
                                     key={meal.meal_id}
                                     meal={meal}
-                                    mode="search"
+                                    mode="admin"
                                     handleInfoButton={handleInfoButton}
-                                    handleAddMealButton={handleAddMealButton}
+                                    handleEditButton={handleEditButton}
+                                    handleDeleteButton={handleDeleteButton}
                                 />
                             ))
                                 :
@@ -195,7 +213,7 @@ export default function SearchPage(){
                         <div className="w-full mt-3">
                             <Button 
                                 variant={'outline'} 
-                                className="w-full hover:bg-orange-default/10"
+                                className="w-full hover:bg-slate-100"
                                 onClick={handleLoadMoreButton}
                             >
                                 Load More

@@ -6,7 +6,7 @@ export default function AdminDashboard(){
     return(
         <>
             <PageHeader 
-                title="Dashboard"
+                title="Welcome, Admin"
             />
 
             <section className="mt-7 space-y-5">

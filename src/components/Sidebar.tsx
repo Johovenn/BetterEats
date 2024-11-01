@@ -58,7 +58,7 @@ export default function Sidebar(){
         {
             title: 'Add Meal',
             icon: <UtensilsIcon size={20}/>,
-            link: '/admin/add-meal',
+            link: '/admin/meal',
         },
         {
             title: 'Add Article',

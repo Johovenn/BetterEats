@@ -21,24 +21,24 @@ export default function DropdownInput(props: DropdownInputProps){
             name={props.id}
             render={({field}) => (
                 <FormItem className="w-[500px]">
-                    <FormLabel>{props.label}</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value} disabled={props.disabled || props.options.length === 0}>
-                            <FormControl>
-                                <SelectTrigger className="w-full">
-                                    <SelectValue placeholder={props.placeholder} />
-                                </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                                {props.options.length !== 0 &&
-                                    props.options.map((option) => (
-                                        <SelectItem value={option[props.optionValue]} key={option[props.optionValue]}>
-                                            {option[props.optionLabel]}
-                                        </SelectItem>
-                                    ))
-                                }
-                            </SelectContent>
-                        </Select>
-                    <FormMessage>{props.error}</FormMessage>
+                    <FormLabel className="text-sm">{props.label}</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value} disabled={props.disabled || props.options.length === 0}>
+                        <FormControl>
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder={props.placeholder} />
+                            </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                            {props.options.length !== 0 &&
+                                props.options.map((option) => (
+                                    <SelectItem value={option[props.optionValue]} key={option[props.optionValue]}>
+                                        {option[props.optionLabel]}
+                                    </SelectItem>
+                                ))
+                            }
+                        </SelectContent>
+                    </Select>
+                    <FormMessage className="text-xs">{props.error}</FormMessage>
                 </FormItem>
             )}
         />

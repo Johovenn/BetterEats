@@ -1,7 +1,7 @@
-import { createPaginationResponse, createResponse } from "@/lib/api";
-import db from "@/lib/db";
-import { auth } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
+import { createPaginationResponse, createResponse } from "@/lib/api"
+import db from "@/lib/db"
+import { auth } from "@clerk/nextjs/server"
+import { NextResponse } from "next/server"
 
 export async function GET(req: Request) {
     try {
@@ -13,13 +13,13 @@ export async function GET(req: Request) {
         const {searchParams} = new URL(req.url)
         const page = parseInt(searchParams.get('page') || '1')
         const limit = parseInt(searchParams.get('limit') || '10')
-        const is_breakfast = searchParams.get('is_breakfast') === 'true' ? true : undefined;
-        const is_lunch = searchParams.get('is_lunch') === 'true' ? true : undefined;
-        const is_dinner = searchParams.get('is_dinner') === 'true' ? true : undefined;
-        const is_snack = searchParams.get('is_snack') === 'true' ? true : undefined;
-        const calorie_range_from = searchParams.get('calorie_range_from') ?  parseInt(String(searchParams.get('calorie_range_from'))) : undefined;
-        const calorie_range_to = searchParams.get('calorie_range_to') ? parseInt(String(searchParams.get('calorie_range_to'))) : undefined;
-        const meal_name = searchParams.get('meal_name') || undefined; 
+        const is_breakfast = searchParams.get('is_breakfast') === 'true' ? true : undefined
+        const is_lunch = searchParams.get('is_lunch') === 'true' ? true : undefined
+        const is_dinner = searchParams.get('is_dinner') === 'true' ? true : undefined
+        const is_snack = searchParams.get('is_snack') === 'true' ? true : undefined
+        const calorie_range_from = searchParams.get('calorie_range_from') ?  parseInt(String(searchParams.get('calorie_range_from'))) : undefined
+        const calorie_range_to = searchParams.get('calorie_range_to') ? parseInt(String(searchParams.get('calorie_range_to'))) : undefined
+        const meal_name = searchParams.get('meal_name') || undefined 
 
         const totalRows = await db.meal.count({
             where: {
@@ -39,7 +39,7 @@ export async function GET(req: Request) {
                     },
                 }),
             },
-        });
+        })
     
         const mealData = await db.meal.findMany({
             where: {
@@ -70,5 +70,56 @@ export async function GET(req: Request) {
         return NextResponse.json(createPaginationResponse(200, "Fetch data successful!", mealData, page, limit, totalRows), {status: 200})
     } catch (error) {
         return NextResponse.json(createPaginationResponse(500, "Internal server error", [], 0, 0, 0 ), {status: 500})
+    }
+}
+
+export async function POST(req: Request) {
+    try {
+        const {userId} = auth()
+        if (!userId) {
+            return NextResponse.json(createResponse(401, "Unauthorized", null), { status: 401 })
+        }
+
+        const body = await req.json()
+        const {
+            meal_image = "", 
+            meal_name, 
+            meal_calories = 0, 
+            meal_protein = 0, 
+            meal_carbohydrate = 0, 
+            meal_fat = 0, 
+            meal_ingredients, 
+            meal_recipe, 
+            is_breakfast = false, 
+            is_lunch = false, 
+            is_dinner = false, 
+            is_snack = false
+        } = body
+
+        if (!meal_name || !meal_ingredients || !meal_recipe) {
+            return NextResponse.json(createResponse(400, "Bad Request: Missing required fields", null), { status: 400 })
+        }
+
+        const meal = await db.meal.create({
+            data: {
+                meal_image,
+                meal_name,
+                meal_calories,
+                meal_protein,
+                meal_carbohydrate,
+                meal_fat,
+                meal_ingredients,
+                meal_recipe,
+                is_breakfast,
+                is_lunch,
+                is_dinner,
+                is_snack,
+            },
+        })
+
+        return NextResponse.json(createResponse(201, "Meal created successfully", meal), { status: 201 })
+
+    } catch (error) {
+        return NextResponse.json(createResponse(500, "Internal server error", []), { status: 500 })
     }
 }
