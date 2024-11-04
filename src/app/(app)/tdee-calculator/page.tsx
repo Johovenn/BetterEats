@@ -18,6 +18,8 @@ import { getUserBMR } from "./api/getUserBMR";
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup'
 import PageHeader from "@/components/PageHeader";
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
 
 interface FormProps{
     user_height: number
@@ -118,6 +120,44 @@ export default function BMRCalculator() {
         },
         resolver: yupResolver<any>(validationSchema),
     });
+    
+    
+    const driverObj = driver({
+        popoverClass: 'driverjs-theme',
+        nextBtnText: 'Next',
+        prevBtnText: 'Previous',
+        allowClose: false,
+        steps: [
+            {
+                element: '.form', 
+                popover: {
+                    title: 'How to use the calculator?',
+                    description: 'First, fill out all of these fields.'
+                }
+            },
+            {
+                element: '.calculate-button', 
+                popover: {
+                    title: 'How to use the calculator?',
+                    description: 'Then, click this button to calculate your TDEE value and macronutrient needs.'
+                }
+            },
+            {
+                element: '.results-card', 
+                popover: {
+                    title: 'How to use the calculator?',
+                    description: 'Your calculation results will appear here.'
+                }
+            },
+            {
+                element: '.save-button', 
+                popover: {
+                    title: 'How to use the calculator?',
+                    description: 'Lastly, click on this button to save your calculation results. Your meal and meal plan recommendations will use this as the base.'
+                }
+            },
+        ]
+    })
 
     useEffect(() => {
         const getUserData = async () => {
@@ -172,6 +212,10 @@ export default function BMRCalculator() {
         setIsLoading(false)
         setAlertModal(false)
     }
+    
+    const triggerTutorial = async () => {
+        driverObj.drive()
+    }
 
     return (
         <>
@@ -185,18 +229,15 @@ export default function BMRCalculator() {
             />
 
             <PageHeader 
-                title="Basal Metabolic Rate Calculator"
-                subtitle="Find out how many calories you burn everyday."
+                title="TDEE Calculator"
+                subtitle="Find out how many calories and macronutrients you need to consume everyday."
             />
             
-            <section className="mt-7 h-full flex gap-5 w-full">
+            <section className="mt-7 flex gap-5 w-full">
                 <div className="h-full w-[60%] shadow bg-white p-5">
-                    {/* <h1 className="text-xl font-medium">
-                        Calculate your BMR here
-                    </h1> */}
                     <div className="w-full flex flex-col">
                         <Form {...form} >
-                            <form action="" onSubmit={form.handleSubmit(handleCalculateButton)} className="space-y-4 flex flex-col">
+                            <form action="" onSubmit={form.handleSubmit(handleCalculateButton)} className="form space-y-4 flex flex-col">
                                 <NumericInput
                                     control={form.control}
                                     id="user_height"
@@ -242,8 +283,14 @@ export default function BMRCalculator() {
                                     radioId="value"
                                     radioLabel="label"
                                 />
+                                <span 
+                                    className="text-sm hover:underline text-orange-primary hover:cursor-pointer"
+                                    onClick={triggerTutorial}
+                                >
+                                    How does this work?
+                                </span>
                                 <Button
-                                    className="text-white rounded-lg py-2 px-4 ml-auto"
+                                    className="text-white rounded-lg py-2 px-4 ml-auto calculate-button"
                                     type="submit"
                                     size={'lg'}
                                 >
@@ -253,28 +300,30 @@ export default function BMRCalculator() {
                         </Form>
                     </div>
                 </div>
-                <div className="h-fit w-[40%] shadow bg-white p-5 flex flex-col justify-center items-center">
+                <div className="h-fit w-[40%] shadow bg-white p-5 flex flex-col justify-center items-center results-card">
                     <h2 className="text-xl font-medium mb-5">
                         Your daily nutrition needs
                     </h2>
-                    <div className="rounded-full border-[20px] border-orange-default w-[200px] h-[200px] text-center flex flex-col justify-center">
-                        <span className="text-lg text-slate-500 font-medium">Total</span>
-                        <span className="text-2xl font-bold">{form.watch('user_bmr_value')}</span>
-                        <span className="text-md text-slate-500 font-medium">kCal</span>
+                    <div className="bg-gradient-to-b from-slate-200 to-green-primary w-[220px] h-[220px] rounded-full flex justify-center items-center">
+                        <div className="rounded-full w-[170px] h-[170px] p-4 text-center flex flex-col justify-center mx-auto my-auto bg-white">
+                            <span className="text-lg text-slate-500 font-medium">Total</span>
+                            <span className="text-2xl font-bold">{form.watch('user_bmr_value')}</span>
+                            <span className="text-md text-slate-500 font-medium">kCal</span>
+                        </div>
                     </div>
                     <div className="flex justify-around gap-3 mt-5">
                         <NutritionCard 
-                            icon={<Beef size={28} className="mt-[-20px]"/>}
+                            icon={<Beef size={28} className="mt-[-20px]" color="#B2533E"/>}
                             title="Protein"
                             value={form.watch('protein')}
                         />
                         <NutritionCard 
-                            icon={<Wheat size={28} className="mt-[-20px]"/>}
+                            icon={<Wheat size={28} className="mt-[-20px]" color="#B2533E"/>}
                             title="Carbs"
                             value={form.watch('carbohydrate')}
                         />
                         <NutritionCard
-                            icon={<Beef size={28} className="mt-[-20px]"/>}
+                            icon={<Beef size={28} className="mt-[-20px]" color="#B2533E"/>}
                             title="Fat"
                             value={form.watch('fat')}
                         />
@@ -282,7 +331,7 @@ export default function BMRCalculator() {
 
                     <Button 
                         disabled={!form.watch('user_bmr_value') || !form.getValues('protein') || !form.getValues('carbohydrate') || !form.getValues('fat')}
-                        className="text-white rounded-xl mt-6"
+                        className="text-white rounded-xl mt-6 save-button"
                         onClick={form.handleSubmit(() => setAlertModal(true))}
                         size={'sm'}
                     >

@@ -2,11 +2,12 @@ import { Control } from "react-hook-form";
 import { FormControl, FormField, FormItem, FormLabel } from "../ui/form";
 import { Checkbox } from "../ui/checkbox";
 import { cn } from "@/lib/utils";
+import { ReactNode } from "react";
 
 interface CheckboxInputProps{
     control: Control<any, any>
     id: string
-    label: string
+    label: string | ReactNode
     classname?: string
 }
 

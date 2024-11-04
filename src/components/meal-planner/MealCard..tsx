@@ -42,10 +42,10 @@ export default function MealCard(props: MealCardProps){
                         {props.meal.is_snack && <MealBadge text="Snack"/>}
                     </div>
                     <div className="flex items-center">
-                        <p className="text-sm text-gray-600 flex item-center w-[130px] gap-1"><Flame size={18} /> {props.meal.meal_calories} calories</p>
-                        <p className="text-sm text-gray-600 flex item-center w-[110px] gap-1"><Beef size={18} /> {props.meal.meal_protein} protein</p>
-                        <p className="text-sm text-gray-600 flex item-center w-[150px] gap-1"><Wheat size={18} /> {props.meal.meal_carbohydrate} carbohyrate</p>
-                        <p className="text-sm text-gray-600 flex item-center w-[80px] gap-1"><Droplet size={18} /> {props.meal.meal_fat} fat</p>
+                        <p className="text-sm text-black flex item-center w-[130px] gap-1"><Flame size={18} color="#b53a31"/> {props.meal.meal_calories} calories</p>
+                        <p className="text-sm text-black flex item-center w-[110px] gap-1"><Beef size={18} color="#6e0e07"/> {props.meal.meal_protein} protein</p>
+                        <p className="text-sm text-black flex item-center w-[150px] gap-1"><Wheat size={18} color="#f2a929"/> {props.meal.meal_carbohydrate} carbohyrate</p>
+                        <p className="text-sm text-black flex item-center w-[80px] gap-1"><Droplet size={18} color="#bd7006"/> {props.meal.meal_fat} fat</p>
                     </div>
                 </div>
                 <div className="mr-1 flex items-center gap-3">

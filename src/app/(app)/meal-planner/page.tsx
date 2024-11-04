@@ -14,6 +14,8 @@ import { deleteMealPlan } from "./api/deleteMealPlan";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import MealDetailModal from "@/components/meal-planner/MealDetailModal";
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
 
 interface FormProps {
     meal_plan_date: Date;
@@ -51,6 +53,73 @@ export default function MealPlannerPage(){
             user_fat_requirement: 0,
             user_protein_requirement: 0,
         }
+    })
+    
+    const emptyTutorial = driver({
+        popoverClass: 'driverjs-theme',
+        nextBtnText: 'Next',
+        prevBtnText: 'Previous',
+        allowClose: false,
+        steps: [
+            {
+                element: '.meal-plans', 
+                popover: {
+                    title: 'How to use the meal planner?',
+                    description: 'Meal plans added to the day will appear here.'
+                }
+            },
+            {
+                element: '.meal-plan-value', 
+                popover: {
+                    title: 'How to use the meal planner?',
+                    description: 'This is the nutrient value of your current meal plan.'
+                }
+            },
+            {
+                element: '.meal-plan-date-picker', 
+                popover: {
+                    title: 'How to use the meal planner?',
+                    description: 'Click on this to change dates and view other date\'s meal plans.'
+                }
+            },
+        ]
+    })
+    
+    const driverObj = driver({
+        popoverClass: 'driverjs-theme',
+        nextBtnText: 'Next',
+        prevBtnText: 'Previous',
+        allowClose: false,
+        steps: [
+            {
+                element: '.meal-plans', 
+                popover: {
+                    title: 'How to use the meal planner?',
+                    description: 'Meal plans added to the day will appear here.'
+                }
+            },
+            {
+                element: '.meal-menu-trigger', 
+                popover: {
+                    title: 'How to use the meal planner?',
+                    description: 'Click on this to view available actions on the current meal in the meal plan.'
+                }
+            },
+            {
+                element: '.meal-plan-value', 
+                popover: {
+                    title: 'How to use the meal planner?',
+                    description: 'This is the nutrient value of your current meal plan.'
+                }
+            },
+            {
+                element: '.meal-plan-date-picker', 
+                popover: {
+                    title: 'How to use the meal planner?',
+                    description: 'Click on this to change dates and view other date\'s meal plans.'
+                }
+            },
+        ]
     })
 
     const getMealPlanData = useCallback(async () => {
@@ -110,6 +179,15 @@ export default function MealPlannerPage(){
         setDetailModal(true)
     }
 
+    const triggerTutorial = () => {
+        if(breakfastData.length > 0 || snackData.length > 0 || lunchData.length > 0 || dinnerData.length > 0){
+            driverObj.drive()
+        }
+        else{
+            emptyTutorial.drive()
+        }
+    }
+
     return (
         <>
             <Loading loading={isLoading} />
@@ -123,6 +201,9 @@ export default function MealPlannerPage(){
 
             <PageHeader 
                 title="Meal Planner"
+                subtitle={
+                    <span className="text-sm hover:cursor-pointer text-green-primary hover:underline" onClick={() => driverObj.drive()}>How does this work?</span>
+                }
             />
 
             <AlertModal 
@@ -135,7 +216,7 @@ export default function MealPlannerPage(){
             />
 
             <div className="w-full flex justify-between">
-                <div className="w-[65%] mb-5 px-4 py-2 bg-[#fefefe] shadow-lg rounded-lg">
+                <div className="w-[65%] mb-5 px-4 py-2 bg-[#fefefe] shadow-lg rounded-lg meal-plans">
                     <section className="w-full mb-5 p-2">
                         <h2 className="text-lg font-medium">Breakfast</h2>
                         <div className="flex flex-col gap-3 justify-between">

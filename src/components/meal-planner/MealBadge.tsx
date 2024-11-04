@@ -8,13 +8,16 @@ interface MealBadgeProps{
 export default function MealBadge(props: MealBadgeProps){
     let color = ''
     if(props.text === 'Breakfast'){
-        color = 'bg-green-600 hover:bg-green-700'
+        color = 'bg-[#FF9B50] hover:bg-[#FF9B50]/80'
     }
     else if(props.text === 'Lunch'){
-        color = 'bg-yellow-600 hover:bg-yellow-700'
+        color = 'bg-[#E25E3E] hover:bg-[#E25E3E]/80'
     }
     else if(props.text === 'Dinner'){
-        color = 'bg-blue-500 hover:bg-blue-600 '
+        color = 'bg-[#C63D2F] hover:bg-[#C63D2F]/80'
+    }
+    else if(props.text === 'Snack'){
+        color = 'bg-[#FFBB5C] hover:bg-[#FFBB5C]/80'
     }
 
     return(

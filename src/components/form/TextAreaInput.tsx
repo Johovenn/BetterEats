@@ -29,7 +29,7 @@ export default function TextAreaInput(props: TextAreaInputProps){
                             disabled={props.disabled} 
                             className={cn(
                                 props.className, 
-                                "border border-gray-300 rounded-xl hover:border-orange-default transition-all focus:border-2 focus:border-orange-default focus:outline-none resize-none"
+                                "border border-gray-300 rounded-xl hover:border-green-primary transition-all focus:border-2 focus:border-green-primary focus:outline-none resize-none"
                             )}
                             {...field}
                         />

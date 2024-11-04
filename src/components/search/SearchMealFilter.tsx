@@ -15,7 +15,7 @@ export default function SearchMealFilter(props: SearchMealFilterProps){
     return(
         <Sheet>
             <SheetTrigger asChild>
-                <Button variant={'outline'} className="gap-2">
+            <Button variant={'outline'} className="gap-2 text-green-primary">
                     Filter
                     <SlidersHorizontal size={18}/>
                 </Button>

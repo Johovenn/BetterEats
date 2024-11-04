@@ -29,7 +29,7 @@ export default function DatePicker(props: DateInputProps) {
             <Button
                 variant={"outline"}
                 className={cn(
-                    "justify-start text-left font-normal",
+                    "justify-start text-left font-normal meal-plan-date-picker",
                     !props.dateValue && "text-muted-foreground",
                     props.className
                 )}
