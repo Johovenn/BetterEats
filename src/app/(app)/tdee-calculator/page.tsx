@@ -304,10 +304,12 @@ export default function BMRCalculator() {
                     <h2 className="text-xl font-medium mb-5">
                         Your daily nutrition needs
                     </h2>
-                    <div className="rounded-full border-[20px] border-green-primary w-[200px] h-[200px] text-center flex flex-col justify-center">
-                        <span className="text-lg text-slate-500 font-medium">Total</span>
-                        <span className="text-2xl font-bold">{form.watch('user_bmr_value')}</span>
-                        <span className="text-md text-slate-500 font-medium">kCal</span>
+                    <div className="bg-gradient-to-b from-slate-200 to-green-primary w-[220px] h-[220px] rounded-full flex justify-center items-center">
+                        <div className="rounded-full w-[170px] h-[170px] p-4 text-center flex flex-col justify-center mx-auto my-auto bg-white">
+                            <span className="text-lg text-slate-500 font-medium">Total</span>
+                            <span className="text-2xl font-bold">{form.watch('user_bmr_value')}</span>
+                            <span className="text-md text-slate-500 font-medium">kCal</span>
+                        </div>
                     </div>
                     <div className="flex justify-around gap-3 mt-5">
                         <NutritionCard 
