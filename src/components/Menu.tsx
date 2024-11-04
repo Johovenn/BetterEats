@@ -14,7 +14,7 @@ interface MenuProps{
 export default function Menu(props: MenuProps){
     return (
         <DropdownMenu modal={false}>
-            <DropdownMenuTrigger>
+            <DropdownMenuTrigger className="meal-menu-trigger">
                 <Button variant={"outline"} size={"icon"}>{props.label}</Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>

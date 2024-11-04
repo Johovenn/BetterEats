@@ -6,7 +6,6 @@ import { useUser } from "@clerk/nextjs"
 import { Search } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
-import { getUserBMR } from "../bmr-calculator/api/getUserBMR"
 import MealPlanValueCard from "@/components/meal-planner/MealPlanValueCard"
 import { getMealPlanTotalNutrition } from "../meal-planner/api/getMealPlanTotalNutrition"
 import { useForm } from "react-hook-form"
@@ -90,7 +89,7 @@ export default function DashboardPage(){
             <Loading loading={isLoading} />
 
             <PageHeader 
-                title={`Hello, ${user.fullName}`}
+                title={`Hi, ${user.fullName}`}
                 subtitle={`It's ${formattedDate}`}
             />
 

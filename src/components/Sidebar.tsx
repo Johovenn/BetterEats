@@ -33,9 +33,9 @@ export default function Sidebar(){
             link: '/search'
         },
         {
-            title: 'BMR Calculator',
+            title: 'TDEE Calculator',
             icon: <Calculator size={20}/>,
-            link: '/bmr-calculator'
+            link: '/tdee-calculator'
         },
         {
             title: 'Meal Planner',
@@ -45,7 +45,7 @@ export default function Sidebar(){
         {
             title: 'Articles',
             icon: <Newspaper size={20}/>,
-            link: '/articles'
+            link: '/article'
         }
     ]
     
@@ -87,7 +87,7 @@ export default function Sidebar(){
                                         href={link.link}
                                         className={cn(
                                         "flex items-center justify-center p-2 rounded-xl transition-colors duration-200",
-                                        pathname === link.link ? "bg-green-500 text-white" : "hover:bg-green-200"
+                                        pathname === link.link ? "bg-orange-primary text-white" : "hover:bg-orange-primary/20"
                                         )}
                                     >
                                         {link.icon}
@@ -108,7 +108,7 @@ export default function Sidebar(){
                                         href={link.link}
                                         className={cn(
                                         "flex items-center justify-center p-2 rounded-xl transition-colors duration-200",
-                                        pathname === link.link ? "bg-green-500 text-white" : "hover:bg-green-200"
+                                        pathname === link.link ? "bg-orange-primary text-white" : "hover:bg-green-200"
                                         )}
                                     >
                                         {link.icon}

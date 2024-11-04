@@ -40,7 +40,7 @@ export default function RadioInput(props: RadioInputProps){
                                         <FormLabel 
                                             className={cn(
                                             "cursor-pointer px-4 py-2 border rounded-lg transition-colors duration-200",
-                                            field.value === radio[props.radioId] ? "bg-orange-default text-white hover:bg-orange-default/70" : "bg-gray-200 text-black hover:bg-orange-200",
+                                            field.value === radio[props.radioId] ? "bg-green-primary text-white hover:bg-green-primary/80" : "bg-gray-200 text-black hover:bg-green-primary/20",
                                         )}>
                                             {radio[props.radioLabel]}
                                         </FormLabel>

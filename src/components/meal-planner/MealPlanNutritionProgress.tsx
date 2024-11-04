@@ -1,11 +1,13 @@
 import { Info } from "lucide-react"
 import HoverTooltip from "../Tooltip"
 import { Progress } from "../ui/progress"
+import { cn } from "@/lib/utils"
 
 interface MealPlanNutritionProgressProps{
     nutritionName: string
     nutritionValue: number
     maxValue: number
+    className?: string
 }
 
 export default function MealPlanNutritionProgress(props: MealPlanNutritionProgressProps){
@@ -28,14 +30,15 @@ export default function MealPlanNutritionProgress(props: MealPlanNutritionProgre
                 </HoverTooltip>
             </div>
             <Progress 
-                value={props.nutritionValue / props.maxValue * 100}
-                className={
-                    props.nutritionValue > props.maxValue 
-                    ? '[&>*]:bg-gradient-to-r from-red-500 to-red-700 bg-slate-200' 
-                    : props.nutritionValue * 100 / props.maxValue < 80 
-                    ? '[&>*]:bg-gradient-to-r from-yellow-400 to-yellow-600 bg-slate-200' 
-                    : '[&>*]:bg-gradient-to-r from-green-400 to-green-600 bg-slate-200'
-                }
+                value={Math.min(props.nutritionValue / props.maxValue * 100, 100)}
+                className={cn("bg-slate-200", props.className)}
+                // className={
+                //     props.nutritionValue > props.maxValue 
+                //     ? '[&>*]:bg-gradient-to-r from-red-500 to-red-700 bg-slate-200' 
+                //     : props.nutritionValue * 100 / props.maxValue < 80 
+                //     ? '[&>*]:bg-gradient-to-r from-yellow-400 to-yellow-600 bg-slate-200' 
+                //     : '[&>*]:bg-gradient-to-r from-green-400 to-green-600 bg-slate-200'
+                // }
             />                    
         </div>
     )

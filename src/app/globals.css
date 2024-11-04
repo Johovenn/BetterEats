@@ -94,5 +94,48 @@
 }
 
 html {
-    font-family:  var(--font-kanit), sans-serif;
+  font-family:  var(--font-kanit), sans-serif;
+}
+.driver-popover * {
+  font-family: Arial !important;
+}
+
+.driver-popover.driverjs-theme {
+  color: #000;
+}
+
+.driver-popover.driverjs-theme .driver-popover-title {
+  font-size: 20px !important;
+  font-family: Arial !important;
+}
+
+.driver-popover.driverjs-theme .driver-popover-title,
+.driver-popover.driverjs-theme .driver-popover-description,
+.driver-popover.driverjs-theme .driver-popover-progress-text {
+  color: #000;
+  font-family: Arial !important;
+}
+
+.driver-popover.driverjs-theme button {
+  flex: 1;
+  text-align: center;
+  color: black;
+  text-shadow: none;
+  font-size: 14px;
+  padding: 5px 8px;
+  border-radius: 6px;
+}
+
+.driver-popover.driverjs-theme button:hover {
+  background-color: rgb(225, 225, 225);
+  transition: 0.2s;
+}
+
+.driver-popover.driverjs-theme .driver-popover-navigation-btns {
+  justify-content: space-between;
+  gap: 3px;
+}
+
+.driver-popover.driverjs-theme .driver-popover-close-btn {
+  color: #9b9b9b;
 }

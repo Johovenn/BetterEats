@@ -1,3 +1,5 @@
+"use client"
+
 import Loading from "@/components/Loading"
 import PageHeader from "@/components/PageHeader"
 import { useState } from "react"

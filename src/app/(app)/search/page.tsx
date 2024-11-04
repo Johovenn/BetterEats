@@ -108,23 +108,6 @@ export default function SearchPage(){
         getMeals()
     }, [getMeals, keyword])
 
-    // const breakfast = form.watch('is_breakfast')
-    // const lunch = form.watch('is_lunch')
-    // const dinner = form.watch('is_dinner')
-    // const snack = form.watch('is_snack')
-    // useEffect(() => {
-    //     getMeals()
-    // }, [breakfast, lunch, dinner, snack, getMeals])
-
-    // const handleOnBlurFilter = async () => {
-    //     getMeals()
-    // }
-
-    // const handleClearFilterButton = async () => {
-    //     form.reset()
-    //     getMeals()
-    // }
-
     const handleAddMealButton = (meal: MealProps) => {
         setSelectedMeal(meal)
         setAddMealModal(true)
@@ -164,7 +147,7 @@ export default function SearchPage(){
 
             <section className="mt-5 min-w-full">
                 <div className="flex justify-between">
-                    <h2 className="text-lg font-medium">{mealName === '' ? 'Showing all search results' : `Showing search results for keyword \'${mealName}\'`}</h2>
+                    <h2 className="text-lg font-medium text-green-primary">{mealName === '' ? 'Showing all search results' : `Showing search results for keyword \'${mealName}\'`}</h2>
                     <SearchMealFilter
                         form={form}
                         onConfirm={getMeals}
@@ -195,7 +178,7 @@ export default function SearchPage(){
                         <div className="w-full mt-3">
                             <Button 
                                 variant={'outline'} 
-                                className="w-full hover:bg-orange-default/10"
+                                className="w-full hover:bg-green-primary/10"
                                 onClick={handleLoadMoreButton}
                             >
                                 Load More

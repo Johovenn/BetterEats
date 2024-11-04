@@ -33,7 +33,7 @@ export default function NumericInput(props: NumericInputProps) {
                             }}
                             className={cn(
                                 props.className,
-                                "border border-gray-300 rounded-xl hover:border-orange-default transition-all focus:border-2 focus:border-orange-default focus:outline-none"
+                                "border border-gray-300 rounded-xl hover:border-green-primary transition-all focus:border-2 focus:border-green-primary focus:outline-none"
                             )}
                             onBlur={props.onBlur}
                         />

@@ -11,11 +11,11 @@ export default function PageHeader(props: PageHeaderProps){
     return(
         <header className="flex justify-between items-start w-full mb-5">
             <div>
-                <h1 className="text-[22px] font-semibold text-black">{props.title}</h1>
+                <h1 className="text-[28px] font-bold text-green-primary">{props.title}</h1>
                 {
                     props.subtitle
                         &&
-                    <p className="text-gray-600">{props.subtitle}</p>
+                    <p className="text-green-primary">{props.subtitle}</p>
                 }
             </div>
             {
