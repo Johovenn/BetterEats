@@ -9,6 +9,7 @@ interface CheckboxInputProps{
     id: string
     label: string | ReactNode
     classname?: string
+    disabled?: boolean
 }
 
 export default function CheckboxInput(props: CheckboxInputProps){
@@ -20,6 +21,7 @@ export default function CheckboxInput(props: CheckboxInputProps){
                 <FormItem className={cn("flex flex-row items-start space-x-2 space-y-0", props.classname)}>
                     <FormControl>
                         <Checkbox
+                            disabled={props.disabled}
                             checked={field.value}
                             onCheckedChange={field.onChange}
                         />

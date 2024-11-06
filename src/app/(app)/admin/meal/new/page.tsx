@@ -8,7 +8,7 @@ import TextInput from "@/components/form/TextInput"
 import { Button } from "@/components/ui/button"
 import PageHeader from "@/components/PageHeader"
 import Loading from "@/components/Loading"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, Save, Trash2 } from "lucide-react"
 import Link from "next/link"
 import NumericInput from "@/components/form/NumericInput"
 import CheckboxInput from "@/components/form/CheckboxInput"
@@ -250,23 +250,25 @@ export default function CreateMealPage() {
                                 label="Ingredients"
                                 placeholder="5 tsp of sugar, 100 grams of chicken thigh"
                                 description="The ingredients must be separated with a comma (,) and a space, ex: '5 tsp of sugar, 100 grams of chicken thight, 2 tsp of salt'"
+                                error={form.formState.errors?.meal_ingredients?.message}
                             />
                             <TextAreaInput 
                                 control={form.control}
                                 id="meal_recipe"
                                 label="Recipe"
                                 placeholder="Marinate chicken with salt, pepper, olive oil, and sauce overnight, wrap with flour, and fry over low heat."
+                                error={form.formState.errors?.meal_recipe?.message}
                             />
                         </div>
                     </FormProvider>
                 </div>
-
-                <Button
-                    className="w-fit ml-auto mt-3"
-                    onClick={form.handleSubmit(handleSaveButton)}
-                >
-                    Save
-                </Button>
+                    <Button
+                        className="w-fit ml-auto mt-3"
+                        onClick={form.handleSubmit(handleSaveButton)}
+                    >
+                        <Save />
+                        Save
+                    </Button>
             </section>
         </>
     )

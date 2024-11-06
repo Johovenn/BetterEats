@@ -50,7 +50,8 @@ export async function POST(req: Request) {
         const {
             article_title = "", 
             article_description = "", 
-            article_body = ""
+            article_body = "",
+            article_image = ""
         } = body
 
         if (!article_title || !article_description || !article_body) {
@@ -62,6 +63,7 @@ export async function POST(req: Request) {
                 article_title,
                 article_description,
                 article_body,
+                article_image,
             },
         })
 

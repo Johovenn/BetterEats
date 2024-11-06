@@ -50,7 +50,7 @@ export default function Navbar(){
                 </div>
             </SignedOut>
             <SignedIn>
-                <Button onClick={handleDashboardButton}>Go to Dashboard</Button>
+                <Button onClick={handleDashboardButton}>Dashboard</Button>
             </SignedIn>
         </nav>
     )

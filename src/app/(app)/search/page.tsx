@@ -16,6 +16,7 @@ import MealDetailModal from "@/components/meal-planner/MealDetailModal";
 import { FilterIcon, SlidersHorizontal } from "lucide-react";
 import SearchMealFilter from "@/components/search/SearchMealFilter";
 import AddMealPlanModal from "@/components/meal-planner/AddMealPlanModal";
+import { CldImage } from "next-cloudinary";
 
 interface FormProps{
     is_breakfast: boolean
@@ -24,14 +25,14 @@ interface FormProps{
     is_snack: boolean
     calorie_range_from: number
     calorie_range_to: number
+    page: number
+    limit: number
+    total_rows: number
+    meal_name: string
 }
 
 export default function SearchPage(){
     const [isLoading, setIsLoading] = useState(false)
-    const [page, setPage] = useState(0)
-    const [limit, setLimit] = useState(10)
-    const [totalRows, setTotalRows] = useState(0)
-    const [mealName, setMealName] = useState('')
     const [searchResults, setSearchResults] = useState<MealProps[]>([])
     const [addMealModal, setAddMealModal] = useState(false)
     const [selectedMeal, setSelectedMeal] = useState<MealProps>()
@@ -55,9 +56,9 @@ export default function SearchPage(){
         setIsLoading(true)
 
         await getAllMeals({
-            page: page,
-            limit: limit,
-            meal_name: mealName,
+            page: form.getValues('page'),
+            limit: form.getValues('limit'),
+            meal_name: form.getValues('meal_name'),
             is_breakfast: form.getValues('is_breakfast'),
             is_lunch: form.getValues('is_lunch'),
             is_dinner: form.getValues('is_dinner'),
@@ -67,23 +68,23 @@ export default function SearchPage(){
         }).then((response) => {
             if(response.data){
                 setSearchResults(response.data)
-                setTotalRows(Number(response.total_rows))
+                form.setValue("total_rows", (Number(response.total_rows)))
             }
         }).catch((error) => {
             setSearchResults([])
-            setTotalRows(0)
+            form.setValue("total_rows", 0)
         })
 
         setIsLoading(false)
-    }, [form, limit, mealName, page])
+    }, [form])
 
     const loadMoreMeals = useCallback(async () => {
         setIsLoading(true)
 
         await getAllMeals({
-            page: page,
-            limit: limit,
-            meal_name: mealName,
+            page: form.getValues('page'),
+            limit: form.getValues('limit'),
+            meal_name: form.getValues('meal_name'),
             is_breakfast: form.getValues('is_breakfast'),
             is_lunch: form.getValues('is_lunch'),
             is_dinner: form.getValues('is_dinner'),
@@ -93,18 +94,18 @@ export default function SearchPage(){
         }).then((response) => {
             if(response.data){
                 setSearchResults(prev => [...prev, ...response.data])
-                setTotalRows(Number(response.total_rows))
+                form.setValue("total_rows", (Number(response.total_rows)))
             }
         }).catch((error) => {
             setSearchResults([])
-            setTotalRows(0)
+            form.setValue("total_rows", 0)
         })
 
         setIsLoading(false)
-    }, [form, limit, mealName, page])
+    }, [form])
 
     useEffect(() => {
-        keyword ? setMealName(keyword) : setMealName('')
+        keyword ? form.setValue('meal_name', keyword) : form.setValue('meal_name', '')
         getMeals()
     }, [getMeals, keyword])
 
@@ -119,7 +120,7 @@ export default function SearchPage(){
     }
 
     const handleLoadMoreButton = () => {
-        setPage((prev) => prev + 1)
+        form.setValue('page', form.getValues('page') + 1)
         loadMoreMeals()
     }
     
@@ -147,7 +148,7 @@ export default function SearchPage(){
 
             <section className="mt-5 min-w-full">
                 <div className="flex justify-between">
-                    <h2 className="text-lg font-medium text-green-primary">{mealName === '' ? 'Showing all search results' : `Showing search results for keyword \'${mealName}\'`}</h2>
+                    <h2 className="text-lg font-medium text-green-primary">{form.watch('meal_name') === '' ? 'Showing all search results' : `Showing search results for keyword \'${form.watch('meal_name')}\'`}</h2>
                     <SearchMealFilter
                         form={form}
                         onConfirm={getMeals}
@@ -169,11 +170,19 @@ export default function SearchPage(){
                                 />
                             ))
                                 :
-                            <h3>Food not found.</h3>
+                            <div className="mt-6 w-full flex flex-col items-center justify-center">
+                                <CldImage 
+                                    src="9796613-removebg_d4sxc2"
+                                    alt="Not Found Image"
+                                    width={300}
+                                    height={300}
+                                />
+                                <p className="mt-3 text-lg font-semibold text-green-primary">Meal not found.</p>
+                            </div>
                         }
                     </div>
                     {
-                        (page + 1) * limit < totalRows
+                        (form.watch('page') + 1) * form.watch('limit') < form.watch('total_rows')
                             &&
                         <div className="w-full mt-3">
                             <Button 

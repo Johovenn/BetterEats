@@ -8,7 +8,7 @@ import TextInput from "@/components/form/TextInput"
 import { Button } from "@/components/ui/button"
 import PageHeader from "@/components/PageHeader"
 import Loading from "@/components/Loading"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, Save, Trash, Trash2 } from "lucide-react"
 import Link from "next/link"
 import NumericInput from "@/components/form/NumericInput"
 import CheckboxInput from "@/components/form/CheckboxInput"
@@ -22,6 +22,8 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import { getMealById } from "@/app/(app)/search/api/getMealById"
 import { CldImage } from "next-cloudinary"
 import { putMeal } from "../api/putMeal"
+import AlertModal from "@/components/AlertModal"
+import { deleteMeal } from "../api/deleteMeal"
 
 interface FormProps {
     meal_id: number
@@ -58,6 +60,7 @@ export default function UpdateMealPage() {
     const { MealId } = useParams()
     const [isLoading, setIsLoading] = useState(false)
     const [imagePreview, setImagePreview] = useState<string>('')
+    const [alertModal, setAlertModal] = useState(false)
 
     const form = useForm<FormProps>({
         mode: 'onBlur',
@@ -182,6 +185,19 @@ export default function UpdateMealPage() {
         setIsLoading(false)
     }
 
+    const handleDeleteMeal = async () => {
+        setIsLoading(true)
+
+        await deleteMeal(form.getValues("meal_id")).then((response) => {
+            router.push(`/admin/meal`)
+            toast('Delete meal successful!')
+        }).catch((error) => {
+            toast('Meal is already used in a meal plan. Delete meal failed.')
+        })
+
+        setIsLoading(false)
+    }
+
     return (
         <>
             <Loading loading={isLoading} />
@@ -192,13 +208,22 @@ export default function UpdateMealPage() {
                 <ArrowLeft size={18} /> Go back to meal page
             </Link>
 
+            <AlertModal 
+                isOpen={alertModal}
+                setIsOpen={setAlertModal}
+                handleClose={() => setAlertModal(false)}
+                title="Delete Meal"
+                description="Are you sure you want to delete this meal? You won't be able to delete this meal if this meal is already used in a meal plan. This action cannot be undone."
+                onConfirm={handleDeleteMeal}
+            />
+
             <section className="mt-5 min-w-full bg-white p-5 rounded-lg flex flex-col">
                 <div className="w-full flex justify-between">
                     <FormProvider {...form}>
-                        <div className="w-[250px] space-y-2">
+                        <div className="w-[250px] h-[250px] space-y-2">
                             {
                                 imagePreview 
-                                    ? 
+                                    ?
                                 <CldImage
                                     className="rounded-lg"
                                     src={imagePreview}
@@ -217,6 +242,7 @@ export default function UpdateMealPage() {
                             }
 
                             <FileInput
+                                disabled={isLoading || form.watch('meal_id') === null}
                                 control={form.control}
                                 id="meal_image"
                                 label="Image"
@@ -226,6 +252,7 @@ export default function UpdateMealPage() {
                         </div>
                         <div className="w-[75%] space-y-4">
                             <TextInput 
+                                disabled={isLoading || form.watch('meal_id') === null}
                                 control={form.control}
                                 id="meal_name"
                                 label="Name"
@@ -235,6 +262,7 @@ export default function UpdateMealPage() {
                             <div className="w-full flex justify-between">
                                 <div className="w-[48%] space-y-2">
                                     <NumericInput
+                                        disabled={isLoading || form.watch('meal_id') === null}
                                         control={form.control}
                                         id="meal_calories"
                                         label="Calories (kCal)"
@@ -242,6 +270,7 @@ export default function UpdateMealPage() {
                                         error={form.formState.errors?.meal_calories?.message}
                                     />
                                     <NumericInput 
+                                        disabled={isLoading || form.watch('meal_id') === null}
                                         control={form.control}
                                         id="meal_protein"
                                         label="Protein (g)"
@@ -251,6 +280,7 @@ export default function UpdateMealPage() {
                                 </div>
                                 <div className="w-[48%] space-y-2">
                                     <NumericInput 
+                                        disabled={isLoading || form.watch('meal_id') === null}
                                         control={form.control}
                                         id="meal_carbohydrate"
                                         label="Carbohydrate (g)"
@@ -258,6 +288,7 @@ export default function UpdateMealPage() {
                                         error={form.formState.errors?.meal_carbohydrate?.message}
                                     />
                                     <NumericInput 
+                                        disabled={isLoading || form.watch('meal_id') === null}
                                         control={form.control}
                                         id="meal_fat"
                                         label="Fat (g)"
@@ -270,24 +301,28 @@ export default function UpdateMealPage() {
                                 <h2 className="font-medium text-sm">Meal Type</h2>
                                 <div className="flex">
                                     <CheckboxInput
+                                        disabled={isLoading || form.watch('meal_id') === null}
                                         control={form.control}
                                         id="is_breakfast"
                                         label="Breakfast"
                                         classname="w-[110px]"
                                     />
-                                    <CheckboxInput 
+                                    <CheckboxInput
+                                        disabled={isLoading || form.watch('meal_id') === null}
                                         control={form.control}
                                         id="is_lunch"
                                         label="Dinner"
                                         classname="w-[110px]"
                                     />
                                     <CheckboxInput 
+                                        disabled={isLoading || form.watch('meal_id') === null}
                                         control={form.control}
                                         id="is_dinner"
                                         label="Lunch"
                                         classname="w-[110px]"
                                     />
-                                    <CheckboxInput 
+                                    <CheckboxInput
+                                        disabled={isLoading || form.watch('meal_id') === null}
                                         control={form.control}
                                         id="is_snack"
                                         label="Snack"
@@ -296,6 +331,7 @@ export default function UpdateMealPage() {
                                 </div>
                             </div>
                             <TextAreaInput
+                                disabled={isLoading || form.watch('meal_id') === null}
                                 control={form.control}
                                 id="meal_ingredients"
                                 label="Ingredients"
@@ -303,6 +339,7 @@ export default function UpdateMealPage() {
                                 description="The ingredients must be separated with a comma (,) and a space, ex: '5 tsp of sugar, 100 grams of chicken thight, 2 tsp of salt'"
                             />
                             <TextAreaInput 
+                                disabled={isLoading || form.watch('meal_id') === null}
                                 control={form.control}
                                 id="meal_recipe"
                                 label="Recipe"
@@ -311,13 +348,24 @@ export default function UpdateMealPage() {
                         </div>
                     </FormProvider>
                 </div>
-
-                <Button
-                    className="w-fit ml-auto mt-3"
-                    onClick={form.handleSubmit(handleSaveButton)}
-                >
-                    Save
-                </Button>
+                <div className="ml-auto flex items-center mt-3 gap-3">
+                    <Button
+                        className="bg-red-700 hover:bg-red-600 flex items-center gap-1"
+                        onClick={() => setAlertModal(true)}
+                        disabled={isLoading || form.watch('meal_id') === null}
+                    >
+                        <Trash2 size={16} />
+                        Delete
+                    </Button>
+                    <Button
+                        className="flex items-center gap-1"
+                        onClick={form.handleSubmit(handleSaveButton)}
+                        disabled={isLoading || form.watch('meal_id') === null}
+                    >
+                        <Save size={16}/>
+                        Save
+                    </Button>
+                </div>
             </section>
         </>
     )

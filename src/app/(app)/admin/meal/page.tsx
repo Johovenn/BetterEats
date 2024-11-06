@@ -18,6 +18,7 @@ import { getAllMeals, MealProps } from "../../search/api/getAllMeals";
 import AddMealPlanModal from "@/components/meal-planner/AddMealPlanModal";
 import AlertModal from "@/components/AlertModal";
 import { deleteMeal } from "./api/deleteMeal";
+import { CldImage } from "next-cloudinary";
 
 interface FormProps{
     is_breakfast: boolean
@@ -26,6 +27,10 @@ interface FormProps{
     is_snack: boolean
     calorie_range_from: number
     calorie_range_to: number
+    page: number
+    limit: number
+    total_rows: number
+    meal_name: string
 }
 
 export default function AdminMealPage(){
@@ -51,6 +56,10 @@ export default function AdminMealPage(){
             is_snack: false,
             calorie_range_from: undefined,
             calorie_range_to: undefined,
+            page: 0,
+            limit: 10,
+            total_rows: 0,
+            meal_name: '',
         }
     })
 
@@ -59,9 +68,9 @@ export default function AdminMealPage(){
 
         setPage(0)
         await getAllMeals({
-            page: page,
-            limit: limit,
-            meal_name: mealName,
+            page: form.getValues('page'),
+            limit: form.getValues('limit'),
+            meal_name: form.getValues('meal_name'),
             is_breakfast: form.getValues('is_breakfast'),
             is_lunch: form.getValues('is_lunch'),
             is_dinner: form.getValues('is_dinner'),
@@ -77,15 +86,15 @@ export default function AdminMealPage(){
         })
 
         setIsLoading(false)
-    }, [form, limit, mealName, page])
+    }, [form])
 
     const loadMoreMeals = useCallback(async () => {
         setIsLoading(true)
 
         await getAllMeals({
-            page: page,
-            limit: limit,
-            meal_name: mealName,
+            page: form.getValues('page'),
+            limit: form.getValues('limit'),
+            meal_name: form.getValues('meal_name'),
             is_breakfast: form.getValues('is_breakfast'),
             is_lunch: form.getValues('is_lunch'),
             is_dinner: form.getValues('is_dinner'),
@@ -103,12 +112,44 @@ export default function AdminMealPage(){
         })
 
         setIsLoading(false)
-    }, [form, limit, mealName, page])
+    }, [form])
+
+    const searchMeals = useCallback(async () => {
+        setIsLoading(true)
+
+        if(form.getValues('meal_name') !== ''){
+            await getAllMeals({
+                page: form.getValues('page'),
+                limit: form.getValues('limit'),
+                meal_name: form.getValues('meal_name'),
+                is_breakfast: form.getValues('is_breakfast'),
+                is_lunch: form.getValues('is_lunch'),
+                is_dinner: form.getValues('is_dinner'),
+                is_snack: form.getValues('is_snack'),
+                calorie_range_from: form.getValues('calorie_range_from'),
+                calorie_range_to: form.getValues('calorie_range_to')
+            }).then((response) => {
+                setSearchResults(response.data)
+                setTotalRows(Number(response.total_rows))
+            }).catch((error) => {
+                setSearchResults([])
+                setTotalRows(0)
+            })
+        }
+
+        setIsLoading(false)
+    }, [form])
 
     useEffect(() => {
-        keyword ? setMealName(keyword) : setMealName('')
-        getMeals()
-    }, [getMeals, keyword])
+        if(keyword){
+            form.setValue('meal_name', keyword)
+            searchMeals()
+        }
+        else{
+            getMeals()
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [searchMeals, getMeals])
 
     const handleInfoButton = (meal_id: number) => {
         setSelectedMealDetailId(meal_id)
@@ -124,7 +165,7 @@ export default function AdminMealPage(){
     }
 
     const handleLoadMoreButton = () => {
-        setPage((prev) => prev + 1)
+        form.setValue('page', form.getValues('page') + 1)
         loadMoreMeals()
     }
 
@@ -204,7 +245,15 @@ export default function AdminMealPage(){
                                 />
                             ))
                                 :
-                            <h3>Food not found.</h3>
+                            <div className="mt-6 w-full flex flex-col items-center justify-center">
+                                <CldImage
+                                    src="9796613-removebg_d4sxc2"
+                                    alt="Not Found Image"
+                                    width={250}
+                                    height={250}
+                                />
+                                <p className="mt-3 text-lg font-semibold text-green-primary">Meal not found.</p>
+                            </div>
                         }
                     </div>
                     {

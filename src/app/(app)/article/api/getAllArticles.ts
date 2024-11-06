@@ -3,6 +3,7 @@ import axios from "axios"
 
 export interface ArticleProps{
     article_id: number
+    article_image: string
     article_title: string
     article_description: string
     article_body: string
