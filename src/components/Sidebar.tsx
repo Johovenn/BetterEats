@@ -33,9 +33,9 @@ export default function Sidebar(){
             link: '/search'
         },
         {
-            title: 'TDEE Calculator',
+            title: 'Health Calculators',
             icon: <Calculator size={20}/>,
-            link: '/tdee-calculator'
+            link: '/health-calculator'
         },
         {
             title: 'Meal Planner',
@@ -63,7 +63,7 @@ export default function Sidebar(){
         {
             title: 'Add Article',
             icon: <NewspaperIcon size={20}/>,
-            link: '/admin/add-article'
+            link: '/admin/article'
         }
     ]
 
@@ -86,8 +86,9 @@ export default function Sidebar(){
                                     <a
                                         href={link.link}
                                         className={cn(
-                                        "flex items-center justify-center p-2 rounded-xl transition-colors duration-200",
-                                        pathname === link.link ? "bg-orange-primary text-white" : "hover:bg-orange-primary/20"
+                                            "flex items-center justify-center p-2 rounded-xl transition-colors duration-200",
+                                            pathname === link.link ? "bg-orange-primary text-white" : "hover:bg-orange-primary/20",
+                                            `sidebar-${link.title}`
                                         )}
                                     >
                                         {link.icon}
@@ -107,8 +108,9 @@ export default function Sidebar(){
                                     <a
                                         href={link.link}
                                         className={cn(
-                                        "flex items-center justify-center p-2 rounded-xl transition-colors duration-200",
-                                        pathname === link.link ? "bg-orange-primary text-white" : "hover:bg-green-200"
+                                            "flex items-center justify-center p-2 rounded-xl transition-colors duration-200",
+                                            pathname === link.link ? "bg-orange-primary text-white" : "hover:bg-orange-primary/20",
+                                            `sidebar-${link.title}`
                                         )}
                                     >
                                         {link.icon}

@@ -69,6 +69,20 @@ export default function MealPlannerPage(){
                 }
             },
             {
+                element: '.sidebar-Search', 
+                popover: {
+                    title: 'How to use the meal planner?',
+                    description: 'Search for meals to add to your meal plan on the search page.'
+                }
+            },
+            {
+                element: '.search-bar', 
+                popover: {
+                    title: 'How to use the meal planner?',
+                    description: 'You can also go to the search page by typing the name of meal you would like to add to the meal plan.'
+                }
+            },
+            {
                 element: '.meal-plan-value', 
                 popover: {
                     title: 'How to use the meal planner?',
@@ -96,6 +110,20 @@ export default function MealPlannerPage(){
                 popover: {
                     title: 'How to use the meal planner?',
                     description: 'Meal plans added to the day will appear here.'
+                }
+            },
+            {
+                element: '.sidebar-Search', 
+                popover: {
+                    title: 'How to use the meal planner?',
+                    description: 'Search for meals to add to your meal plan on the search page.'
+                }
+            },
+            {
+                element: '.search-bar', 
+                popover: {
+                    title: 'How to use the meal planner?',
+                    description: 'You can also go to the search page by typing the name of meal you would like to add to the meal plan.'
                 }
             },
             {
@@ -201,9 +229,6 @@ export default function MealPlannerPage(){
 
             <PageHeader 
                 title="Meal Planner"
-                subtitle={
-                    <span className="text-sm hover:cursor-pointer text-green-primary hover:underline" onClick={() => driverObj.drive()}>How does this work?</span>
-                }
             />
 
             <AlertModal 
@@ -215,9 +240,9 @@ export default function MealPlannerPage(){
                 setIsOpen={setAlertDeleteModal}
             />
 
-            <div className="w-full flex justify-between">
+            <section className="w-full flex justify-between">
                 <div className="w-[65%] mb-5 px-4 py-2 bg-[#fefefe] shadow-lg rounded-lg meal-plans">
-                    <section className="w-full mb-5 p-2">
+                    <div className="w-full mb-5 p-2">
                         <h2 className="text-lg font-medium">Breakfast</h2>
                         <div className="flex flex-col gap-3 justify-between">
                             {
@@ -233,12 +258,14 @@ export default function MealPlannerPage(){
                                     />
                                 ))
                                     :
-                                "No meal plan data found"
+                                <p className="text-sm ">
+                                    No meal plan data found
+                                </p>
                             }
                         </div>
-                    </section>
+                    </div>
 
-                    <section className="w-full mb-5 p-2 bg-white">
+                    <div className="w-full mb-5 p-2 bg-white">
                         <h2 className="text-lg font-medium">Snack</h2>
                         <div className="flex flex-col gap-3 justify-between">
                             {
@@ -254,12 +281,14 @@ export default function MealPlannerPage(){
                                     />
                                 ))
                                     :
-                                "No meal plan data found"
+                                <p className="text-sm ">
+                                    No meal plan data found
+                                </p>
                             }
                         </div>
-                    </section>
+                    </div>
 
-                    <section className="w-full mb-5 p-2 bg-white">
+                    <div className="w-full mb-5 p-2 bg-white">
                         <h2 className="text-lg font-medium">Lunch</h2>
                         <div className="flex flex-col gap-3 justify-between">
                             {
@@ -275,12 +304,14 @@ export default function MealPlannerPage(){
                                     />
                                 ))
                                     :
-                                "No meal plan data found"
+                                <p className="text-sm ">
+                                    No meal plan data found
+                                </p>
                             }
                         </div>
-                    </section>
+                    </div>
 
-                    <section className="w-full mb-5 p-2 bg-white">
+                    <div className="w-full mb-5 p-2 bg-white">
                         <h2 className="text-lg font-medium">Dinner</h2>
                         <div className="flex flex-col gap-3 justify-between">
                             {
@@ -296,10 +327,13 @@ export default function MealPlannerPage(){
                                     />
                                 ))
                                     :
-                                "No meal plan data found"
+                                <p className="text-sm ">
+                                    No meal plan data found
+                                </p>
                             }
                         </div>
-                    </section>
+                    </div>
+                    <span className="text-sm hover:cursor-pointer text-green-primary hover:underline" onClick={() => driverObj.drive()}>How does this work?</span>
                 </div>
                 <div className="w-[30%]">
                     <MealPlanValueCard 
@@ -315,7 +349,7 @@ export default function MealPlannerPage(){
                         handleChangeDate={handleChangeDate}
                     />
                 </div>
-            </div>
+            </section>
         </>
     )
 }

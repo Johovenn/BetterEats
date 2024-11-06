@@ -79,6 +79,17 @@ model UserBMR {
   goal Goal @relation(fields: [goal_id], references: [goal_id])
 }
 
+model UserBMI {
+  user_bmi_id Int @id @default(autoincrement())
+  user_id String 
+  user_bmi_date DateTime
+  user_weight Float
+  user_height Float
+  user_age Int
+  user_gender String
+  user_bmi_value Float
+}
+
 model ActivityLevel {
   activity_level_id           Int @id @default(autoincrement())
   activity_level_code         String @default("")
@@ -102,6 +113,7 @@ model Goal {
 
 model Article {
   article_id Int @id @default(autoincrement())
+  article_image String @default("")
   article_title String
   article_description String
   article_body String @db.Text
