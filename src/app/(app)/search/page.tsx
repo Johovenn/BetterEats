@@ -107,7 +107,7 @@ export default function SearchPage(){
     useEffect(() => {
         keyword ? form.setValue('meal_name', keyword) : form.setValue('meal_name', '')
         getMeals()
-    }, [getMeals, keyword])
+    }, [form, getMeals, keyword])
 
     const handleAddMealButton = (meal: MealProps) => {
         setSelectedMeal(meal)

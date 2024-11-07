@@ -19,8 +19,7 @@ export async function POST(req: Request){
                 user_height: parseInt(request.user_height),
                 user_weight: parseInt(request.user_weight),
                 user_age: parseInt(request.user_age),
-                user_bmi_date: request.user_bmi_date,
-                user_bmi_value: request.user_bmi_value,
+                user_bmi_value: parseFloat(request.user_bmi_value),
                 user_gender: request.user_gender,
             }
         })

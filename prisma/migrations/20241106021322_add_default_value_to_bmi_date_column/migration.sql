@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "UserBMI" ALTER COLUMN "user_bmi_date" SET DEFAULT CURRENT_TIMESTAMP;
