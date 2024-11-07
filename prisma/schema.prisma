@@ -82,7 +82,7 @@ model UserBMR {
 model UserBMI {
   user_bmi_id Int @id @default(autoincrement())
   user_id String 
-  user_bmi_date DateTime
+  user_bmi_date DateTime @default(now())
   user_weight Float
   user_height Float
   user_age Int

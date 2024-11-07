@@ -21,7 +21,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getUserBMR } from "../api/getUserBMR";
 import { getBMRValue } from "../api/calculateBMR";
 import { postUserBMR } from "../api/postUserBMR";
-
 interface FormProps{
     user_height: number
     user_weight: number
@@ -87,7 +86,7 @@ const activityLevelInputValues = [
 
 const goalInputValues = [
     {
-        label: 'Gain Muscle',
+        label: 'Gain Muscle / Weight',
         value: 'GM'
     },
     {

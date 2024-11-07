@@ -1,5 +1,4 @@
 "use client"
-import BMRCard from "@/components/dashboard/BMRCard"
 import Loading from "@/components/Loading"
 import SearchBar from "@/components/SearchBar"
 import { useUser } from "@clerk/nextjs"
@@ -10,17 +9,21 @@ import MealPlanValueCard from "@/components/meal-planner/MealPlanValueCard"
 import { getMealPlanTotalNutrition } from "../meal-planner/api/getMealPlanTotalNutrition"
 import { useForm } from "react-hook-form"
 import PageHeader from "@/components/PageHeader"
+import BMRCard from "@/components/dashboard/BMRCard"
+import BMICard from "@/components/dashboard/BMICard"
+import { getUserBMI } from "../health-calculator/api/getUserBMI"
 
 interface FormProps {
-    meal_plan_date: Date;
-    meal_plan_total_calorie: number;
-    meal_plan_total_protein: number;
-    meal_plan_total_carbohydrate: number;
-    meal_plan_total_fat: number;
-    user_calorie_requirement: number;
-    user_protein_requirement: number;
-    user_carbohydrate_requirement: number;
-    user_fat_requirement: number;
+    meal_plan_date: Date
+    meal_plan_total_calorie: number
+    meal_plan_total_protein: number
+    meal_plan_total_carbohydrate: number
+    meal_plan_total_fat: number
+    user_calorie_requirement: number
+    user_protein_requirement: number
+    user_carbohydrate_requirement: number
+    user_fat_requirement: number
+    user_bmi_value: number
 }
 
 export default function DashboardPage(){
@@ -48,6 +51,7 @@ export default function DashboardPage(){
             user_carbohydrate_requirement: 0,
             user_fat_requirement: 0,
             user_protein_requirement: 0,
+            user_bmi_value: 0,
         }
     })
 
@@ -70,6 +74,18 @@ export default function DashboardPage(){
         setIsLoading(false)
     }, [form])
 
+    const getBMI = useCallback(async () => {
+        setIsLoading(true)
+
+        await getUserBMI().then((response) => {
+            if(response.data.user_bmi_value){
+                form.setValue('user_bmi_value', response.data.user_bmi_value)
+            }  
+        })
+
+        setIsLoading(false)
+    }, [form])
+
     const handleChangeDate = async (date: Date) => {
         form.setValue('meal_plan_date', date)
         
@@ -78,7 +94,8 @@ export default function DashboardPage(){
 
     useEffect(() => {
         getTotalNutrition()
-    }, [form, getTotalNutrition])
+        getBMI()
+    }, [form, getBMI, getTotalNutrition])
     
     if(!user){
         return null
@@ -93,7 +110,7 @@ export default function DashboardPage(){
                 subtitle={`It's ${formattedDate}`}
             />
 
-            <section className="mt-7 space-y-5">
+            <section className="mt-2 grid grid-cols-3 grid-rows-2 gap-4">
                 <BMRCard 
                     bmrValue={form.watch('user_calorie_requirement')}
                 />
@@ -108,6 +125,9 @@ export default function DashboardPage(){
                     fatValue={form.watch('meal_plan_total_fat')}
                     maxFat={form.watch('user_fat_requirement')}
                     handleChangeDate={handleChangeDate}
+                />
+                <BMICard
+                    bmiValue={form.watch('user_bmi_value')}
                 />
             </section>
         </>

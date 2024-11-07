@@ -8,7 +8,7 @@ import { Form } from "@/components/ui/form";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import NutritionCard from "@/components/bmr-calculator/NutritionCard";
-import { Beef, Wheat } from "lucide-react";
+import { Beef, Calculator, Save, Wheat } from "lucide-react";
 import SaveBMRAlertModal from "@/components/bmr-calculator/SaveBMRAlertModal";
 import { toast } from "sonner";
 import RadioInput from "@/components/form/RadioGroup";
@@ -21,33 +21,25 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getUserBMR } from "../api/getUserBMR";
 import { getBMRValue } from "../api/calculateBMR";
 import { postUserBMR } from "../api/postUserBMR";
+import { getUserBMI } from "../api/getUserBMI";
+import { postUserBMI } from "../api/postUserBMI";
+import { getBMIValue } from "../api/calculateBMI";
+import { getRecommendationBasedOnBMI } from "@/lib/bmiUtils";
 
 interface FormProps{
+    user_bmi_id: number
     user_height: number
     user_weight: number
     user_age: number
-    user_bmr_date: Date
     user_gender: string
-    user_bmr_value: number
-    activity_level_code: string
-    goal_code: string
-    protein: number
-    carbohydrate: number
-    fat: number
+    user_bmi_value: number
 }
 
 const validationSchema = yup.object().shape({
     user_height: yup.number().required().min(1, "Height must be more than 0cm"),
     user_weight: yup.number().required().min(1, "Weight must be more than 0kg"),
-    user_age: yup.number().required().min(15, "Age must at least be 15 years old"),
+    user_age: yup.number().required().min(1, "Age must at least be 1 year old"),
     user_gender: yup.string().required("Gender is required"),
-    user_bmr_date: yup.date().default(() => new Date()),
-    user_bmr_value: yup.number().required("BMR value is required"),
-    activity_level_code: yup.string().required("Activity Level is required"),
-    goal_code: yup.string().required("Goal is required"),
-    protein: yup.number().optional(),
-    carbohydrate: yup.number().optional(),
-    fat: yup.number().optional(),
 });
 
 
@@ -62,44 +54,6 @@ const genderInputValues = [
     }
 ]
 
-const activityLevelInputValues = [
-    {
-        label: 'Little to no exercise',
-        value: 'AL1'
-    },
-    {
-        label: 'Light exercise (1-2 days a week)',
-        value: 'AL2'
-    },
-    {
-        label: 'Moderate exercise (3-5 days a week)',
-        value: 'AL3'
-    },
-    {
-        label: 'Very Active (6-7 days a week)',
-        value: 'AL4'
-    },
-    {
-        label: 'Extra Active (Very active / physical job)',
-        value: 'AL5'
-    }
-]
-
-const goalInputValues = [
-    {
-        label: 'Gain Muscle',
-        value: 'GM'
-    },
-    {
-        label: 'Maintain Weight',
-        value: 'MW'
-    },
-    {
-        label: 'Lose Weight',
-        value: 'LW'
-    },
-]
-
 export default function TDEECalculator() {
     const [isLoading, setIsLoading] = useState(false)
     const [alertModal, setAlertModal] = useState(false)
@@ -107,17 +61,12 @@ export default function TDEECalculator() {
     const form = useForm<FormProps>({
         mode: 'onChange',
         defaultValues: {
+            user_bmi_id: undefined,
             user_height: 0,
             user_weight: 0,
             user_age: 0,
-            user_bmr_date: new Date(),
             user_gender: 'M',
-            user_bmr_value: 0,
-            activity_level_code: "AL1",
-            goal_code: "GM",
-            protein: 0,
-            carbohydrate: 0,
-            fat: 0,
+            user_bmi_value: 0,
         },
         resolver: yupResolver<any>(validationSchema),
     });
@@ -140,7 +89,7 @@ export default function TDEECalculator() {
                 element: '.calculate-button', 
                 popover: {
                     title: 'How to use the calculator?',
-                    description: 'Then, click this button to calculate your TDEE value and macronutrient needs.'
+                    description: 'Then, click this button to calculate your BMI value and your recommendation.'
                 }
             },
             {
@@ -154,7 +103,7 @@ export default function TDEECalculator() {
                 element: '.save-button', 
                 popover: {
                     title: 'How to use the calculator?',
-                    description: 'Lastly, click on this button to save your calculation results. Your meal and meal plan recommendations will use this as the base.'
+                    description: 'Lastly, click on this button to save your calculation results so you don\'t have to manually fill in all your data next time you want to calculate.'
                 }
             },
         ]
@@ -164,17 +113,13 @@ export default function TDEECalculator() {
         const getUserData = async () => {
             setIsLoading(true)
 
-            await getUserBMR().then((response) => {
-                if(response.data){
+            await getUserBMI().then((response) => {
+                if(response.data !== null){
                     form.setValue('user_height', response.data.user_height)
                     form.setValue('user_weight', response.data.user_weight)
                     form.setValue('user_age', response.data.user_age)
-                    form.setValue('activity_level_code', response.data.activity_level_code)
-                    form.setValue('goal_code', response.data.goal_code)
-                    form.setValue('user_bmr_value', response.data.user_bmr_value)
-                    form.setValue('protein', response.data.protein)
-                    form.setValue('carbohydrate', response.data.carbohydrate)
-                    form.setValue('fat', response.data.fat)
+                    form.setValue('user_gender', response.data.user_gender)
+                    form.setValue('user_bmi_value', response.data.user_bmi_value)
                 }
             }).catch((error) => [
                 toast("Error retrieving user BMR data.")
@@ -189,22 +134,19 @@ export default function TDEECalculator() {
     const handleCalculateButton = async () => {
         setIsLoading(true)
 
-        await getBMRValue(form.getValues()).then((response) => {
-            form.setValue('user_bmr_value', response.data.bmr_value)
-            form.setValue('protein', response.data.protein)
-            form.setValue('fat', response.data.fat)
-            form.setValue('carbohydrate', response.data.carbohydrate)
+        await getBMIValue(form.getValues()).then((response) => {
+            form.setValue('user_bmi_value', response.data.bmi_value)
         }).catch((error) => {})
 
         setIsLoading(false)
     }
 
-    const handleSaveBMR = async () => {
+    const handleSaveBMI = async () => {
         setIsLoading(true)
 
-        await postUserBMR(form.getValues()).then((response) => {
+        await postUserBMI(form.getValues()).then((response) => {
             if(response.data){
-                toast('BMR data saved successfully!')
+                toast('BMI data saved successfully!')
             }
         }).catch((error) => {
             toast(error.response.data.message)
@@ -236,6 +178,7 @@ export default function TDEECalculator() {
                                         label="Height (cm)"
                                         placeholder="Input your height in cm"
                                         className="w-full"
+                                        error={form.formState.errors.user_height?.message}
                                     />
                                     <NumericInput
                                         control={form.control}
@@ -243,6 +186,7 @@ export default function TDEECalculator() {
                                         label="Weight (kg)"
                                         placeholder="Input your weight in kg"
                                         className="w-full"
+                                        error={form.formState.errors.user_weight?.message}
                                     />
                                     <NumericInput
                                         control={form.control}
@@ -250,6 +194,7 @@ export default function TDEECalculator() {
                                         label="Age"
                                         placeholder="Input your Age"
                                         className="w-full"
+                                        error={form.formState.errors.user_age?.message}
                                     />
                                     <RadioInput
                                         control={form.control}
@@ -266,10 +211,10 @@ export default function TDEECalculator() {
                                         How does this work?
                                     </span>
                                     <Button
-                                        className="text-white rounded-lg py-2 px-4 ml-auto calculate-button"
+                                        className="text-white rounded-lg ml-auto flex items-center gap-1 calculate-button"
                                         type="submit"
-                                        size={'lg'}
                                     >
+                                        <Calculator size={16} />
                                         Calculate
                                     </Button>
                                 </form>
@@ -283,17 +228,21 @@ export default function TDEECalculator() {
 
                         <div className="bg-gradient-to-b from-slate-200 to-green-primary w-[220px] h-[220px] rounded-full flex justify-center items-center">
                             <div className="rounded-full w-[170px] h-[170px] p-4 text-center flex flex-col justify-center mx-auto my-auto bg-white">
-                                <span className="text-2xl font-bold">{form.watch('user_bmr_value')}</span>
+                                <span className="text-2xl font-bold">{form.watch('user_bmi_value')}</span>
                                 <span className="text-md text-slate-500 font-medium">kg/m&sup2;</span>
                             </div>
                         </div>
 
+                        <p className="text-sm text-center text-green-primary mt-5">
+                            {form.watch('user_bmi_value') !== 0 && getRecommendationBasedOnBMI(form.getValues('user_bmi_value'))}
+                        </p>
+
                         <Button 
-                            disabled={!form.watch('user_bmr_value') || !form.getValues('protein') || !form.getValues('carbohydrate') || !form.getValues('fat')}
-                            className="text-white rounded-xl mt-6 save-button"
-                            onClick={form.handleSubmit(() => setAlertModal(true))}
-                            size={'sm'}
+                            disabled={!form.watch('user_bmi_value')}
+                            className="mt-6 flex items-center gap-1 save-button"
+                            onClick={form.handleSubmit(handleSaveBMI)}
                         >
+                            <Save size={16}/>
                             Save BMI
                         </Button>
                     </div>
