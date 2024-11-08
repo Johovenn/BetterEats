@@ -18,7 +18,7 @@ export default function BMRCard(props: BMRCardProps){
     }
 
     return(
-        <div className={cn('h-[285px]  bg-white shadow-lg rounded-xl border p-3 flex flex-col', props.className)}>
+        <div className={cn('h-[285px] bg-white shadow-lg rounded-xl border p-3 flex flex-col', props.className)}>
             <div className="flex items-center justify-between gap-1 mb-4">
                 <h1 className="text-lg font-medium">
                     Basal Metabolic Rate

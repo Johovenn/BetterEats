@@ -12,6 +12,8 @@ import PageHeader from "@/components/PageHeader"
 import BMRCard from "@/components/dashboard/BMRCard"
 import BMICard from "@/components/dashboard/BMICard"
 import { getUserBMI } from "../health-calculator/api/getUserBMI"
+import RecommendedMeals from "@/components/dashboard/RecommendedMeals"
+import { getAllMeals } from "../search/api/getAllMeals"
 
 interface FormProps {
     meal_plan_date: Date
@@ -29,6 +31,7 @@ interface FormProps {
 export default function DashboardPage(){
     const [isLoading, setIsLoading] = useState(false)
     const [bmrValue, setBmrValue] = useState(0)
+    const [recommendedMeals, setRecommendedMeals] = useState<any>([])
 
     const {user} = useUser()
 
@@ -86,6 +89,19 @@ export default function DashboardPage(){
         setIsLoading(false)
     }, [form])
 
+    const getRecommendedMeals = useCallback(async () => {
+        setIsLoading(true)
+
+        await getAllMeals({
+            page: 0,
+            limit: 2,
+        }).then((response) => {
+            setRecommendedMeals(response.data)
+        }).catch((error) => setRecommendedMeals([]))
+
+        setIsLoading(false)
+    }, [])
+
     const handleChangeDate = async (date: Date) => {
         form.setValue('meal_plan_date', date)
         
@@ -95,7 +111,8 @@ export default function DashboardPage(){
     useEffect(() => {
         getTotalNutrition()
         getBMI()
-    }, [form, getBMI, getTotalNutrition])
+        getRecommendedMeals()
+    }, [form, getBMI, getRecommendedMeals, getTotalNutrition])
     
     if(!user){
         return null
@@ -128,6 +145,9 @@ export default function DashboardPage(){
                 />
                 <BMICard
                     bmiValue={form.watch('user_bmi_value')}
+                />
+                <RecommendedMeals 
+                    meals={recommendedMeals}
                 />
             </section>
         </>

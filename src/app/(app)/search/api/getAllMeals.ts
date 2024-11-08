@@ -22,13 +22,13 @@ export interface MealProps{
 interface GetAllMealRequest{
     page: number
     limit: number
-    meal_name: string
-    is_breakfast: boolean
-    is_lunch: boolean
-    is_dinner: boolean
-    is_snack: boolean
-    calorie_range_from: number
-    calorie_range_to: number
+    meal_name?: string
+    is_breakfast?: boolean
+    is_lunch?: boolean
+    is_dinner?: boolean
+    is_snack?: boolean
+    calorie_range_from?: number
+    calorie_range_to?: number
 }
 
 export async function getAllMeals(request: GetAllMealRequest): Promise<ResponseProps<MealProps[]>>{
