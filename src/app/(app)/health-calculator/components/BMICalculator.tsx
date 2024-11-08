@@ -121,9 +121,7 @@ export default function TDEECalculator() {
                     form.setValue('user_gender', response.data.user_gender)
                     form.setValue('user_bmi_value', response.data.user_bmi_value)
                 }
-            }).catch((error) => [
-                toast("Error retrieving user BMR data.")
-            ])
+            }).catch((error) => {})
 
             setIsLoading(false)
         }
