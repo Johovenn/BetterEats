@@ -78,7 +78,7 @@ export default function DashboardPage(){
                 form.setValue('user_fat_requirement', response.data.user_fat_requirement)
                 form.setValue('user_carbohydrate_requirement', response.data.user_carbohydrate_requirement)
             }
-        })
+        }).catch((error) => {})
 
         setIsLoading(false)
     }, [form])
@@ -87,10 +87,10 @@ export default function DashboardPage(){
         setIsLoading(true)
 
         await getUserBMI().then((response) => {
-            if(response.data.user_bmi_value){
-                form.setValue('user_bmi_value', response.data.user_bmi_value)
+            if(response.data){
+                response.data.user_bmi_value !== null ? form.setValue('user_bmi_value', response.data.user_bmi_value) : null
             }  
-        })
+        }).catch((error) => {})
 
         setIsLoading(false)
     }, [form])

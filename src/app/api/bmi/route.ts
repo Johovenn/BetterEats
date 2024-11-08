@@ -52,7 +52,9 @@ export async function GET(req: Request){
         })
 
         if(!bmiData){
-            return NextResponse.json(createResponse(200, "No existing data", null), {status: 200}) //belum ada data user
+            return NextResponse.json(createResponse(200, "No existing data", {
+                user_bmi_value: 0
+            }), {status: 200})
         }
         else{
             return NextResponse.json(createResponse(200, "Fetch data succesful!", bmiData), {status: 200})
