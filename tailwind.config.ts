@@ -38,7 +38,7 @@ const config = {
         },
         green: {
           primary: '#1A5319',
-          foreground: '#bf5200',
+          secondary: '##428041',
         },
         orange: {
           primary: '#B2533E',

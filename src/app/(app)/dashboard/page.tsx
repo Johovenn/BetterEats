@@ -13,7 +13,9 @@ import BMRCard from "@/components/dashboard/BMRCard"
 import BMICard from "@/components/dashboard/BMICard"
 import { getUserBMI } from "../health-calculator/api/getUserBMI"
 import RecommendedMeals from "@/components/dashboard/RecommendedMeals"
-import { getAllMeals } from "../search/api/getAllMeals"
+import { getAllMeals, MealProps } from "../search/api/getAllMeals"
+import { getRecommendedMeals } from "../search/api/getRecommendedMeals"
+import AddMealPlanModal from "@/components/meal-planner/AddMealPlanModal"
 
 interface FormProps {
     meal_plan_date: Date
@@ -31,7 +33,11 @@ interface FormProps {
 export default function DashboardPage(){
     const [isLoading, setIsLoading] = useState(false)
     const [bmrValue, setBmrValue] = useState(0)
+    const [addMealModal, setAddMealModal] = useState(false)
+    const [selectedMeal, setSelectedMeal] = useState<MealProps>()
     const [recommendedMeals, setRecommendedMeals] = useState<any>([])
+    const [selectedMealId, setSelectedMealId] = useState<number>()
+    const [detailModal, setDetailModal] = useState(false)
 
     const {user} = useUser()
 
@@ -89,30 +95,43 @@ export default function DashboardPage(){
         setIsLoading(false)
     }, [form])
 
-    const getRecommendedMeals = useCallback(async () => {
+    const getMeals = useCallback(async () => {
         setIsLoading(true)
 
-        await getAllMeals({
+        await getRecommendedMeals({
             page: 0,
             limit: 2,
+            meal_plan_date: form.watch('meal_plan_date')
         }).then((response) => {
             setRecommendedMeals(response.data)
         }).catch((error) => setRecommendedMeals([]))
 
         setIsLoading(false)
-    }, [])
+    }, [form])
 
     const handleChangeDate = async (date: Date) => {
         form.setValue('meal_plan_date', date)
         
         getTotalNutrition()
+        getMeals()
     }
+    
+    const handleAddMealButton = (meal: MealProps) => {
+        setSelectedMeal(meal)
+        setAddMealModal(true)
+    } 
+
+    const handleInfoButton = (meal_id: number) => {
+        setSelectedMealId(meal_id)
+        setDetailModal(true)
+    }
+
 
     useEffect(() => {
         getTotalNutrition()
         getBMI()
-        getRecommendedMeals()
-    }, [form, getBMI, getRecommendedMeals, getTotalNutrition])
+        getMeals()
+    }, [form, getBMI, getMeals, getTotalNutrition])
     
     if(!user){
         return null
@@ -121,6 +140,13 @@ export default function DashboardPage(){
     return(
         <>
             <Loading loading={isLoading} />
+
+            <AddMealPlanModal
+                isOpen={addMealModal}
+                handleClose={() => setAddMealModal(false)}
+                setIsOpen={setAddMealModal}
+                meal={selectedMeal || {} as MealProps}
+            />
 
             <PageHeader 
                 title={`Hi, ${user.fullName}`}
@@ -148,6 +174,8 @@ export default function DashboardPage(){
                 />
                 <RecommendedMeals 
                     meals={recommendedMeals}
+                    handleAddMealButton={handleAddMealButton}
+                    handleInfoButton={handleInfoButton}
                 />
             </section>
         </>

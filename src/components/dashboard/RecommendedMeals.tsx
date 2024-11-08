@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 
 interface RecommendedMealsProps{
     meals: MealProps[]
+    handleInfoButton: (id: number) => void
+    handleAddMealButton: (meal: MealProps) => void 
 }
 
 export default function RecommendedMeals(props: RecommendedMealsProps){
@@ -30,7 +32,8 @@ export default function RecommendedMeals(props: RecommendedMealsProps){
                             key={meal.meal_id}
                             meal={meal} 
                             mode="search"
-                            handleInfoButton={() => {}}
+                            handleInfoButton={props.handleInfoButton}
+                            handleAddMealButton={props.handleAddMealButton}
                         />
                     ))
                         :

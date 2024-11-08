@@ -5,6 +5,7 @@ import { Separator } from "../ui/separator"
 import { useRouter } from "next/navigation"
 import HoverTooltip from "../Tooltip"
 import { cn } from "@/lib/utils"
+import { getRecommendationBasedOnBMI } from "@/lib/bmiUtils"
 
 interface BMRCardProps{
     bmiValue: number
@@ -28,7 +29,7 @@ export default function BMICard(props: BMRCardProps){
                     tooltipContent={
                         props.bmiValue !== 0
                             ?
-                        "This BMI value should help you in deciding your diet goal."
+                        getRecommendationBasedOnBMI(props.bmiValue)
                             :
                         "You haven't calculated your BMI yet, please go to the Health Calculator page."
                     }
