@@ -49,6 +49,10 @@ export default function SearchPage(){
             is_snack: false,
             calorie_range_from: undefined,
             calorie_range_to: undefined,
+            page: 0,
+            limit: 10,
+            meal_name: '',
+            total_rows: 0,
         }
     })
 

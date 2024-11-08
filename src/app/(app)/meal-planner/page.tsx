@@ -333,7 +333,7 @@ export default function MealPlannerPage(){
                             }
                         </div>
                     </div>
-                    <span className="text-sm hover:cursor-pointer text-green-primary hover:underline" onClick={() => driverObj.drive()}>How does this work?</span>
+                    <span className="text-sm hover:cursor-pointer text-orange-primary hover:underline" onClick={triggerTutorial}>How does this work?</span>
                 </div>
                 <div className="w-[30%]">
                     <MealPlanValueCard 
