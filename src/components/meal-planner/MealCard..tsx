@@ -27,7 +27,7 @@ export default function MealCard(props: MealCardProps){
                     width={110}
                     height={110}
                     alt={props.meal.meal_name}
-                    className="object-cover rounded-lg my-1"
+                    className="object-cover rounded-lg my-1 z-10"
                     crop={"fill"}
                     gravity="center"
                 />

@@ -153,7 +153,7 @@ export default function DashboardPage(){
                 subtitle={`It's ${formattedDate}`}
             />
 
-            <section className="mt-2 grid grid-cols-3 grid-rows-2 gap-4">
+            <section className="mt-2 grid grid-cols-4 grid-rows-2 gap-4">
                 <BMRCard 
                     bmrValue={form.watch('user_calorie_requirement')}
                 />

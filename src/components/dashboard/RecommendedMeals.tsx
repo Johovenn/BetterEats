@@ -14,7 +14,7 @@ export default function RecommendedMeals(props: RecommendedMealsProps){
     const router = useRouter()
     
     return(
-        <div className="col-span-2 px-5 py-4 bg-white rounded-lg shadow-lg">
+        <div className="col-span-3 px-5 py-4 bg-white rounded-lg shadow-lg">
             <div className="flex items-start justify-between">
                 <h3 className="font-medium text-lg">
                     Recommended Meals
