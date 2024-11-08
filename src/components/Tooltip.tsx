@@ -9,7 +9,7 @@ interface HoverTooltipProps{
 
 export default function HoverTooltip(props: HoverTooltipProps){
     return(
-        <TooltipProvider>
+        <TooltipProvider delayDuration={100}>
             <Tooltip>
                 <TooltipTrigger asChild>
                     {props.children}

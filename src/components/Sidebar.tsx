@@ -72,9 +72,11 @@ export default function Sidebar(){
     }
 
     return(
-        <aside className="h-screen p-3 border-r bg-white flex flex-col items-center fixed">
-            <ul className="space-y-10 flex flex-col justify-center items-center pt-2">
-                <Image src="/BetterEats.png" alt="Logo" width={30} height={30} className="w-auto h-auto" priority/>
+        <aside className="h-screen p-3 flex flex-col items-center justify-between fixed">
+            <div className="w-[50px] h-[50px] shadow-lg flex justify-center items-center rounded-full bg-white"> 
+                <Image src="/BetterEats.png" alt="Logo" width={30} height={30} className="" priority/>
+            </div>
+            <ul className="space-y-5 flex flex-col justify-center items-center">
                 <TooltipProvider>
                     {
                         user?.publicMetadata?.role !== 'admin'
@@ -86,7 +88,7 @@ export default function Sidebar(){
                                     <a
                                         href={link.link}
                                         className={cn(
-                                            "flex items-center justify-center p-2 rounded-xl transition-colors duration-200",
+                                            "flex items-center justify-center p-3 rounded-full transition-colors duration-200 bg-orange-primary/10",
                                             pathname === link.link ? "bg-orange-primary text-white" : "hover:bg-orange-primary/20",
                                             `sidebar-${link.title}`
                                         )}
@@ -94,7 +96,7 @@ export default function Sidebar(){
                                         {link.icon}
                                     </a>
                                 </TooltipTrigger>
-                                <TooltipContent side="right" className="bg-[#fafafa] rounded-lg">
+                                <TooltipContent side="right" className="bg-[#fafafa] rounded-lg z-[1000]">
                                     <span>{link.title}</span>
                                 </TooltipContent>
                             </Tooltip>
@@ -116,7 +118,7 @@ export default function Sidebar(){
                                         {link.icon}
                                     </a>
                                 </TooltipTrigger>
-                                <TooltipContent side="right" className="bg-[#fafafa] rounded-lg">
+                                <TooltipContent side="right" className="bg-[#fafafa] rounded-lg z-[1000]">
                                     <span>{link.title}</span>
                                 </TooltipContent>
                             </Tooltip>
@@ -125,7 +127,7 @@ export default function Sidebar(){
                     }
                 </TooltipProvider>
             </ul>
-            <div className="mt-auto">
+            <div className="">
                 <UserButton />
             </div>
         </aside>

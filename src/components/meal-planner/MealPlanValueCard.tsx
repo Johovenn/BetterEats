@@ -24,7 +24,7 @@ interface MealPlanValueProps{
 
 export default function MealPlanValueCard(props: MealPlanValueProps){
     return(
-        <div className={cn("h-[285px] shadow-lg bg-white rounded-lg px-5 py-4 min-w-min meal-plan-value col-span-2", props.className)}>
+        <div className={cn("h-[285px] shadow-lg bg-white rounded-lg px-5 py-4 min-w-min meal-plan-value col-span-3", props.className)}>
             <div className="flex justify-between items-start gap-5">
                 <h3 className="font-medium text-lg">{props.title ? props.title : "Meal Plan Value"}</h3>
                 {
