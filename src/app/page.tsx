@@ -63,17 +63,51 @@ export default function LandingPage() {
                         The BetterEats application is aimed at individuals over 15 years of age who have an interest in adjusting their diet according to their individual goals, be it losing weight, maintaining a healthy lifestyle, or increasing muscle mass. This application is suitable for users who find it difficult to regulate their diet according to the nutrition they need. Apart from that, with fast and efficient features, this application is suitable for use by individuals who are busy or have a busy schedule who still want to maintain their diet.
                     </p>
                 </div>
-
-                {/* Our Objective */}
-                <div className="bg-white shadow-md p-8 rounded-lg flex-1 text-center">
-                    <h3 className="text-2xl font-semibold text-green-800 mb-2">Our Objective</h3>
-                    <p className="text-gray-700">
-                    <li> Determine the features on the BetterEats website to help users.</li>
-                    <li> Designing the BetterEats website to help users maintain their diet.</li>
-                    <li> Designing the BetterEats website to increase user motivation or compliance to start and maintain a healthy eating pattern.</li>
-                    </p>
-                </div>
             </div>
+
+            {/* Product Features */}
+<section className="container mx-auto px-6 py-16 text-center">
+  <h3 className="text-3xl font-bold text-gray-800">Product Features</h3>
+  <p className="text-gray-600 mt-4 mb-10">Discover the standout features that make this smartwatch a top choice.</p>
+
+  <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+    {/* Feature 1 */}
+    <div className="flex flex-col items-center">
+      <div className="bg-orange-100 p-4 rounded-full">
+        <i className="fas fa-star text-orange-500 text-3xl"></i>
+      </div>
+      <h4 className="text-xl font-semibold text-gray-800 mt-4">High Quality</h4>
+      <p className="text-gray-600 mt-2">Built with premium materials to ensure durability and excellence.</p>
+    </div>
+
+    {/* Feature 2 */}
+    <div className="flex flex-col items-center">
+      <div className="bg-orange-100 p-4 rounded-full">
+        <i className="fas fa-paint-brush text-orange-500 text-3xl"></i>
+      </div>
+      <h4 className="text-xl font-semibold text-gray-800 mt-4">Awesome Design</h4>
+      <p className="text-gray-600 mt-2">Sleek and modern design, perfect for any style or occasion.</p>
+    </div>
+
+    {/* Feature 3 */}
+    <div className="flex flex-col items-center">
+      <div className="bg-orange-100 p-4 rounded-full">
+        <i className="fas fa-microchip text-orange-500 text-3xl"></i>
+      </div>
+      <h4 className="text-xl font-semibold text-gray-800 mt-4">Latest Technology</h4>
+      <p className="text-gray-600 mt-2">Equipped with the latest technology for enhanced functionality.</p>
+    </div>
+
+    {/* Feature 4 */}
+    <div className="flex flex-col items-center">
+      <div className="bg-orange-100 p-4 rounded-full">
+        <i className="fas fa-user-friends text-orange-500 text-3xl"></i>
+      </div>
+      <h4 className="text-xl font-semibold text-gray-800 mt-4">User Friendly</h4>
+      <p className="text-gray-600 mt-2">Designed with simplicity and ease of use in mind.</p>
+    </div>
+  </div>
+</section>
 
             {/* Footer Section */}
 <footer className="bg-gray-900 text-gray-300 mt-10">
