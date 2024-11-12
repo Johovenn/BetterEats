@@ -36,10 +36,10 @@ export default function ArticlePage(){
 
             <PageHeader 
                 title="Articles"
-                subtitle={`Today's news`}
+                subtitle={`Learn more about your body and health`}
             />
 
-            <div>
+            <main>
                 {
                     articles.length > 0
                         ?
@@ -53,7 +53,7 @@ export default function ArticlePage(){
                         :
                     <h3>Article not found.</h3>
                 }
-            </div>
+            </main>
         </>
     )
 
