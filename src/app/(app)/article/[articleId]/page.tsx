@@ -10,6 +10,7 @@ import { getArticleById } from "../api/getArticleById.api"
 import { Skeleton } from "@/components/ui/skeleton"
 import Image from "next/image"
 import { formatDate } from "@/lib/dateUtils"
+import { Button } from "@/components/ui/button";
 
 export default function ArticleDetailPage() {
     const router = useRouter()
@@ -40,10 +41,22 @@ export default function ArticleDetailPage() {
         }
     }, [articleId, router])
 
+    const handleBackButton = () => {
+        window.history.back()
+    }
+
     return (
         <>
             <Loading loading={isLoading} />
             <section className="flex flex-col py-5 px-[5%] w-full">
+                <div>
+                    <Button 
+                        variant={'link'} 
+                        onClick={handleBackButton}
+                    >
+                        &larr; Back
+                    </Button>
+                </div>
                 <header className="w-full mb-5 flex items-start justify-between">
                     <div>
                         {
@@ -69,7 +82,7 @@ export default function ArticleDetailPage() {
                             />
                         }
                     </div>
-                    <div className="flex itmes-center justify-end bg-white rounded-lg shadow px-3 py-2 gap-3">
+                    <div className="flex items-center justify-end bg-white rounded-lg shadow px-3 py-2 gap-3">
                         <div className="text-right">
                             <h5 className="text-sm text-green-primary">
                                 BetterEats Admin
@@ -102,8 +115,8 @@ export default function ArticleDetailPage() {
                                     article.article_image
                                 }
                                 alt="Not Found Image"
-                                className="w-full h-full"
-                                width={200}
+                                className="max-w-full h-auto max-h-full"
+                                width={400}
                                 height={200}
                             />
                                 :
