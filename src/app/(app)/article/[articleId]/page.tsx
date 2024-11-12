@@ -11,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import Image from "next/image"
 import { formatDate } from "@/lib/dateUtils"
 import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react"
 
 export default function ArticleDetailPage() {
     const router = useRouter()
@@ -49,14 +50,13 @@ export default function ArticleDetailPage() {
         <>
             <Loading loading={isLoading} />
             <section className="flex flex-col py-5 px-[5%] w-full">
-                <div>
-                    <Button 
-                        variant={'link'} 
-                        onClick={handleBackButton}
-                    >
-                        &larr; Back
-                    </Button>
-                </div>
+                <Button 
+                    variant={'link'} 
+                    className="self-start space-x-2"
+                    onClick={handleBackButton}
+                >
+                    <ArrowLeft size={16} color="black" className=""></ArrowLeft> <span>Back</span>
+                </Button>
                 <header className="w-full mb-5 flex items-start justify-between">
                     <div>
                         {
