@@ -8,11 +8,10 @@ export default function HealthCalculatorPage() {
     return (
         <>
             <section className="flex justify-between items-start w-full mb-5">
-                <Tabs defaultValue="tdee">
+                <Tabs defaultValue="bmi">
                     <TabsList>
-                        <TabsTrigger value="tdee">TDEE Calculator</TabsTrigger>
                         <TabsTrigger value="bmi">BMI Calculator</TabsTrigger>
-                        <TabsTrigger value="weight">Weight Tracker</TabsTrigger>
+                        <TabsTrigger value="tdee">TDEE Calculator</TabsTrigger>
                     </TabsList>
                     <TabsContent value="tdee">
                         <TDEECalculator />
