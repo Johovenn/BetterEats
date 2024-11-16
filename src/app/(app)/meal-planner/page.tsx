@@ -16,6 +16,9 @@ import { useRouter } from "next/navigation";
 import MealDetailModal from "@/components/meal-planner/MealDetailModal";
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
+import { Button } from "@/components/ui/button";
+import { ChefHat } from "lucide-react";
+import { generateMealPlan } from "./api/generateMealPlan";
 
 interface FormProps {
     meal_plan_date: Date;
@@ -55,50 +58,6 @@ export default function MealPlannerPage(){
         }
     })
     
-    const emptyTutorial = driver({
-        popoverClass: 'driverjs-theme',
-        nextBtnText: 'Next',
-        prevBtnText: 'Previous',
-        allowClose: false,
-        steps: [
-            {
-                element: '.meal-plans', 
-                popover: {
-                    title: 'How to use the meal planner?',
-                    description: 'Meal plans added to the day will appear here.'
-                }
-            },
-            {
-                element: '.sidebar-Search', 
-                popover: {
-                    title: 'How to use the meal planner?',
-                    description: 'Search for meals to add to your meal plan on the search page.'
-                }
-            },
-            {
-                element: '.search-bar', 
-                popover: {
-                    title: 'How to use the meal planner?',
-                    description: 'You can also go to the search page by typing the name of meal you would like to add to the meal plan.'
-                }
-            },
-            {
-                element: '.meal-plan-value', 
-                popover: {
-                    title: 'How to use the meal planner?',
-                    description: 'This is the nutrient value of your current meal plan.'
-                }
-            },
-            {
-                element: '.meal-plan-date-picker', 
-                popover: {
-                    title: 'How to use the meal planner?',
-                    description: 'Click on this to change dates and view other date\'s meal plans.'
-                }
-            },
-        ]
-    })
-    
     const driverObj = driver({
         popoverClass: 'driverjs-theme',
         nextBtnText: 'Next',
@@ -127,17 +86,17 @@ export default function MealPlannerPage(){
                 }
             },
             {
-                element: '.meal-menu-trigger', 
+                element: '.generate-button', 
                 popover: {
                     title: 'How to use the meal planner?',
-                    description: 'Click on this to view available actions on the current meal in the meal plan.'
+                    description: "Don't know what to eat? Let us fill in rest of your meal plan according to your needs."
                 }
             },
             {
                 element: '.meal-plan-value', 
                 popover: {
                     title: 'How to use the meal planner?',
-                    description: 'This is the nutrient value of your current meal plan.'
+                    description: 'This is the total nutrient value of your current meal plan.'
                 }
             },
             {
@@ -208,12 +167,18 @@ export default function MealPlannerPage(){
     }
 
     const triggerTutorial = () => {
-        if(breakfastData.length > 0 || snackData.length > 0 || lunchData.length > 0 || dinnerData.length > 0){
-            driverObj.drive()
-        }
-        else{
-            emptyTutorial.drive()
-        }
+        driverObj.drive()
+    }
+
+    const handleGenerateMealPlanButton = async () => {
+        setIsLoading(true)
+
+        await generateMealPlan(form.getValues()).then((response) => {
+            toast('Generate meal plan successful!')
+            getMealPlanData()
+        }).catch((error) => toast(error.response.data.message))
+
+        setIsLoading(false)
     }
 
     return (
@@ -242,8 +207,20 @@ export default function MealPlannerPage(){
 
             <section className="w-full flex justify-between">
                 <div className="w-[65%] mb-5 px-4 py-2 bg-[#fefefe] shadow-lg rounded-lg meal-plans">
+                    <div className="p-2 flex items-center justify-between w-full">
+                        <h3 className="text-xl font-semibold text-green-primary">
+                            Meal Plans
+                        </h3>
+                        <Button 
+                            className="flex items-center gap-2 generate-button"
+                            onClick={handleGenerateMealPlanButton}
+                        >
+                            <ChefHat size={18}/> 
+                            Generate Meal Plan
+                        </Button>
+                    </div>
                     <div className="w-full mb-5 p-2">
-                        <h2 className="text-lg font-medium">Breakfast</h2>
+                        <h2 className="text-lg font-medium text-green-primary">Breakfast</h2>
                         <div className="flex flex-col gap-3 justify-between">
                             {
                                 breakfastData.length > 0
@@ -266,7 +243,7 @@ export default function MealPlannerPage(){
                     </div>
 
                     <div className="w-full mb-5 p-2 bg-white">
-                        <h2 className="text-lg font-medium">Snack</h2>
+                        <h2 className="text-lg font-medium text-green-primary">Snack</h2>
                         <div className="flex flex-col gap-3 justify-between">
                             {
                                 snackData.length > 0
@@ -289,7 +266,7 @@ export default function MealPlannerPage(){
                     </div>
 
                     <div className="w-full mb-5 p-2 bg-white">
-                        <h2 className="text-lg font-medium">Lunch</h2>
+                        <h2 className="text-lg font-medium text-green-primary">Lunch</h2>
                         <div className="flex flex-col gap-3 justify-between">
                             {
                                 lunchData.length > 0
@@ -312,7 +289,7 @@ export default function MealPlannerPage(){
                     </div>
 
                     <div className="w-full mb-5 p-2 bg-white">
-                        <h2 className="text-lg font-medium">Dinner</h2>
+                        <h2 className="text-lg font-medium text-green-primary">Dinner</h2>
                         <div className="flex flex-col gap-3 justify-between">
                             {
                                 dinnerData.length > 0
