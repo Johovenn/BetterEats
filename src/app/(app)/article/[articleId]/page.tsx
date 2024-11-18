@@ -50,19 +50,28 @@ export default function ArticleDetailPage() {
         <>
             <Loading loading={isLoading} />
             <section className="flex flex-col py-5 px-[5%] w-full">
-                <Button 
-                    variant={'link'} 
-                    className="self-start space-x-2"
-                    onClick={handleBackButton}
-                >
-                    <ArrowLeft size={16} color="black" className=""></ArrowLeft> <span>Back</span>
-                </Button>
-                <header className="w-full mb-5 flex items-start justify-between">
-                    <div>
+                <header className="w-full mb-5 flex flex-col justify-center">
+                    <div className="flex justify-between items-center">
+                        <Button 
+                            variant={'link'} 
+                            className="self-start space-x-2"
+                            onClick={handleBackButton}
+                        >
+                            <ArrowLeft size={16} color="black" className=""></ArrowLeft> <span>Back</span>
+                        </Button>
+                        <h6 className="text-xs text-gray-600">
+                            {
+                                article
+                                    &&
+                                formatDate(new Date(article.article_creation_date))
+                            }
+                        </h6>
+                    </div>
+                    <div className="flex flex-col justify-center items-center">
                         {
                             article
                                 ?
-                            <h1 className="text-3xl text-green-primary font-bold">
+                            <h1 className="text-3xl text-green-primary font-bold text-center">
                                 {article.article_title}
                             </h1>
                                 :
@@ -81,28 +90,6 @@ export default function ArticleDetailPage() {
                                 className="w-full"
                             />
                         }
-                    </div>
-                    <div className="flex items-center justify-end bg-white rounded-lg shadow px-3 py-2 gap-3">
-                        <div className="text-right">
-                            <h5 className="text-sm text-green-primary">
-                                BetterEats Admin
-                            </h5>
-                            <h6 className="text-xs text-gray-600">
-                                {
-                                    article
-                                        &&
-                                    formatDate(new Date(article.article_creation_date))
-                                }
-                            </h6>
-                        </div>
-                        <div className="">
-                            <Image 
-                                src={'/BetterEats.png'}
-                                width={35}
-                                height={35}
-                                alt="Logo"
-                            />
-                        </div>
                     </div>
                 </header>
                 <div className="">
