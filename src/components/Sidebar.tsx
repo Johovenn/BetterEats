@@ -110,7 +110,7 @@ export default function Sidebar(){
                                     <a
                                         href={link.link}
                                         className={cn(
-                                            "flex items-center justify-center p-2 rounded-xl transition-colors duration-200",
+                                            "flex items-center justify-center p-3 rounded-full transition-colors duration-200 bg-orange-primary/10",
                                             pathname === link.link ? "bg-orange-primary text-white" : "hover:bg-orange-primary/20",
                                             `sidebar-${link.title}`
                                         )}
