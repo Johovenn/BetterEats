@@ -3,11 +3,12 @@
 import Loading from "@/components/Loading"
 import PageHeader from "@/components/PageHeader"
 import { useEffect, useState } from "react"
-import { getAllArticles } from "./api/getAllArticles"
+import { ArticleProps, getAllArticles }  from "./api/getAllArticles"
+import ArticleCard from "@/components/article/ArticleCard";
 
 export default function ArticlePage(){
     const [isLoading, setIsLoading] = useState(false)
-    const [articles, setArticles] = useState<any>([])
+    const [articles, setArticles] = useState<ArticleProps[]>([])
 
     useEffect(() => {
         const getArticles = async () => {
@@ -35,7 +36,28 @@ export default function ArticlePage(){
 
             <PageHeader 
                 title="Articles"
+                subtitle={`Learn more about your body and health`}
             />
+
+            <main>
+                {
+                    articles.length > 0
+                        ?
+                        articles.map((article) => (
+                            <ArticleCard 
+                                key={article.article_id}
+                                article={article}
+                                mode="search"
+                            />
+                        ))
+                        :
+                    <h3>Article not found.</h3>
+                }
+            </main>
         </>
     )
+
+            
+            
+            
 }

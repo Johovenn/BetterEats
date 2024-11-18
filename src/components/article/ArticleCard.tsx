@@ -27,7 +27,7 @@ export default function ArticleCard(props: ArticleCardProps){
 
     return(
         <div 
-            className="flex w-full p-2 rounded-lg hover:shadow-lg hover:bg-white transition-all hover:cursor-pointer"
+            className="flex w-full p-2 rounded-lg hover:shadow-lg hover:bg-slate-50 shadow-md bg-white transition-all hover:cursor-pointer"
             onClick={handleClickArticle}
         >
             <CldImage 
