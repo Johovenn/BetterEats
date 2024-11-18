@@ -61,9 +61,6 @@ export default function LandingPage() {
         {/* Left Text Content */}
         <div>
           <h2 className="text-3xl font-semibold text-green-500 uppercase">About Us</h2>
-          <h1 className="text-3xl font-bold text-gray-900 mt-2">
-            "Turning a Vision into Reality"
-          </h1>
           <p className="text-gray-700 mt-4">
             Our journey began as a simple idea for a college thesis—a project that combined our passion for health and technology. We wanted to create something meaningful, not just for academic purposes but for real-world impact.
           </p>
@@ -89,7 +86,7 @@ export default function LandingPage() {
               <h4 className="text-xl font-semibold text-gray-900">Our Vision</h4>
             </div>
             <h2 className="text-gray-700 mt-4">
-              "Building a healthier society through education and easy and practical diet planning."
+              Building a healthier society through education and easy and practical diet planning.
             </h2>
           </div>
 
