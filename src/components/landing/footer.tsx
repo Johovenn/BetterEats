@@ -13,7 +13,7 @@ const Footer: React.FC = () => {
                         Eats
                     </h1>
           <p style={styles.description}>
-            Your One-Stop Solution To All Your Regular Needs, Right At Your Fingertips.
+            Your Solution to be Healthy.
           </p>
           <div style={styles.subscribeContainer}>
             <input
@@ -25,22 +25,20 @@ const Footer: React.FC = () => {
           </div>
         </div>
         <div style={styles.section}>
-          <h3 style={styles.heading}>Contact</h3>
-          <p>Help/FAQ</p>
-          <p>Press</p>
-          <p>Affiliates</p>
-          <p>Partners</p>
-        </div>
-        <div style={styles.section}>
           <h3 style={styles.heading}>Social Media</h3>
           <p>Facebook</p>
           <p>Twitter</p>
           <p>Instagram</p>
           <p>Youtube</p>
         </div>
+        <div style={styles.section}>
+          <h3 style={styles.heading}>Contact</h3>
+          <p>(021) 12345678, </p>
+          <p>Jakarta, Indonesia</p>
+        </div>
       </div>
       <div style={styles.copyright}>
-        © Copyright powered by <a href="https://wpdeveloper.net">WPDeveloper</a>
+      © 2024 BetterEats Jakarta, Indonesia
       </div>
     </footer>
   );

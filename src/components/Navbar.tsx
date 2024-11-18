@@ -37,11 +37,6 @@ export default function Navbar(){
                         Features
                     </Link>
                 </li>
-                <li>
-                    <Link href={"#contact"}>
-                        Contact
-                    </Link>
-                </li>
             </ul>
             <SignedOut>
                 <div className="gap-3">

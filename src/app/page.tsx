@@ -26,7 +26,7 @@ export default function LandingPage() {
       <Navbar />
 
       {/* Banner Section */}
-      <div className="flex items-center rounded-lg px-20 py-10 mt-10">
+      <div id="home" className="flex items-center rounded-lg px-20 py-10 mt-10">
         {/* Text Section */}
         <div className="w-1/2 pr-10">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
@@ -57,7 +57,7 @@ export default function LandingPage() {
       </div>
 
       {/* About Us Section */}
-      <section className="mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-2 gap-12 items-center bg-gray-50">
+      <section id ="about" className="mx-auto px-6 py-16 mx-6 mt-10 grid grid-cols-1 md:grid-cols-2 gap-12 items-center bg-gray-50">
         {/* Left Text Content */}
         <div>
           <h2 className="text-3xl font-semibold text-green-500 uppercase">About Us</h2>
@@ -112,7 +112,7 @@ export default function LandingPage() {
 
 
       {/* Product Features */}
-      <section className="container mx-auto px-6 py-16 text-center">
+      <section id="features" className="container mx-auto px-6 py-16 text-center">
         <h3 className="text-3xl font-bold text-gray-800">Product Features</h3>
         <p className="text-gray-600 mt-4 mb-10">
           Discover the standout features that make this smartwatch a top choice.
@@ -133,7 +133,7 @@ export default function LandingPage() {
             </div>
             <h4 className="text-xl font-semibold text-gray-800 mt-4">Dashboard</h4>
             <p className="text-gray-600 mt-2">
-              Built with premium materials to ensure durability and excellence.
+            A page that can be used to see our daily activities and the progress we have made so far
             </p>
           </motion.div>
 
@@ -151,7 +151,7 @@ export default function LandingPage() {
             </div>
             <h4 className="text-xl font-semibold text-gray-800 mt-4">Search Meal</h4>
             <p className="text-gray-600 mt-2">
-              Built with premium materials to ensure durability and excellence.
+              Page used to search for food and information about food
             </p>
           </motion.div>
           {/* Feature 3 */}
@@ -168,7 +168,7 @@ export default function LandingPage() {
             </div>
             <h4 className="text-xl font-semibold text-gray-800 mt-4">BMI Calculator</h4>
             <p className="text-gray-600 mt-2">
-              Built with premium materials to ensure durability and excellence.
+            The page used to find out how many food sources we need for one day depends on the values ​​in our body
             </p>
           </motion.div>
 
@@ -186,7 +186,7 @@ export default function LandingPage() {
             </div>
             <h4 className="text-xl font-semibold text-gray-800 mt-4">Meal Planner</h4>
             <p className="text-gray-600 mt-2">
-              Built with premium materials to ensure durability and excellence.
+              This page is used to prepare plans for each day if we want to go on a diet and other things
             </p>
           </motion.div>
 
@@ -204,12 +204,12 @@ export default function LandingPage() {
             </div>
             <h4 className="text-xl font-semibold text-gray-800 mt-4">Articles</h4>
             <p className="text-gray-600 mt-2">
-              Built with premium materials to ensure durability and excellence.
+            Page to search for articles related to health
             </p>
           </motion.div>
         </div>
       </section>
-      <Footer />
+      <Footer/>
     </main>
   );
 }  
