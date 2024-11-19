@@ -147,7 +147,6 @@ export default function LandingPage() {
             viewport={{ once: true, amount: 0.2 }}
           >
             <div className="bg-orange-100 p-4 rounded-full">
-              {/* Replace the icon here */}
               <HomeIcon size={20} className="text-orange-500" />
             </div>
             <h4 className="text-xl font-semibold text-gray-800 mt-4">Dashboard</h4>
@@ -165,7 +164,6 @@ export default function LandingPage() {
             viewport={{ once: true, amount: 0.2 }}
           >
             <div className="bg-orange-100 p-4 rounded-full">
-              {/* Replace the icon here */}
               <SearchIcon size={20} className="text-orange-500" />
             </div>
             <h4 className="text-xl font-semibold text-gray-800 mt-4">Search Meal</h4>
@@ -182,7 +180,6 @@ export default function LandingPage() {
             viewport={{ once: true, amount: 0.2 }}
           >
             <div className="bg-orange-100 p-4 rounded-full">
-              {/* Replace the icon here */}
               <Calculator size={20} className="text-orange-500" />
             </div>
             <h4 className="text-xl font-semibold text-gray-800 mt-4">TDEE Calculator</h4>
@@ -200,7 +197,6 @@ export default function LandingPage() {
             viewport={{ once: true, amount: 0.2 }}
           >
             <div className="bg-orange-100 p-4 rounded-full">
-              {/* Replace the icon here */}
               <UtensilsIcon size={20} className="text-orange-500" />
             </div>
             <h4 className="text-xl font-semibold text-gray-800 mt-4">Meal Planner</h4>
@@ -218,7 +214,6 @@ export default function LandingPage() {
             viewport={{ once: true, amount: 0.2 }}
           >
             <div className="bg-orange-100 p-4 rounded-full">
-              {/* Replace the icon here */}
               <Newspaper size={20} className="text-orange-500" />
             </div>
             <h4 className="text-xl font-semibold text-gray-800 mt-4">Articles</h4>
