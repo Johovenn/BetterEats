@@ -185,7 +185,7 @@ export default function LandingPage() {
               {/* Replace the icon here */}
               <Calculator size={20} className="text-orange-500" />
             </div>
-            <h4 className="text-xl font-semibold text-gray-800 mt-4">BMI Calculator</h4>
+            <h4 className="text-xl font-semibold text-gray-800 mt-4">TDEE Calculator</h4>
             <p className="text-gray-600 mt-2">
             The page used to find out how many food sources we need for one day depends on the values ​​in our body
             </p>

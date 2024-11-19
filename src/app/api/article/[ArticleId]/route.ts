@@ -42,6 +42,7 @@ export async function PUT(req: Request, { params }: { params: { ArticleId: strin
             article_title,
             article_description,
             article_body,
+            article_image
         } = body
 
         const existingArticle = await db.article.findFirst({
@@ -62,6 +63,7 @@ export async function PUT(req: Request, { params }: { params: { ArticleId: strin
                 article_title: article_title ?? existingArticle.article_title,
                 article_description: article_description ?? existingArticle.article_description,
                 article_body: article_body ?? existingArticle.article_body,
+                article_image: article_image ?? existingArticle.article_image,
             },
         })
 
