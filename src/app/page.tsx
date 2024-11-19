@@ -74,7 +74,6 @@ export default function LandingPage() {
         <section className="bg-gray-50 ">
         <h3 className="text-3xl font-bold text-gray-800 text-center mt-6 text-green-600">About Us</h3>
       <div id ="about" className="mx-auto px-10 py-16 mx-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-        {/* Left Text Content */}
         <div>
           <h1 className="text-2xl font-medium flex items-center gap-2">
                 Better
