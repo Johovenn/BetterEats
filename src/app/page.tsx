@@ -21,10 +21,22 @@ export default function LandingPage() {
     visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
   };
 
+  const MotionWrapper = ({ children }: { children: React.ReactNode }) => (
+    <motion.div
+      className="flex flex-col items-center"
+      variants={featureVariant}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
+    >
+      {children}
+    </motion.div>
+  );
+
   return (
     <main className="w-full bg-white">
       <Navbar />
-
+      <MotionWrapper>
       {/* Banner Section */}
       <div id="home" className="flex items-center rounded-lg px-20 py-10 mt-10">
         {/* Text Section */}
@@ -55,12 +67,20 @@ export default function LandingPage() {
           />
         </div>
       </div>
+      </MotionWrapper>
 
       {/* About Us Section */}
-      <section id ="about" className="mx-auto px-6 py-16 mx-6 mt-10 grid grid-cols-1 md:grid-cols-2 gap-12 items-center bg-gray-50">
+      <MotionWrapper>
+        <section className="bg-gray-50 ">
+        <h3 className="text-3xl font-bold text-gray-800 text-center mt-6 text-green-600">About Us</h3>
+      <div id ="about" className="mx-auto px-10 py-16 mx-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         {/* Left Text Content */}
         <div>
-          <h2 className="text-3xl font-semibold text-green-500 uppercase">About Us</h2>
+          <h1 className="text-2xl font-medium flex items-center gap-2">
+                Better
+                <UtensilsCrossed size={32} color="green"/>
+                Eats
+            </h1>
           <p className="text-gray-700 mt-4">
             Our journey began as a simple idea for a college thesis—a project that combined our passion for health and technology. We wanted to create something meaningful, not just for academic purposes but for real-world impact.
           </p>
@@ -105,7 +125,9 @@ export default function LandingPage() {
             </ul>
           </div>
         </div>
+      </div>
       </section>
+      </MotionWrapper>
 
 
       {/* Product Features */}
@@ -206,7 +228,13 @@ export default function LandingPage() {
           </motion.div>
         </div>
       </section>
-      <Footer/>
+      <motion.div
+            className="items-center"
+            variants={featureVariant}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+          ><Footer/></motion.div>
     </main>
   );
 }  
