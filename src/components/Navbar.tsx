@@ -17,7 +17,7 @@ export default function Navbar(){
     }
 
     return( 
-        <nav className="py-4 px-20 flex justify-between items-center w-full border-b-2">
+        <nav className="py-4 px-20 flex justify-between items-center w-full">
             <h1 className="text-2xl font-medium flex items-center gap-2">
                 Better
                 <UtensilsCrossed size={32} color="green"/>
