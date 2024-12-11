@@ -43,13 +43,17 @@ export default function ArticlePage(){
                 {
                     articles.length > 0
                         ?
-                        articles.map((article) => (
-                            <ArticleCard 
-                                key={article.article_id}
-                                article={article}
-                                mode="search"
-                            />
-                        ))
+                        <div className="space-y-3">
+                            {
+                                articles.map((article) => (
+                                    <ArticleCard 
+                                        key={article.article_id}
+                                        article={article}
+                                        mode="search"
+                                    />
+                                ))
+                            }
+                        </div>
                         :
                     <h3>Article not found.</h3>
                 }

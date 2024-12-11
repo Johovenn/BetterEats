@@ -19,7 +19,13 @@ export async function GET(req: Request) {
         const is_snack = searchParams.get('is_snack') === 'true' ? true : undefined
         const calorie_range_from = searchParams.get('calorie_range_from') ?  parseInt(String(searchParams.get('calorie_range_from'))) : undefined
         const calorie_range_to = searchParams.get('calorie_range_to') ? parseInt(String(searchParams.get('calorie_range_to'))) : undefined
-        const meal_name = searchParams.get('meal_name') || undefined 
+        const protein_range_from = searchParams.get('protein_range_from') ?  parseInt(String(searchParams.get('protein_range_from'))) : undefined
+        const protein_range_to = searchParams.get('protein_range_to') ? parseInt(String(searchParams.get('protein_range_to'))) : undefined
+        const fat_range_from = searchParams.get('fat_range_from') ?  parseInt(String(searchParams.get('fat_range_from'))) : undefined
+        const fat_range_to = searchParams.get('fat_range_to') ? parseInt(String(searchParams.get('fat_range_to'))) : undefined
+        const carbohydrate_range_from = searchParams.get('carbohydrate_range_from') ?  parseInt(String(searchParams.get('carbohydrate_range_from'))) : undefined
+        const carbohydrate_range_to = searchParams.get('carbohydrate_range_to') ? parseInt(String(searchParams.get('carbohydrate_range_to'))) : undefined
+        const meal_name = searchParams.get('meal_name') || undefined
 
         const totalRows = await db.meal.count({
             where: {
@@ -36,6 +42,36 @@ export async function GET(req: Request) {
                 ...(calorie_range_to !== undefined && {
                     meal_calories: {
                         lte: calorie_range_to,
+                    },
+                }),
+                ...(protein_range_from !== undefined && {
+                    meal_protein: {
+                        gte: protein_range_from,
+                    },
+                }),
+                ...(protein_range_to !== undefined && {
+                    meal_protein: {
+                        lte: protein_range_to,
+                    },
+                }),
+                ...(fat_range_from !== undefined && {
+                    meal_fat: {
+                        gte: fat_range_from,
+                    },
+                }),
+                ...(fat_range_to !== undefined && {
+                    meal_fat: {
+                        lte: fat_range_to,
+                    },
+                }),
+                ...(carbohydrate_range_from !== undefined && {
+                    meal_carbohydrate: {
+                        gte: carbohydrate_range_from,
+                    },
+                }),
+                ...(carbohydrate_range_to !== undefined && {
+                    meal_carbohydrate: {
+                        lte: carbohydrate_range_to,
                     },
                 }),
             },
@@ -58,16 +94,57 @@ export async function GET(req: Request) {
                         lte: calorie_range_to,
                     },
                 }),
+                ...(protein_range_from !== undefined && {
+                    meal_protein: {
+                        gte: protein_range_from,
+                    },
+                }),
+                ...(protein_range_to !== undefined && {
+                    meal_protein: {
+                        lte: protein_range_to,
+                    },
+                }),
+                ...(fat_range_from !== undefined && {
+                    meal_fat: {
+                        gte: fat_range_from,
+                    },
+                }),
+                ...(fat_range_to !== undefined && {
+                    meal_fat: {
+                        lte: fat_range_to,
+                    },
+                }),
+                ...(carbohydrate_range_from !== undefined && {
+                    meal_carbohydrate: {
+                        gte: carbohydrate_range_from,
+                    },
+                }),
+                ...(carbohydrate_range_to !== undefined && {
+                    meal_carbohydrate: {
+                        lte: carbohydrate_range_to,
+                    },
+                }),
             },
             take: limit,
             skip: page * limit,
+            include: {
+                favoriteMeals: {
+                    where: { user_id: userId },
+                    select: { favorite_meal_id: true },
+                },
+            },
         })
+
+        const responseData = mealData.map((meal) => ({
+            ...meal,
+            is_favorite: meal.favoriteMeals.length > 0,
+        }));
     
-        if(mealData.length === 0){
+        if(responseData.length === 0){
             return NextResponse.json(createPaginationResponse(200, "Fetch data success, no data found.", [], page, limit, 0), {status: 200})
         }
         
-        return NextResponse.json(createPaginationResponse(200, "Fetch data successful!", mealData, page, limit, totalRows), {status: 200})
+        return NextResponse.json(createPaginationResponse(200, "Fetch data successful!", responseData, page, limit, totalRows), {status: 200})
     } catch (error) {
         return NextResponse.json(createPaginationResponse(500, "Internal server error", [], 0, 0, 0 ), {status: 500})
     }

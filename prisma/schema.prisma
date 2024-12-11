@@ -29,6 +29,7 @@ model Meal {
   is_dinner           Boolean @default(false)
   is_snack            Boolean @default(false)
   mealDetails         MealPlanDetail[]
+  favoriteMeals       UserFavoriteMeals[]
 }
 
 model MealPlan {
@@ -49,6 +50,7 @@ model MealPlanDetail {
   meal_plan_id         Int
   meal_type_id         Int 
   meal_id              Int
+  creation_date        DateTime @default(now())
   mealType             MealType @relation(fields: [meal_type_id], references: [meal_type_id])
   mealPlan             MealPlan @relation(fields: [meal_plan_id], references: [meal_plan_id])
   meal                 Meal     @relation(fields: [meal_id], references: [meal_id])
@@ -118,4 +120,12 @@ model Article {
   article_description String
   article_body String @db.Text
   article_creation_date DateTime @default(now())
+}
+
+model UserFavoriteMeals {
+  favorite_meal_id Int @id @default(autoincrement())
+  user_id String
+  meal_id Int
+
+  meal Meal @relation(fields: [meal_id], references: [meal_id])
 }

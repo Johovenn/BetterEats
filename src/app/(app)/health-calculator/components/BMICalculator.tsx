@@ -25,6 +25,7 @@ import { getUserBMI } from "../api/getUserBMI";
 import { postUserBMI } from "../api/postUserBMI";
 import { getBMIValue } from "../api/calculateBMI";
 import { getRecommendationBasedOnBMI } from "@/lib/bmiUtils";
+import AlertModal from "@/components/AlertModal";
 
 interface FormProps{
     user_bmi_id: number
@@ -36,9 +37,9 @@ interface FormProps{
 }
 
 const validationSchema = yup.object().shape({
-    user_height: yup.number().required().min(1, "Height must be more than 0cm"),
-    user_weight: yup.number().required().min(1, "Weight must be more than 0kg"),
-    user_age: yup.number().required().min(1, "Age must at least be 1 year old"),
+    user_height: yup.number().nullable().required('Height is required!').min(1, "Height must be more than 0cm"),
+    user_weight: yup.number().nullable().required('Weight is required!').min(1, "Weight must be more than 0kg"),
+    user_age: yup.number().nullable().required('Age is required!').min(1, "Age must at least be 1 year old"),
     user_gender: yup.string().required("Gender is required"),
 });
 
@@ -162,6 +163,15 @@ export default function TDEECalculator() {
         <>
             <Loading loading={isLoading} />
 
+            <AlertModal 
+                isOpen={alertModal}
+                setIsOpen={setAlertModal}
+                handleClose={() => setAlertModal(false)}
+                onConfirm={handleSaveBMI}
+                title="Save BMI"
+                description="Are you sure you want to save the calculated BMI data? By doing so, you don't have to re entry your data the next time you want to calculate your data."
+            />
+
             <section className="w-full">
                 <h1 className="text-[28px] font-bold text-green-primary">BMI Calculator</h1>
                 <p className="text-green-primary">Find out how healthy your body is.</p>
@@ -238,7 +248,7 @@ export default function TDEECalculator() {
                         <Button 
                             disabled={!form.watch('user_bmi_value')}
                             className="mt-6 flex items-center gap-1 save-button"
-                            onClick={form.handleSubmit(handleSaveBMI)}
+                            onClick={form.handleSubmit(() => setAlertModal(true))}
                         >
                             <Save size={16}/>
                             Save BMI

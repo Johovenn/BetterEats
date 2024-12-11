@@ -8,7 +8,9 @@ import { useAuth, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import {
+    BookOpen,
     Calculator,
+    Eye,
     HomeIcon,
     Newspaper,
     NewspaperIcon,
@@ -127,7 +129,7 @@ export default function LandingPage() {
                         <div className="grid grid-cols-1 gap-6">
                             <div className="p-6 bg-white shadow-md rounded-lg">
                                 <div className="flex items-center space-x-4">
-                                    <div className="bg-blue-100 p-3 rounded-full"></div>
+                                    <Eye size={20} color="green"/>
                                     <h4 className="text-xl font-semibold text-gray-900">
                                         Our Vision
                                     </h4>
@@ -141,7 +143,7 @@ export default function LandingPage() {
 
                             <div className="p-6 bg-white shadow-md rounded-lg">
                                 <div className="flex items-center space-x-4">
-                                    <div className="bg-blue-100 p-3 rounded-full"></div>
+                                    <BookOpen size={20} color="green"/>
                                     <h4 className="text-xl font-semibold text-gray-900">
                                         Our Mission
                                     </h4>
@@ -210,7 +212,7 @@ export default function LandingPage() {
                             <SearchIcon size={20} className="text-orange-500" />
                         </div>
                         <h4 className="text-xl font-semibold text-gray-800 mt-4">
-                            Search Meal
+                            Meal Search
                         </h4>
                         <p className="text-gray-600 mt-2">
                             Search for information on healthy foods that are

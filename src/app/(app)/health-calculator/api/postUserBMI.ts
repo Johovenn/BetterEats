@@ -7,6 +7,7 @@ interface PostUserBMIRequestProps{
     user_height: number
     user_age: number
     user_gender: string
+    user_bmi_value: number
 }
 
 export async function postUserBMI(request: PostUserBMIRequestProps): Promise<ResponseProps<UserBMRProps>>{

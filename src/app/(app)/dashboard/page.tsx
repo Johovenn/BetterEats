@@ -2,7 +2,7 @@
 import Loading from "@/components/Loading"
 import SearchBar from "@/components/SearchBar"
 import { useUser } from "@clerk/nextjs"
-import { Search } from "lucide-react"
+import { Router, Search } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
 import MealPlanValueCard from "@/components/meal-planner/MealPlanValueCard"
@@ -16,6 +16,8 @@ import RecommendedMeals from "@/components/dashboard/RecommendedMeals"
 import { getAllMeals, MealProps } from "../search/api/getAllMeals"
 import { getRecommendedMeals } from "../search/api/getRecommendedMeals"
 import AddMealPlanModal from "@/components/meal-planner/AddMealPlanModal"
+import AlertModal from "@/components/AlertModal"
+import { getUserBMR } from "../health-calculator/api/getUserBMR"
 
 interface FormProps {
     meal_plan_date: Date
@@ -31,6 +33,7 @@ interface FormProps {
 }
 
 export default function DashboardPage(){
+    const router = useRouter()
     const [isLoading, setIsLoading] = useState(false)
     const [bmrValue, setBmrValue] = useState(0)
     const [addMealModal, setAddMealModal] = useState(false)
@@ -38,6 +41,7 @@ export default function DashboardPage(){
     const [recommendedMeals, setRecommendedMeals] = useState<any>([])
     const [selectedMealId, setSelectedMealId] = useState<number>()
     const [detailModal, setDetailModal] = useState(false)
+    const [alertModal, setAlertModal] = useState(false)
 
     const {user} = useUser()
 
@@ -95,6 +99,20 @@ export default function DashboardPage(){
         setIsLoading(false)
     }, [form])
 
+    const getTDEE = useCallback(async () => {
+        setIsLoading(true)
+
+        await getUserBMR().then((response) => {
+            if(response.data === null){
+                setAlertModal(true)
+            }
+        }).catch((error) => {
+            setAlertModal(true)
+        })
+
+        setIsLoading(false)
+    }, [])
+
     const getMeals = useCallback(async () => {
         setIsLoading(true)
 
@@ -131,7 +149,8 @@ export default function DashboardPage(){
         getTotalNutrition()
         getBMI()
         getMeals()
-    }, [form, getBMI, getMeals, getTotalNutrition])
+        getTDEE()
+    }, [form, getBMI, getMeals, getTDEE, getTotalNutrition])
     
     if(!user){
         return null
@@ -140,6 +159,17 @@ export default function DashboardPage(){
     return(
         <>
             <Loading loading={isLoading} />
+
+            <AlertModal 
+                title="Calculate your TDEE values"
+                description="It is recommended for you to first calculate your TDEE values as it will be the base for our recommendations."
+                isOpen={alertModal}
+                setIsOpen={setAlertModal}
+                handleClose={() => setAlertModal(false)}
+                onConfirm={() => {
+                    router.push(`/health-calculator`)
+                }}
+            />
 
             <AddMealPlanModal
                 isOpen={addMealModal}

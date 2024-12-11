@@ -21,7 +21,7 @@ export default function BMRCard(props: BMRCardProps){
         <div className={cn('h-[285px] bg-white shadow-lg rounded-xl border p-3 flex flex-col', props.className)}>
             <div className="flex items-center justify-between gap-1 mb-4">
                 <h1 className="text-lg font-medium">
-                    Basal Metabolic Rate
+                    Total Daily Energy Expenditure
                 </h1>
                 <HoverTooltip
                     tooltipContent={
@@ -29,7 +29,7 @@ export default function BMRCard(props: BMRCardProps){
                             ?
                         "This BMR value will be used to create food recommendations for you."
                             :
-                        "You haven't calculated your BMR yet, please go to the BMR Calculator page."
+                        "You haven't calculated your TDEE yet, please go to the TDEE Calculator page."
                     }
                 >
                     {
@@ -58,7 +58,5 @@ export default function BMRCard(props: BMRCardProps){
                 Update
             </Button>
         </div>
-
-        
     )
 }

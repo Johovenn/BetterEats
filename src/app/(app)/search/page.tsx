@@ -17,6 +17,8 @@ import { FilterIcon, SlidersHorizontal } from "lucide-react";
 import SearchMealFilter from "@/components/search/SearchMealFilter";
 import AddMealPlanModal from "@/components/meal-planner/AddMealPlanModal";
 import { CldImage } from "next-cloudinary";
+import MealCardNew from "@/components/search/MealCardNew";
+import RadioInput from "@/components/form/RadioGroup";
 
 interface FormProps{
     is_breakfast: boolean
@@ -25,10 +27,17 @@ interface FormProps{
     is_snack: boolean
     calorie_range_from: number
     calorie_range_to: number
+    protein_range_from: number
+    protein_range_to: number
+    carbohydrate_range_from: number
+    carbohydrate_range_to: number
+    fat_range_from: number
+    fat_range_to: number
     page: number
     limit: number
     total_rows: number
     meal_name: string
+    category: string
 }
 
 export default function SearchPage(){
@@ -50,26 +59,40 @@ export default function SearchPage(){
             calorie_range_from: undefined,
             calorie_range_to: undefined,
             page: 0,
-            limit: 10,
+            limit: 12,
             meal_name: '',
             total_rows: 0,
+            category: 'ALL',
         }
     })
+
+    const mealCategories = [
+        {
+            label: 'All',
+            value: 'ALL',
+        },
+        {
+            label: 'Favorites',
+            value: 'FV',
+        },
+        {
+            label: 'Recently Added',
+            value: 'RA',
+        },
+        {
+            label: "Newest Meals",
+            value: 'NM'
+        },
+        {
+            label: "Most Popular",
+            value: 'MP'
+        },
+    ]
 
     const getMeals = useCallback(async () => {
         setIsLoading(true)
 
-        await getAllMeals({
-            page: form.getValues('page'),
-            limit: form.getValues('limit'),
-            meal_name: form.getValues('meal_name'),
-            is_breakfast: form.getValues('is_breakfast'),
-            is_lunch: form.getValues('is_lunch'),
-            is_dinner: form.getValues('is_dinner'),
-            is_snack: form.getValues('is_snack'),
-            calorie_range_from: form.getValues('calorie_range_from'),
-            calorie_range_to: form.getValues('calorie_range_to')
-        }).then((response) => {
+        await getAllMeals(form.getValues()).then((response) => {
             if(response.data){
                 setSearchResults(response.data)
                 form.setValue("total_rows", (Number(response.total_rows)))
@@ -113,6 +136,15 @@ export default function SearchPage(){
         getMeals()
     }, [form, getMeals, keyword])
 
+    const category = form.watch('category')
+    useEffect(() => {
+        if(category){
+            form.setValue('page', 0)
+            form.setValue('limit', 12)
+            getMeals()
+        }
+    }, [category, form, getMeals])
+
     const handleAddMealButton = (meal: MealProps) => {
         setSelectedMeal(meal)
         setAddMealModal(true)
@@ -152,7 +184,23 @@ export default function SearchPage(){
 
             <section className="mt-5 min-w-full">
                 <div className="flex justify-between">
-                    <h2 className="text-lg font-medium text-green-primary">{form.watch('meal_name') === '' ? 'Showing all search results' : `Showing search results for keyword \'${form.watch('meal_name')}\'`}</h2>
+                    <FormProvider {...form}>
+                        <RadioInput 
+                            control={form.control}
+                            id="category"
+                            inputValues={mealCategories}
+                            label=""
+                            radioId="value"
+                            radioLabel="label"                    
+                        />
+                    </FormProvider>
+                    {/* <h2 className="text-lg font-medium text-green-primary">
+                        {  
+                            form.watch('meal_name') === '' 
+                            ? 'Showing all search results' 
+                            : `Showing search results for keyword \'${form.watch('meal_name')}\'`
+                        }
+                    </h2> */}
                     <SearchMealFilter
                         form={form}
                         onConfirm={getMeals}
@@ -160,12 +208,12 @@ export default function SearchPage(){
                     />
                 </div>
                 <div className="mt-3">
-                    <div className="w-full space-y-3">
+                    <div className="w-full gap-y-5 grid grid-cols-4">
                         {
                             searchResults.length > 0
                                 ?
                             searchResults.map((meal) => (
-                                <MealCard 
+                                <MealCardNew
                                     key={meal.meal_id}
                                     meal={meal}
                                     mode="search"
@@ -174,7 +222,7 @@ export default function SearchPage(){
                                 />
                             ))
                                 :
-                            <div className="mt-6 w-full flex flex-col items-center justify-center">
+                            <div className="mt-6 w-full flex flex-col items-center justify-center col-span-4">
                                 <CldImage 
                                     src="9796613-removebg_d4sxc2"
                                     alt="Not Found Image"
