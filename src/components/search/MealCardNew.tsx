@@ -8,14 +8,16 @@ import { MealProps } from "@/app/(app)/search/api/getAllMeals"
 import Menu from "../Menu"
 import { MealPlanDetailProps } from "@/app/(app)/meal-planner/api/getMealPlan"
 import MealBadge from "../meal-planner/MealBadge"
+import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
+import StarOutlinedIcon from '@mui/icons-material/StarOutlined';
 
 interface MealCardNewProps{
     meal: MealProps | MealPlanDetailProps
     mode: "search" | "meal-plan" | "admin"
     handleInfoButton: (id: number) => void
     handleAddMealButton?: (meal: MealProps) => void
-    handleDeleteButton?: (meal_plan_detail_id: number) => void
-    handleEditButton?: (meal_id: number) => void
+    updateMeal: (meal_id: number) => void
+    removeMeal: (meal_id: number) => void
 }
 
 export default function MealCardNew(props: MealCardNewProps){
@@ -35,7 +37,23 @@ export default function MealCardNew(props: MealCardNewProps){
                 <div className="w-full px-3">
                     <div className="mt-1 flex items-center justify">
                         <p className="font-medium w-[250px] line-clamp-1">{props.meal.meal_name}</p>
-                        <Star size={18}/>
+                        {
+                            props.meal.is_favorite 
+                                ?
+                            <div onClick={(e) => {
+                                e.stopPropagation()
+                                props.removeMeal(props.meal.meal_id)
+                            }}>
+                                <StarOutlinedIcon className="text-yellow-500 hover:text-yellow-200 transition-all hover:cursor-pointer"/>
+                            </div>
+                                :
+                            <div onClick={(e) => {
+                                e.stopPropagation()
+                                props.updateMeal(props.meal.meal_id)
+                            }}>
+                                <StarBorderOutlinedIcon className="hover:cursor-pointer hover:text-yellow-500 transition-all"/>
+                            </div> 
+                        }
                     </div>
                     <div className="mb-2 space-x-1">
                         {props.meal.is_breakfast && <MealBadge text="Breakfast"/>}

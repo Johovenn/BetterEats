@@ -19,6 +19,11 @@ import AddMealPlanModal from "@/components/meal-planner/AddMealPlanModal";
 import { CldImage } from "next-cloudinary";
 import MealCardNew from "@/components/search/MealCardNew";
 import RadioInput from "@/components/form/RadioGroup";
+import { addFavoriteMeal } from "./api/addFavoriteMeal";
+import { deleteFavoriteMeal } from "./api/deleteFavoriteMeal";
+import { getAllFavoriteMeals } from "./api/getAllFavoriteMeals";
+import { getAllRecentlyAddedMeals } from "./api/getAllRecentlyAddedMeals";
+import { getAllMostPopularMeals } from "./api/getAllMostPopularMeals";
 
 interface FormProps{
     is_breakfast: boolean
@@ -92,15 +97,55 @@ export default function SearchPage(){
     const getMeals = useCallback(async () => {
         setIsLoading(true)
 
-        await getAllMeals(form.getValues()).then((response) => {
-            if(response.data){
-                setSearchResults(response.data)
-                form.setValue("total_rows", (Number(response.total_rows)))
-            }
-        }).catch((error) => {
-            setSearchResults([])
-            form.setValue("total_rows", 0)
-        })
+        form.setValue('page', 0)
+        form.setValue('limit', 12)
+        form.setValue('total_rows', 0)
+        setSearchResults([])
+
+        if(form.getValues('category') === 'ALL'){
+            await getAllMeals(form.getValues()).then((response) => {
+                if(response.data){
+                    setSearchResults(response.data)
+                    form.setValue("total_rows", (Number(response.total_rows)))
+                }
+            }).catch((error) => {
+                setSearchResults([])
+                form.setValue("total_rows", 0)
+            })
+        }
+        else if (form.getValues('category') === 'FV'){
+            await getAllFavoriteMeals(form.getValues()).then((response) => {
+                if(response.data){
+                    setSearchResults(response.data)
+                    form.setValue("total_rows", (Number(response.total_rows)))
+                }
+            }).catch((error) => {
+                setSearchResults([])
+                form.setValue("total_rows", 0)
+            })
+        }
+        else if (form.getValues('category') === 'RA'){
+            await getAllRecentlyAddedMeals(form.getValues()).then((response) => {
+                if(response.data){
+                    setSearchResults(response.data)
+                    form.setValue("total_rows", (Number(response.total_rows)))
+                }
+            }).catch((error) => {
+                setSearchResults([])
+                form.setValue("total_rows", 0)
+            })
+        }
+        else if (form.getValues('category') === 'MP'){
+            await getAllMostPopularMeals(form.getValues()).then((response) => {
+                if(response.data){
+                    setSearchResults(response.data)
+                    form.setValue("total_rows", (Number(response.total_rows)))
+                }
+            }).catch((error) => {
+                setSearchResults([])
+                form.setValue("total_rows", 0)
+            })
+        }
 
         setIsLoading(false)
     }, [form])
@@ -108,25 +153,50 @@ export default function SearchPage(){
     const loadMoreMeals = useCallback(async () => {
         setIsLoading(true)
 
-        await getAllMeals({
-            page: form.getValues('page'),
-            limit: form.getValues('limit'),
-            meal_name: form.getValues('meal_name'),
-            is_breakfast: form.getValues('is_breakfast'),
-            is_lunch: form.getValues('is_lunch'),
-            is_dinner: form.getValues('is_dinner'),
-            is_snack: form.getValues('is_snack'),
-            calorie_range_from: form.getValues('calorie_range_from'),
-            calorie_range_to: form.getValues('calorie_range_to')
-        }).then((response) => {
-            if(response.data){
-                setSearchResults(prev => [...prev, ...response.data])
-                form.setValue("total_rows", (Number(response.total_rows)))
-            }
-        }).catch((error) => {
-            setSearchResults([])
-            form.setValue("total_rows", 0)
-        })
+        if(form.getValues('category') === 'ALL'){
+            await getAllMeals(form.getValues()).then((response) => {
+                if(response.data){
+                    setSearchResults(prev => [...prev, ...response.data])
+                    form.setValue("total_rows", (Number(response.total_rows)))
+                }
+            }).catch((error) => {
+                setSearchResults([])
+                form.setValue("total_rows", 0)
+            })
+        }
+        else if (form.getValues('category') === 'FV'){
+            await getAllFavoriteMeals(form.getValues()).then((response) => {
+                if(response.data){
+                    setSearchResults(prev => [...prev, ...response.data])
+                    form.setValue("total_rows", (Number(response.total_rows)))
+                }
+            }).catch((error) => {
+                setSearchResults([])
+                form.setValue("total_rows", 0)
+            })
+        }
+        else if (form.getValues('category') === 'RA'){
+            await getAllRecentlyAddedMeals(form.getValues()).then((response) => {
+                if(response.data){
+                    setSearchResults(prev => [...prev, ...response.data])
+                    form.setValue("total_rows", (Number(response.total_rows)))
+                }
+            }).catch((error) => {
+                setSearchResults([])
+                form.setValue("total_rows", 0)
+            })
+        }
+        else if (form.getValues('category') === 'MP'){
+            await getAllMostPopularMeals(form.getValues()).then((response) => {
+                if(response.data){
+                    setSearchResults(prev => [...prev, ...response.data])
+                    form.setValue("total_rows", (Number(response.total_rows)))
+                }
+            }).catch((error) => {
+                setSearchResults([])
+                form.setValue("total_rows", 0)
+            })
+        }
 
         setIsLoading(false)
     }, [form])
@@ -159,6 +229,49 @@ export default function SearchPage(){
         form.setValue('page', form.getValues('page') + 1)
         loadMoreMeals()
     }
+
+    const updateFavoriteMeal = async (meal_id: number) => {
+        setIsLoading(true)
+
+        await addFavoriteMeal(meal_id).catch((error) => toast(error.response.data.message))
+        
+        setSearchResults((prevResults) =>
+            prevResults.map((meal) =>
+                meal.meal_id === meal_id ? { ...meal, is_favorite: true } : meal
+            )
+        )
+
+        setIsLoading(false)
+    }
+
+    const removeFavoriteMeal = async (meal_id: number) => {
+        setIsLoading(true)
+
+        await deleteFavoriteMeal(meal_id).catch((error) => toast(error.response.data.message))
+        
+        setSearchResults((prevResults) =>
+            prevResults.map((meal) =>
+                meal.meal_id === meal_id ? { ...meal, is_favorite: false } : meal
+            )
+        )
+
+        setIsLoading(false)
+    }
+
+    const handleClearFilter = async () => {
+        form.setValue('is_breakfast', false)
+        form.setValue('is_lunch', false)
+        form.setValue('is_dinner', false)
+        form.setValue('is_snack', false)
+        form.setValue('calorie_range_from', 0)
+        form.setValue('calorie_range_to', 0)
+        form.setValue('protein_range_from', 0)
+        form.setValue('protein_range_to', 0)
+        form.setValue('carbohydrate_range_from', 0)
+        form.setValue('carbohydrate_range_to', 0)
+        form.setValue('fat_range_from', 0)
+        form.setValue('fat_range_to', 0)
+    }
     
     return(
         <>
@@ -183,7 +296,7 @@ export default function SearchPage(){
             />
 
             <section className="mt-5 min-w-full">
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                     <FormProvider {...form}>
                         <RadioInput 
                             control={form.control}
@@ -194,17 +307,10 @@ export default function SearchPage(){
                             radioLabel="label"                    
                         />
                     </FormProvider>
-                    {/* <h2 className="text-lg font-medium text-green-primary">
-                        {  
-                            form.watch('meal_name') === '' 
-                            ? 'Showing all search results' 
-                            : `Showing search results for keyword \'${form.watch('meal_name')}\'`
-                        }
-                    </h2> */}
                     <SearchMealFilter
                         form={form}
                         onConfirm={getMeals}
-                        onClear={() => form.reset()}
+                        onClear={handleClearFilter}
                     />
                 </div>
                 <div className="mt-3">
@@ -219,6 +325,8 @@ export default function SearchPage(){
                                     mode="search"
                                     handleInfoButton={handleInfoButton}
                                     handleAddMealButton={handleAddMealButton}
+                                    updateMeal={updateFavoriteMeal}
+                                    removeMeal={removeFavoriteMeal}
                                 />
                             ))
                                 :
@@ -229,12 +337,16 @@ export default function SearchPage(){
                                     width={300}
                                     height={300}
                                 />
-                                <p className="mt-3 text-lg font-semibold text-green-primary">Meal not found.</p>
+                                <p className="mt-3 text-lg font-semibold text-green-primary">
+                                    {
+                                        isLoading ? 'Loading meals....' : 'Meal not found'
+                                    }
+                                </p>
                             </div>
                         }
                     </div>
                     {
-                        (form.watch('page') + 1) * form.watch('limit') < form.watch('total_rows')
+                        ((form.watch('page') + 1) * form.watch('limit') < form.watch('total_rows') && form.getValues('total_rows') !== 0)
                             &&
                         <div className="w-full mt-3">
                             <Button 

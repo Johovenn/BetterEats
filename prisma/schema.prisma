@@ -129,3 +129,11 @@ model UserFavoriteMeals {
 
   meal Meal @relation(fields: [meal_id], references: [meal_id])
 }
+
+model Post {
+  post_id Int @id @default(autoincrement())
+  user_id String
+  post_body String 
+  post_date DateTime
+  meal_plan_id Int
+}

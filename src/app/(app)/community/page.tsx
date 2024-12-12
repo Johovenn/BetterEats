@@ -4,6 +4,7 @@ import Loading from "@/components/Loading"
 import PageHeader from "@/components/PageHeader"
 import { useEffect, useState } from "react"
 import { ArticleProps } from "../article/api/getAllArticles"
+import Post from "@/components/community/Post"
 
 export default function CommunityPage(){
     const [isLoading, setIsLoading] = useState(false)
@@ -39,8 +40,10 @@ export default function CommunityPage(){
                 hideSearchBar
             />
 
-            <main>
-
+            <main className="w-full flex flex-col items-center">
+                <Post />
+                <Post />
+                <Post />
             </main>
         </>
     )
