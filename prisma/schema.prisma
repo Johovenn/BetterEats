@@ -28,6 +28,7 @@ model Meal {
   is_lunch            Boolean @default(false)
   is_dinner           Boolean @default(false)
   is_snack            Boolean @default(false)
+  creation_date       DateTime @default(now())
   mealDetails         MealPlanDetail[]
   favoriteMeals       UserFavoriteMeals[]
 }
@@ -41,6 +42,7 @@ model MealPlan {
   meal_plan_total_protein       Int @default(0)
   meal_plan_total_fat           Int @default(0)
   mealDetails     MealPlanDetail[]
+  posts Post[]
 
   @@index([meal_plan_id, meal_plan_date])
 }
@@ -136,4 +138,6 @@ model Post {
   post_body String 
   post_date DateTime
   meal_plan_id Int
+
+  MealPlan MealPlan @relation(fields: [meal_plan_id], references: [meal_plan_id])
 }

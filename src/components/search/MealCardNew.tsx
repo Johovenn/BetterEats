@@ -22,7 +22,7 @@ interface MealCardNewProps{
 
 export default function MealCardNew(props: MealCardNewProps){
     return(
-        <div className="w-[260px] h-[280px] bg-white rounded-lg shadow-lg hover:cursor-pointer">
+        <div className="w-[260px] bg-white rounded-lg shadow-lg hover:cursor-pointer">
             <div onClick={() => props.handleInfoButton(props.meal.meal_id)}>
                 <div className="w-[260px] h-[150px] px-3 pt-3">
                     <CldImage 
@@ -69,7 +69,7 @@ export default function MealCardNew(props: MealCardNewProps){
                     </div>
                 </div>
             </div>
-            <div className="px-3 mt-2">
+            <div className="px-3 mt-2 mb-3">
                 <Button 
                     className="w-full"
                     onClick={() => props.handleAddMealButton ? props.handleAddMealButton(props.meal) : () => {}}

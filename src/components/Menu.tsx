@@ -9,6 +9,7 @@ interface MenuProps{
         label: string
         onClick: () => void
     }[]
+    className?: string
 }
 
 export default function Menu(props: MenuProps){
@@ -18,11 +19,11 @@ export default function Menu(props: MenuProps){
                 <Button variant={"outline"} size={"icon"}>{props.label}</Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                <DropdownMenuLabel className={props.className}>Actions</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {
                     props.items.map((item) => (
-                        <DropdownMenuItem key={item.label} onClick={item.onClick}>{item.label}</DropdownMenuItem>
+                        <DropdownMenuItem key={item.label} onClick={item.onClick} className={props.className}>{item.label}</DropdownMenuItem>
                     ))
                 }
             </DropdownMenuContent>
