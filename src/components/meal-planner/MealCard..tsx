@@ -20,7 +20,7 @@ interface MealCardProps{
 
 export default function MealCard(props: MealCardProps){
     return(
-        <div className="w-full min-w-[700px] h-[100px] bg-white shadow-lg flex items-center px-3 rounded-xl">
+        <div className="w-full h-[100px] bg-white shadow-lg flex items-center px-3 rounded-xl">
             <div className="relative w-[80px] h-[80px]">
                 <CldImage 
                     src={props.meal.meal_image}

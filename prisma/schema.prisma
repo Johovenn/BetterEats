@@ -137,7 +137,17 @@ model Post {
   user_id String
   post_body String 
   post_date DateTime
-  meal_plan_id Int
+  meal_plan_id Int?
+  reply_to_id Int?
 
-  MealPlan MealPlan @relation(fields: [meal_plan_id], references: [meal_plan_id])
+  MealPlan MealPlan? @relation(fields: [meal_plan_id], references: [meal_plan_id])
+  postLikes PostLikes[] 
+}
+
+model PostLikes {
+  post_like_id Int @id @default(autoincrement())
+  user_id String
+  post_id Int
+
+  Post Post @relation(fields: [post_id], references: [post_id])
 }

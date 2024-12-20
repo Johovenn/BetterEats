@@ -159,9 +159,9 @@ export default function SearchPage(){
                     setSearchResults(prev => [...prev, ...response.data])
                     form.setValue("total_rows", (Number(response.total_rows)))
                 }
-            }).catch((error) => {
-                setSearchResults([])
-                form.setValue("total_rows", 0)
+                }).catch((error) => {
+                    setSearchResults([])
+                    form.setValue("total_rows", 0)
             })
         }
         else if (form.getValues('category') === 'FV'){

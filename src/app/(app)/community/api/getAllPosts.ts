@@ -31,9 +31,9 @@ interface MealPlanDetails {
     snack: MealPlanQuoteProps[]
 }
 
-interface MealPlanData {
+export interface MealPlanData {
     meal_plan_id: number
-    meal_plan_date: string
+    meal_plan_date: Date
     meal_plan_total_calorie: number
     meal_plan_total_carbohydrate: number
     meal_plan_total_protein: number
@@ -50,6 +50,9 @@ export interface PostProps {
     post_body: string
     post_date: string // ISO 8601 string
     meal_plan_id: number
+    is_liked: boolean
+    like_count: number
+    reply_count: number
     meal_plan_data: MealPlanData
 }
 

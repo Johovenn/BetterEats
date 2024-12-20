@@ -1,16 +1,11 @@
-import { createPaginationResponse } from "@/lib/api"
+import { createPaginationResponse, createResponse } from "@/lib/api"
 import db from "@/lib/db"
 import { auth, clerkClient } from "@clerk/nextjs/server"
 import { NextResponse } from "next/server"
+
 export async function GET(req: Request) {
     try {
-        const { userId } = auth()
-        if (!userId) {
-            return NextResponse.json(
-                createPaginationResponse(401, "Unauthorized", null, 0, 10, 0),
-                { status: 401 }
-            )
-        }
+        const {userId} = auth()
 
         const { searchParams } = new URL(req.url)
         const page = parseInt(searchParams.get("page") || "1")
@@ -62,7 +57,7 @@ export async function GET(req: Request) {
                 const userData = await clerkClient.users.getUser(post.user_id)
     
                 type MealPlanDetails = Record<
-                    string,
+                    string, 
                     Array<{
                         meal_plan_detail_id: number
                         meal_id: number
@@ -98,6 +93,26 @@ export async function GET(req: Request) {
                         },
                         { breakfast: [], lunch: [], dinner: [], snack: [] } as MealPlanDetails
                     ) || {}
+
+                let is_liked = false
+                if(userId){
+                    const likeData = await db.postLikes.findFirst({
+                        where: {
+                            user_id: userId,
+                            post_id: post.post_id
+                        }
+                    })
+
+                    if(likeData){
+                        is_liked = true
+                    }
+                }
+
+                const likeCount = await db.postLikes.count({
+                    where: {
+                        post_id: post.post_id,
+                    }
+                })
     
                 return {
                     user_id: post.user_id,
@@ -107,6 +122,9 @@ export async function GET(req: Request) {
                     post_id: post.post_id,
                     post_body: post.post_body,
                     post_date: post.post_date,
+                    is_liked: is_liked,
+                    like_count: likeCount,
+                    reply_count: 0,
                     meal_plan_id: mealPlan?.meal_plan_id,
                     meal_plan_data: {
                         meal_plan_id: mealPlan?.meal_plan_id,
@@ -140,5 +158,38 @@ export async function GET(req: Request) {
             createPaginationResponse(500, "Internal server error", [], 0, 0, 0),
             { status: 500 }
         )
+    }
+}
+
+export async function POST(req: Request) {
+    try {
+        const {userId} = auth()
+        if (!userId) {
+            return NextResponse.json(createResponse(401, "Unauthorized", null), { status: 401 })
+        }
+
+        const body = await req.json()
+        const {
+            post_body = "",
+            meal_plan_id = null,
+        } = body
+
+        if (!post_body) {
+            return NextResponse.json(createResponse(400, "Bad Request: Missing required fields", null), { status: 400 })
+        }
+
+        const post = await db.post.create({
+            data: {
+                post_body: post_body,
+                post_date: new Date,
+                meal_plan_id: meal_plan_id,
+                user_id: userId
+            },
+        })
+
+        return NextResponse.json(createResponse(201, "Post created successfully", post), { status: 201 })
+
+    } catch (error) {
+        return NextResponse.json(createResponse(500, "Internal server error", []), { status: 500 })
     }
 }

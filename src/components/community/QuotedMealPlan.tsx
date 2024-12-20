@@ -2,9 +2,8 @@ import { Beef, Droplet, Ellipsis, Flame, Sunrise, Wheat } from "lucide-react";
 import { CldImage } from "next-cloudinary";
 import { MealPlanQuoteProps } from "@/app/(app)/community/api/getAllPosts";
 import QuotedMeal from "./QuotedMeal";
-        
 interface QuotedMealPlanProps{
-    mealPlanDetail: {
+    mealPlanDetail?: {
         breakfast: MealPlanQuoteProps[]
         lunch: MealPlanQuoteProps[]
         dinner: MealPlanQuoteProps[]
@@ -28,7 +27,7 @@ export default function QuotedMealPlan(props: QuotedMealPlanProps){
     const formattedDate = date.toLocaleDateString('en-US', options)
 
     return(
-        <div className="min-w-full border-2 rounded-lg border-gray-300 px-2 py-1 hover:bg-gray-100 hover:cursor-pointer transition-all">
+        <div className="min-w-full border-2 rounded-lg border-gray-300 px-2 py-1 hover:bg-gray-200 hover:cursor-pointer transition-all">
             <div className="flex items-center justify-between gap-3">
                 <span className="font-medium text-sm">Jonathan&apos;s meal plan</span>
                 <span className="text-xs text-gray-400">{`${formattedDate}`}</span>
@@ -40,7 +39,7 @@ export default function QuotedMealPlan(props: QuotedMealPlanProps){
                 <span className="text-xs text-black flex item-center gap-1"><Droplet size={18} color="#bd7006"/>{props.totalFat} fat</span>
             </div>
             {
-                props.mealPlanDetail
+                props.mealPlanDetail?.breakfast
                     &&
                 props.mealPlanDetail.breakfast.map((meal) => (
                     <QuotedMeal 
@@ -51,7 +50,7 @@ export default function QuotedMealPlan(props: QuotedMealPlanProps){
                 ))
             }
             {
-                props.mealPlanDetail
+                props.mealPlanDetail?.lunch
                     &&
                 props.mealPlanDetail.lunch.map((meal) => (
                     <QuotedMeal 
@@ -62,7 +61,7 @@ export default function QuotedMealPlan(props: QuotedMealPlanProps){
                 ))
             }
             {
-                props.mealPlanDetail
+                props.mealPlanDetail?.snack
                     &&
                 props.mealPlanDetail.snack.map((meal) => (
                     <QuotedMeal 
@@ -73,7 +72,7 @@ export default function QuotedMealPlan(props: QuotedMealPlanProps){
                 ))
             }
             {
-                props.mealPlanDetail
+                props.mealPlanDetail?.dinner
                     &&
                 props.mealPlanDetail.dinner.map((meal) => (
                     <QuotedMeal 
@@ -83,33 +82,6 @@ export default function QuotedMealPlan(props: QuotedMealPlanProps){
                     />
                 ))
             }
-            {/* <div className="w-full flex items-center justify-center mt-1 mb-3 gap-3">
-                <div>
-                    <Sunrise size={20} color="#b53a31"/>
-                </div>
-                <div className="flex items-center gap-3">
-                    <div className="w-[60px] h-[60px]">
-                        <CldImage 
-                            src={'t2mfsisbs6whyaenkx1q'}
-                            width={110}
-                            height={110}
-                            alt={'test'}
-                            className="object-cover rounded-lg my-1 z-10"
-                            crop={"fill"}
-                            gravity="center"
-                        />
-                    </div>
-                    <div className="mr-3">
-                        <p className="text-sm">Ayam Goreng</p>
-                        <div className="flex items-center gap-3">
-                            <span className="text-xs text-black flex item-center gap-1"><Flame size={18} color="#b53a31"/>400</span>
-                            <span className="text-xs text-black flex item-center gap-1"><Beef size={18} color="#6e0e07"/>10</span>
-                            <span className="text-xs text-black flex item-center gap-1"><Wheat size={18} color="#f2a929"/>20</span>
-                            <span className="text-xs text-black flex item-center gap-1"><Droplet size={18} color="#bd7006"/>10</span>
-                        </div>
-                    </div>
-                </div>
-            </div> */}
         </div>
     )
 }
