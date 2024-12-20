@@ -101,6 +101,14 @@ export default function CommunityPage(){
         )
     }
 
+    const handleAddReply = async (post_id: number) => {
+        setPosts((prevResults) =>
+            prevResults.map((post) =>
+                post.post_id === post_id ? { ...post, reply_count: post.reply_count + 1 } : post
+            )
+        )
+    }
+
     useEffect(() => {
         refreshPosts()
     }, [refreshPosts])
@@ -133,6 +141,7 @@ export default function CommunityPage(){
                                 post={post}
                                 handleLike={handleLikePost}
                                 handleUnlike={handleUnlikePost}
+                                handleAddReply={handleAddReply}
                             />
                         ))
                     }

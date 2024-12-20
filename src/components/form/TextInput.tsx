@@ -11,6 +11,7 @@ interface TextInputProps extends HTMLAttributes<HTMLInputElement>{
     label: string
     error?: string
     disabled?: boolean
+    hideError?: boolean
 }
 
 export default function TextInput(props: TextInputProps){
@@ -20,17 +21,27 @@ export default function TextInput(props: TextInputProps){
             name={props.id}
             render={({field}) => (
                 <FormItem>
-                    <FormLabel>{props.label}</FormLabel>
+                    {
+                        props.label
+                            &&
+                        <FormLabel>{props.label}</FormLabel>
+                    }
                     <FormControl>
                         <Input
                             placeholder={props.placeholder} 
                             disabled={props.disabled} 
                             {...field}
-                            className={cn(props.className, "border border-gray-300 rounded-xl hover:border-green-primary transition-all focus:border-2 focus:border-green-primary focus:outline-none")}
+                            className={cn(props.className, "border border-gray-300 rounded-xl hover:border-green-primary transition-all focus:border-2 focus:border-green-primary outline-none focus:outline-none")}
                             onBlur={props.onBlur}
                         />
                     </FormControl>
-                    <FormMessage className="text-red-500 text-xs">{props.error}</FormMessage>
+                    {
+                        props.hideError === true
+                            ?
+                        <></>  
+                            :
+                        <FormMessage className="text-red-500 text-xs">{props.error}</FormMessage>
+                    }
                 </FormItem>
             )}
         />

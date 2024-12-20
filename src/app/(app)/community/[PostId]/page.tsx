@@ -91,6 +91,7 @@ export default function PostDetailPage() {
                         post={post}
                         handleLike={handleLikePost}
                         handleUnlike={handleUnlikePost}
+                        showReplies
                     />
                 }
                 </div>

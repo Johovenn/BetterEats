@@ -15,6 +15,9 @@ export async function GET(req: Request) {
             take: limit,
             skip: page * limit,
             orderBy: { post_date: "desc" },
+            where: {
+                reply_to_id: null,
+            },
             include: {
                 MealPlan: {
                     select: {
@@ -139,7 +142,11 @@ export async function GET(req: Request) {
             })
         )
 
-        const totalRows = await db.post.count()
+        const totalRows = await db.post.count({
+            where: {
+                reply_to_id: null,
+            }
+        })
 
         return NextResponse.json(
             createPaginationResponse(
@@ -172,6 +179,7 @@ export async function POST(req: Request) {
         const {
             post_body = "",
             meal_plan_id = null,
+            reply_to_id = null,
         } = body
 
         if (!post_body) {
@@ -183,11 +191,54 @@ export async function POST(req: Request) {
                 post_body: post_body,
                 post_date: new Date,
                 meal_plan_id: meal_plan_id,
+                reply_to_id: reply_to_id,
                 user_id: userId
             },
         })
 
-        return NextResponse.json(createResponse(201, "Post created successfully", post), { status: 201 })
+        const userData = await clerkClient.users.getUser(post.user_id)
+
+        let is_liked = false
+
+        const likeCount = await db.postLikes.count({
+            where: {
+                post_id: post.post_id
+            }
+        })
+
+        if(userId){
+            const isLiked = await db.postLikes.findFirst({
+                where: {
+                    post_id: post.post_id,
+                    user_id: userId,
+                }
+            })
+
+            if(isLiked){
+                is_liked = true
+            }
+        }
+
+        const replyCount = await db.post.count({
+            where: {
+                reply_to_id: post.post_id,
+            }
+        })
+
+        const response = {
+            user_id: post.user_id,
+            user_name: userData.fullName,
+            username: userData.username,
+            user_profile_picture: userData.imageUrl,
+            post_id: post.post_id,
+            post_body: post.post_body,
+            post_date: post.post_date,
+            is_liked: is_liked,
+            like_count: likeCount,
+            reply_count: replyCount,
+        }
+
+        return NextResponse.json(createResponse(201, "Post created successfully", response), { status: 201 })
 
     } catch (error) {
         return NextResponse.json(createResponse(500, "Internal server error", []), { status: 500 })

@@ -111,6 +111,64 @@ export async function GET(req: Request, { params }: { params: { PostId: string }
             }
         }
 
+        const replyCount = await db.post.count({
+            where: {
+                reply_to_id: post.post_id,
+            }
+        })
+
+        const replies = await db.post.findMany({
+            where: {
+                reply_to_id: post.post_id
+            },
+        })
+
+        const transformedReplies = await Promise.all(
+            replies.map(async (reply) => {
+                const userData = await clerkClient.users.getUser(reply.user_id)
+                
+                let reply_is_liked = false
+
+                if(userId){
+                    const likeData = await db.postLikes.findFirst({
+                        where: {
+                            user_id: userId,
+                            post_id: reply.post_id
+                        }
+                    })
+
+                    if(likeData){
+                        reply_is_liked = true
+                    }
+                }
+
+                const replyLikeCount = await db.postLikes.count({
+                    where: {
+                        post_id: reply.post_id,
+                    }
+                })
+
+                const replyToReplyCount = await db.post.count({
+                    where: {
+                        reply_to_id: reply.post_id,
+                    }
+                })
+
+                return {
+                    user_id: reply.user_id,
+                    user_name: userData.fullName,
+                    username: userData.username,
+                    user_profile_picture: userData.imageUrl,
+                    post_id: reply.post_id,
+                    post_body: reply.post_body,
+                    post_date: reply.post_date,
+                    is_liked: reply_is_liked,
+                    like_count: replyLikeCount,
+                    reply_count: replyToReplyCount,
+                }
+            })
+        )
+
         const response = {
             user_id: post.user_id,
             user_name: userData.fullName,
@@ -122,7 +180,8 @@ export async function GET(req: Request, { params }: { params: { PostId: string }
             meal_plan_id: mealPlan?.meal_plan_id,
             is_liked: is_liked,
             like_count: likeCount,
-            reply_count: 0,
+            reply_count: replyCount,
+            replies: transformedReplies,
             meal_plan_data: {
                 meal_plan_id: mealPlan?.meal_plan_id,
                 meal_plan_date: mealPlan?.meal_plan_date,
