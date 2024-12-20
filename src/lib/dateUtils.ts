@@ -6,3 +6,8 @@ export function formatDate(date: Date){
         year: 'numeric',
     })
 }
+
+export function formatDateTime(date: Date){
+    return date.toUTCString()
+    // return date.toString().replace(/-/g, '\/').replace(/T.+/, '')
+}

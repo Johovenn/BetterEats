@@ -15,6 +15,7 @@ export interface MealProps{
     is_lunch: boolean
     is_dinner: boolean
     is_snack: boolean
+    is_favorite: boolean
     meal_type_description: string
     meal_plan_detail_id: number
 }
@@ -29,6 +30,12 @@ interface GetAllMealRequest{
     is_snack?: boolean
     calorie_range_from?: number
     calorie_range_to?: number
+    fat_range_from?: number
+    fat_range_to?: number
+    protein_range_from?: number
+    protein_range_to?: number
+    carbohydrate_range_from?: number
+    carbohydrate_range_to?: number
 }
 
 export async function getAllMeals(request: GetAllMealRequest): Promise<ResponseProps<MealProps[]>>{
@@ -40,5 +47,11 @@ export async function getAllMeals(request: GetAllMealRequest): Promise<ResponseP
     if(request.is_snack) url += `&is_snack=${request.is_snack}`
     if(request.calorie_range_from) url += `&calorie_range_from=${request.calorie_range_from}`
     if(request.calorie_range_to) url += `&calorie_range_to=${request.calorie_range_to}`
+    if(request.protein_range_from) url += `&protein_range_from=${request.protein_range_from}`
+    if(request.protein_range_to) url += `&protein_range_to=${request.protein_range_to}`
+    if(request.fat_range_from) url += `&fat_range_from=${request.fat_range_from}`
+    if(request.fat_range_to) url += `&fat_range_to=${request.fat_range_to}`
+    if(request.carbohydrate_range_from) url += `&carbohydrate_range_from=${request.carbohydrate_range_from}`
+    if(request.carbohydrate_range_to) url += `&carbohydrate_range_to=${request.carbohydrate_range_to}`
     return (await axios.get(url)).data
 }

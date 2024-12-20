@@ -2,14 +2,14 @@ import { Control } from "react-hook-form"
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import { Input } from "../ui/input"
 import { cn } from "@/lib/utils"
-import { HTMLAttributes } from "react"
+import { HTMLAttributes, ReactNode } from "react"
 import { Textarea } from "../ui/textarea"
 
 interface TextAreaInputProps extends HTMLAttributes<HTMLInputElement>{
     control: Control<any, any>
     id: string
     placeholder: string
-    label: string
+    label: string | ReactNode
     error?: string
     disabled?: boolean
     description?: string

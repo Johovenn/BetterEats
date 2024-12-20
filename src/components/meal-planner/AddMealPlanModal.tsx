@@ -37,6 +37,10 @@ interface FormProps {
     meal_type_id: number
 }
 
+const validationSchema = yup.object().shape({
+    meal_type_id: yup.number().nullable().required('Meal Type is required!')
+})
+
 export default function AddMealPlanModal(props: AddMealModalProps){
     const [isLoading, setIsLoading] = useState(false)
     const [mealTypeOptions, setMealTypeOptions] = useState<MealTypeProps[]>([])
@@ -58,6 +62,7 @@ export default function AddMealPlanModal(props: AddMealModalProps){
             user_protein_requirement: 0,
             meal_type_id: undefined
         },
+        resolver: yupResolver<any>(validationSchema)
     })
 
     const getTotalNutrition = useCallback(async () => {
@@ -107,16 +112,7 @@ export default function AddMealPlanModal(props: AddMealModalProps){
 
     const handleConfirmButton = async () => {
         setIsLoading(true)
-
-        if(!form.getValues('meal_type_id')){
-            form.setError('meal_type_id', {
-                type: 'manual',
-                message: 'Meal Type is required!'
-            })
-            setIsLoading(false)
-            return
-        }
-
+        
         form.setValue('meal_id', props.meal.meal_id)
         await postMealPlan({
             meal_id: form.getValues('meal_id'),
@@ -124,7 +120,7 @@ export default function AddMealPlanModal(props: AddMealModalProps){
             meal_type_id: form.getValues('meal_type_id')
         }).then((response) => {
             toast("Add new meal plan successful!")
-            router.push(`/meal-planner`)
+            router.push(`/meal-planner?meal_plan_date=${form.getValues('meal_plan_date')}`)
         }).catch((error) => toast('Something went wrong, add meal plan failed!'))
 
         props.setIsOpen(false)
@@ -178,10 +174,7 @@ export default function AddMealPlanModal(props: AddMealModalProps){
                 <DialogFooter>
                     <Button
                         disabled={isLoading} 
-                        onClick={() => {
-                            console.log(form.getValues())
-                            handleConfirmButton()
-                        }}
+                        onClick={form.handleSubmit(handleConfirmButton)}
                     >
                         Confirm
                     </Button>

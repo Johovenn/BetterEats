@@ -36,17 +36,17 @@ interface FormProps{
 }
 
 const validationSchema = yup.object().shape({
-    user_height: yup.number().required().min(1, "Height must be more than 0cm"),
-    user_weight: yup.number().required().min(1, "Weight must be more than 0kg"),
-    user_age: yup.number().required().min(15, "Age must at least be 15 years old"),
+    user_height: yup.number().nullable().required('Height is required!').min(1, "Height must be more than 0cm"),
+    user_weight: yup.number().nullable().required('Weight is required!').min(1, "Weight must be more than 0kg"),
+    user_age: yup.number().nullable().required('Age is required!').min(15, "Age must at least be 15 years old"),
     user_gender: yup.string().required("Gender is required"),
     user_bmr_date: yup.date().default(() => new Date()),
-    user_bmr_value: yup.number().required("BMR value is required"),
+    user_bmr_value: yup.number().nullable().required("BMR value is required"),
     activity_level_code: yup.string().required("Activity Level is required"),
     goal_code: yup.string().required("Goal is required"),
-    protein: yup.number().optional(),
-    carbohydrate: yup.number().optional(),
-    fat: yup.number().optional(),
+    protein: yup.number().nullable().optional(),
+    carbohydrate: yup.number().nullable().optional(),
+    fat: yup.number().nullable().optional(),
 });
 
 

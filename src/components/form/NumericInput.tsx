@@ -29,7 +29,7 @@ export default function NumericInput(props: NumericInputProps) {
                             {...field}
                             onChange={(e) => {
                                 const value = e.target.value;
-                                field.onChange(value === '' ? value : Number(value));
+                                field.onChange(value === '' ? null : Number(value));
                             }}
                             className={cn(
                                 props.className,

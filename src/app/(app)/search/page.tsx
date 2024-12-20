@@ -17,6 +17,13 @@ import { FilterIcon, SlidersHorizontal } from "lucide-react";
 import SearchMealFilter from "@/components/search/SearchMealFilter";
 import AddMealPlanModal from "@/components/meal-planner/AddMealPlanModal";
 import { CldImage } from "next-cloudinary";
+import MealCardNew from "@/components/search/MealCardNew";
+import RadioInput from "@/components/form/RadioGroup";
+import { addFavoriteMeal } from "./api/addFavoriteMeal";
+import { deleteFavoriteMeal } from "./api/deleteFavoriteMeal";
+import { getAllFavoriteMeals } from "./api/getAllFavoriteMeals";
+import { getAllRecentlyAddedMeals } from "./api/getAllRecentlyAddedMeals";
+import { getAllMostPopularMeals } from "./api/getAllMostPopularMeals";
 
 interface FormProps{
     is_breakfast: boolean
@@ -25,10 +32,17 @@ interface FormProps{
     is_snack: boolean
     calorie_range_from: number
     calorie_range_to: number
+    protein_range_from: number
+    protein_range_to: number
+    carbohydrate_range_from: number
+    carbohydrate_range_to: number
+    fat_range_from: number
+    fat_range_to: number
     page: number
     limit: number
     total_rows: number
     meal_name: string
+    category: string
 }
 
 export default function SearchPage(){
@@ -50,34 +64,88 @@ export default function SearchPage(){
             calorie_range_from: undefined,
             calorie_range_to: undefined,
             page: 0,
-            limit: 10,
+            limit: 12,
             meal_name: '',
             total_rows: 0,
+            category: 'ALL',
         }
     })
+
+    const mealCategories = [
+        {
+            label: 'All',
+            value: 'ALL',
+        },
+        {
+            label: 'Favorites',
+            value: 'FV',
+        },
+        {
+            label: 'Recently Added',
+            value: 'RA',
+        },
+        {
+            label: "Newest Meals",
+            value: 'NM'
+        },
+        {
+            label: "Most Popular",
+            value: 'MP'
+        },
+    ]
 
     const getMeals = useCallback(async () => {
         setIsLoading(true)
 
-        await getAllMeals({
-            page: form.getValues('page'),
-            limit: form.getValues('limit'),
-            meal_name: form.getValues('meal_name'),
-            is_breakfast: form.getValues('is_breakfast'),
-            is_lunch: form.getValues('is_lunch'),
-            is_dinner: form.getValues('is_dinner'),
-            is_snack: form.getValues('is_snack'),
-            calorie_range_from: form.getValues('calorie_range_from'),
-            calorie_range_to: form.getValues('calorie_range_to')
-        }).then((response) => {
-            if(response.data){
-                setSearchResults(response.data)
-                form.setValue("total_rows", (Number(response.total_rows)))
-            }
-        }).catch((error) => {
-            setSearchResults([])
-            form.setValue("total_rows", 0)
-        })
+        form.setValue('page', 0)
+        form.setValue('limit', 12)
+        form.setValue('total_rows', 0)
+        setSearchResults([])
+
+        if(form.getValues('category') === 'ALL'){
+            await getAllMeals(form.getValues()).then((response) => {
+                if(response.data){
+                    setSearchResults(response.data)
+                    form.setValue("total_rows", (Number(response.total_rows)))
+                }
+            }).catch((error) => {
+                setSearchResults([])
+                form.setValue("total_rows", 0)
+            })
+        }
+        else if (form.getValues('category') === 'FV'){
+            await getAllFavoriteMeals(form.getValues()).then((response) => {
+                if(response.data){
+                    setSearchResults(response.data)
+                    form.setValue("total_rows", (Number(response.total_rows)))
+                }
+            }).catch((error) => {
+                setSearchResults([])
+                form.setValue("total_rows", 0)
+            })
+        }
+        else if (form.getValues('category') === 'RA'){
+            await getAllRecentlyAddedMeals(form.getValues()).then((response) => {
+                if(response.data){
+                    setSearchResults(response.data)
+                    form.setValue("total_rows", (Number(response.total_rows)))
+                }
+            }).catch((error) => {
+                setSearchResults([])
+                form.setValue("total_rows", 0)
+            })
+        }
+        else if (form.getValues('category') === 'MP'){
+            await getAllMostPopularMeals(form.getValues()).then((response) => {
+                if(response.data){
+                    setSearchResults(response.data)
+                    form.setValue("total_rows", (Number(response.total_rows)))
+                }
+            }).catch((error) => {
+                setSearchResults([])
+                form.setValue("total_rows", 0)
+            })
+        }
 
         setIsLoading(false)
     }, [form])
@@ -85,25 +153,50 @@ export default function SearchPage(){
     const loadMoreMeals = useCallback(async () => {
         setIsLoading(true)
 
-        await getAllMeals({
-            page: form.getValues('page'),
-            limit: form.getValues('limit'),
-            meal_name: form.getValues('meal_name'),
-            is_breakfast: form.getValues('is_breakfast'),
-            is_lunch: form.getValues('is_lunch'),
-            is_dinner: form.getValues('is_dinner'),
-            is_snack: form.getValues('is_snack'),
-            calorie_range_from: form.getValues('calorie_range_from'),
-            calorie_range_to: form.getValues('calorie_range_to')
-        }).then((response) => {
-            if(response.data){
-                setSearchResults(prev => [...prev, ...response.data])
-                form.setValue("total_rows", (Number(response.total_rows)))
-            }
-        }).catch((error) => {
-            setSearchResults([])
-            form.setValue("total_rows", 0)
-        })
+        if(form.getValues('category') === 'ALL'){
+            await getAllMeals(form.getValues()).then((response) => {
+                if(response.data){
+                    setSearchResults(prev => [...prev, ...response.data])
+                    form.setValue("total_rows", (Number(response.total_rows)))
+                }
+                }).catch((error) => {
+                    setSearchResults([])
+                    form.setValue("total_rows", 0)
+            })
+        }
+        else if (form.getValues('category') === 'FV'){
+            await getAllFavoriteMeals(form.getValues()).then((response) => {
+                if(response.data){
+                    setSearchResults(prev => [...prev, ...response.data])
+                    form.setValue("total_rows", (Number(response.total_rows)))
+                }
+            }).catch((error) => {
+                setSearchResults([])
+                form.setValue("total_rows", 0)
+            })
+        }
+        else if (form.getValues('category') === 'RA'){
+            await getAllRecentlyAddedMeals(form.getValues()).then((response) => {
+                if(response.data){
+                    setSearchResults(prev => [...prev, ...response.data])
+                    form.setValue("total_rows", (Number(response.total_rows)))
+                }
+            }).catch((error) => {
+                setSearchResults([])
+                form.setValue("total_rows", 0)
+            })
+        }
+        else if (form.getValues('category') === 'MP'){
+            await getAllMostPopularMeals(form.getValues()).then((response) => {
+                if(response.data){
+                    setSearchResults(prev => [...prev, ...response.data])
+                    form.setValue("total_rows", (Number(response.total_rows)))
+                }
+            }).catch((error) => {
+                setSearchResults([])
+                form.setValue("total_rows", 0)
+            })
+        }
 
         setIsLoading(false)
     }, [form])
@@ -112,6 +205,15 @@ export default function SearchPage(){
         keyword ? form.setValue('meal_name', keyword) : form.setValue('meal_name', '')
         getMeals()
     }, [form, getMeals, keyword])
+
+    const category = form.watch('category')
+    useEffect(() => {
+        if(category){
+            form.setValue('page', 0)
+            form.setValue('limit', 12)
+            getMeals()
+        }
+    }, [category, form, getMeals])
 
     const handleAddMealButton = (meal: MealProps) => {
         setSelectedMeal(meal)
@@ -126,6 +228,49 @@ export default function SearchPage(){
     const handleLoadMoreButton = () => {
         form.setValue('page', form.getValues('page') + 1)
         loadMoreMeals()
+    }
+
+    const updateFavoriteMeal = async (meal_id: number) => {
+        setIsLoading(true)
+
+        await addFavoriteMeal(meal_id).catch((error) => toast(error.response.data.message))
+        
+        setSearchResults((prevResults) =>
+            prevResults.map((meal) =>
+                meal.meal_id === meal_id ? { ...meal, is_favorite: true } : meal
+            )
+        )
+
+        setIsLoading(false)
+    }
+
+    const removeFavoriteMeal = async (meal_id: number) => {
+        setIsLoading(true)
+
+        await deleteFavoriteMeal(meal_id).catch((error) => toast(error.response.data.message))
+        
+        setSearchResults((prevResults) =>
+            prevResults.map((meal) =>
+                meal.meal_id === meal_id ? { ...meal, is_favorite: false } : meal
+            )
+        )
+
+        setIsLoading(false)
+    }
+
+    const handleClearFilter = async () => {
+        form.setValue('is_breakfast', false)
+        form.setValue('is_lunch', false)
+        form.setValue('is_dinner', false)
+        form.setValue('is_snack', false)
+        form.setValue('calorie_range_from', 0)
+        form.setValue('calorie_range_to', 0)
+        form.setValue('protein_range_from', 0)
+        form.setValue('protein_range_to', 0)
+        form.setValue('carbohydrate_range_from', 0)
+        form.setValue('carbohydrate_range_to', 0)
+        form.setValue('fat_range_from', 0)
+        form.setValue('fat_range_to', 0)
     }
     
     return(
@@ -151,42 +296,57 @@ export default function SearchPage(){
             />
 
             <section className="mt-5 min-w-full">
-                <div className="flex justify-between">
-                    <h2 className="text-lg font-medium text-green-primary">{form.watch('meal_name') === '' ? 'Showing all search results' : `Showing search results for keyword \'${form.watch('meal_name')}\'`}</h2>
+                <div className="flex justify-between items-center">
+                    <FormProvider {...form}>
+                        <RadioInput 
+                            control={form.control}
+                            id="category"
+                            inputValues={mealCategories}
+                            label=""
+                            radioId="value"
+                            radioLabel="label"                    
+                        />
+                    </FormProvider>
                     <SearchMealFilter
                         form={form}
                         onConfirm={getMeals}
-                        onClear={() => form.reset()}
+                        onClear={handleClearFilter}
                     />
                 </div>
                 <div className="mt-3">
-                    <div className="w-full space-y-3">
+                    <div className="w-full gap-y-5 grid grid-cols-4">
                         {
                             searchResults.length > 0
                                 ?
                             searchResults.map((meal) => (
-                                <MealCard 
+                                <MealCardNew
                                     key={meal.meal_id}
                                     meal={meal}
                                     mode="search"
                                     handleInfoButton={handleInfoButton}
                                     handleAddMealButton={handleAddMealButton}
+                                    updateMeal={updateFavoriteMeal}
+                                    removeMeal={removeFavoriteMeal}
                                 />
                             ))
                                 :
-                            <div className="mt-6 w-full flex flex-col items-center justify-center">
+                            <div className="mt-6 w-full flex flex-col items-center justify-center col-span-4">
                                 <CldImage 
                                     src="9796613-removebg_d4sxc2"
                                     alt="Not Found Image"
                                     width={300}
                                     height={300}
                                 />
-                                <p className="mt-3 text-lg font-semibold text-green-primary">Meal not found.</p>
+                                <p className="mt-3 text-lg font-semibold text-green-primary">
+                                    {
+                                        isLoading ? 'Loading meals....' : 'Meal not found'
+                                    }
+                                </p>
                             </div>
                         }
                     </div>
                     {
-                        (form.watch('page') + 1) * form.watch('limit') < form.watch('total_rows')
+                        ((form.watch('page') + 1) * form.watch('limit') < form.watch('total_rows') && form.getValues('total_rows') !== 0)
                             &&
                         <div className="w-full mt-3">
                             <Button 

@@ -1,39 +1,42 @@
 "use client"
 
-import Loading from "@/components/Loading";
-import MealCard from "@/components/meal-planner/MealCard.";
-import SearchBar from "@/components/SearchBar";
-import { useCallback, useEffect, useState } from "react";
-import { getMealPlan, MealPlanDetailProps } from "./api/getMealPlan";
-import { MealProps } from "../search/api/getAllMeals";
-import MealPlanValueCard from "@/components/meal-planner/MealPlanValueCard";
-import { useForm } from "react-hook-form";
-import PageHeader from "@/components/PageHeader";
-import AlertModal from "@/components/AlertModal";
-import { deleteMealPlan } from "./api/deleteMealPlan";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import MealDetailModal from "@/components/meal-planner/MealDetailModal";
-import { driver } from "driver.js";
-import "driver.js/dist/driver.css";
-import { Button } from "@/components/ui/button";
-import { ChefHat } from "lucide-react";
-import { generateMealPlan } from "./api/generateMealPlan";
+import Loading from "@/components/Loading"
+import MealCard from "@/components/meal-planner/MealCard."
+import SearchBar from "@/components/SearchBar"
+import { useCallback, useEffect, useState } from "react"
+import { getMealPlan, MealPlanDetailProps } from "./api/getMealPlan"
+import { MealProps } from "../search/api/getAllMeals"
+import MealPlanValueCard from "@/components/meal-planner/MealPlanValueCard"
+import { useForm } from "react-hook-form"
+import PageHeader from "@/components/PageHeader"
+import AlertModal from "@/components/AlertModal"
+import { deleteMealPlan } from "./api/deleteMealPlan"
+import { toast } from "sonner"
+import { useRouter, useSearchParams } from "next/navigation"
+import MealDetailModal from "@/components/meal-planner/MealDetailModal"
+import { driver } from "driver.js"
+import "driver.js/dist/driver.css"
+import { Button } from "@/components/ui/button"
+import { ChefHat, Moon, Share, Share2, Sun, Sunrise, Sunset } from "lucide-react"
+import { generateMealPlan } from "./api/generateMealPlan"
+import PostModal from "@/components/community/PostModal"
 
 interface FormProps {
-    meal_plan_date: Date;
-    meal_plan_total_calorie: number;
-    meal_plan_total_protein: number;
-    meal_plan_total_carbohydrate: number;
-    meal_plan_total_fat: number;
-    user_calorie_requirement: number;
-    user_protein_requirement: number;
-    user_carbohydrate_requirement: number;
-    user_fat_requirement: number;
+    meal_plan_id: number
+    meal_plan_date: Date
+    meal_plan_total_calorie: number
+    meal_plan_total_protein: number
+    meal_plan_total_carbohydrate: number
+    meal_plan_total_fat: number
+    user_calorie_requirement: number
+    user_protein_requirement: number
+    user_carbohydrate_requirement: number
+    user_fat_requirement: number
 }
 
 export default function MealPlannerPage(){
     const router = useRouter()
+    const searchParams = useSearchParams()
     const [isLoading, setIsLoading] = useState(false)
     const [mealPlanDetailId, setMealPlanDetailId] = useState<any>()
     const [alertDeleteModal, setAlertDeleteModal] = useState(false)
@@ -43,9 +46,13 @@ export default function MealPlannerPage(){
     const [snackData, setSnackData] = useState<MealPlanDetailProps[]>([])
     const [selectedMealId, setSelectedMealId] = useState<number>()
     const [detailModal, setDetailModal] = useState(false)
+    const [postModal, setPostModal] = useState(false)
+    const [mealPlanId, setMealPlanId] = useState<number>()
+    const mealPlanDate = searchParams.get('meal_plan_date')
     
     const form = useForm<FormProps>({
         defaultValues: {
+            meal_plan_id: undefined,
             meal_plan_date: new Date,
             meal_plan_total_calorie: 0,
             meal_plan_total_carbohydrate: 0,
@@ -114,6 +121,7 @@ export default function MealPlannerPage(){
 
         await getMealPlan(form.getValues('meal_plan_date')).then((response) => {
             if(response.data){
+                form.setValue('meal_plan_id', response.data.meal_plan_id)
                 form.setValue('meal_plan_total_calorie', response.data.meal_plan_total_calorie)
                 form.setValue('meal_plan_total_protein', response.data.meal_plan_total_protein)
                 form.setValue('meal_plan_total_fat', response.data.meal_plan_total_fat)
@@ -133,8 +141,12 @@ export default function MealPlannerPage(){
     }, [form])
 
     useEffect(() => {
+        if(mealPlanDate){
+            form.setValue('meal_plan_date', new Date(mealPlanDate))
+        }
+        
         getMealPlanData()
-    }, [getMealPlanData])
+    }, [form, getMealPlanData, mealPlanDate])
 
     const handleChangeDate = async (date: Date) => {
         form.setValue('meal_plan_date', date)
@@ -181,6 +193,11 @@ export default function MealPlannerPage(){
         setIsLoading(false)
     }
 
+    const handleShareButton = async () => {
+        setPostModal(true)
+        setMealPlanId(form.getValues('meal_plan_id'))
+    }
+
     return (
         <>
             <Loading loading={isLoading} />
@@ -192,12 +209,20 @@ export default function MealPlannerPage(){
                 mealId={1}
             />
 
+            <PostModal
+                isOpen={postModal}
+                setIsOpen={setPostModal}
+                handleClose={() => setPostModal(false)}
+                mealPlanId={mealPlanId}
+                refreshPosts={() => {}}
+            />
+
             <PageHeader 
                 title="Meal Planner"
             />
 
             <AlertModal 
-                title="Remove meal plan?"
+                title="Remove meal from meal plan?"
                 description="Are you sure you want to remove this meal from the meal plan? You can always re-add the meal to the meal plan later."
                 isOpen={alertDeleteModal}
                 handleClose={() => setAlertDeleteModal(false)}
@@ -209,18 +234,30 @@ export default function MealPlannerPage(){
                 <div className="w-[65%] mb-5 px-4 py-2 bg-[#fefefe] shadow-lg rounded-lg meal-plans">
                     <div className="p-2 flex items-center justify-between w-full">
                         <h3 className="text-xl font-semibold text-green-primary">
-                            Meal Plans
+                            Your Meal Plan
                         </h3>
-                        <Button 
-                            className="flex items-center gap-2 generate-button"
-                            onClick={handleGenerateMealPlanButton}
-                        >
-                            <ChefHat size={18}/> 
-                            Generate Meal Plan
-                        </Button>
+                        <div className="flex items-center gap-2">
+                            <Button 
+                                className="flex items-center gap-2 generate-button"
+                                onClick={handleGenerateMealPlanButton}
+                            >
+                                <ChefHat size={18}/> 
+                                Generate Meal Plan
+                            </Button>
+
+                            <Button 
+                                className="flex items-center gap-2 generate-button"
+                                onClick={handleShareButton}
+                                variant={'outline'}
+                            >
+                                <Share2 size={16} color="gray"/>
+                                Share
+                            </Button>
+                        </div>
+                            
                     </div>
                     <div className="w-full mb-5 p-2">
-                        <h2 className="text-lg font-medium text-green-primary">Breakfast</h2>
+                    <h2 className="text-lg font-medium text-green-primary flex items-center gap-3"><Sunrise size={20} color="#b53a31"/>Breakfast</h2>
                         <div className="flex flex-col gap-3 justify-between">
                             {
                                 breakfastData.length > 0
@@ -241,32 +278,9 @@ export default function MealPlannerPage(){
                             }
                         </div>
                     </div>
-
+                    
                     <div className="w-full mb-5 p-2 bg-white">
-                        <h2 className="text-lg font-medium text-green-primary">Snack</h2>
-                        <div className="flex flex-col gap-3 justify-between">
-                            {
-                                snackData.length > 0
-                                    ?
-                                snackData.map((meal) => (
-                                    <MealCard 
-                                        key={meal.meal_plan_detail_id}
-                                        meal={meal}
-                                        mode="meal-plan"
-                                        handleDeleteButton={handleDeleteButton}
-                                        handleInfoButton={handleInfoButton}
-                                    />
-                                ))
-                                    :
-                                <p className="text-sm ">
-                                    No meal plan data found
-                                </p>
-                            }
-                        </div>
-                    </div>
-
-                    <div className="w-full mb-5 p-2 bg-white">
-                        <h2 className="text-lg font-medium text-green-primary">Lunch</h2>
+                        <h2 className="text-lg font-medium text-green-primary flex items-center gap-2"><Sun size={20} color="#b53a31"/>Lunch</h2>
                         <div className="flex flex-col gap-3 justify-between">
                             {
                                 lunchData.length > 0
@@ -289,7 +303,30 @@ export default function MealPlannerPage(){
                     </div>
 
                     <div className="w-full mb-5 p-2 bg-white">
-                        <h2 className="text-lg font-medium text-green-primary">Dinner</h2>
+                        <h2 className="text-lg font-medium text-green-primary flex items-center gap-2"><Sunset size={20} color="#b53a31"/>Snack</h2>
+                        <div className="flex flex-col gap-3 justify-between">
+                            {
+                                snackData.length > 0
+                                    ?
+                                snackData.map((meal) => (
+                                    <MealCard 
+                                        key={meal.meal_plan_detail_id}
+                                        meal={meal}
+                                        mode="meal-plan"
+                                        handleDeleteButton={handleDeleteButton}
+                                        handleInfoButton={handleInfoButton}
+                                    />
+                                ))
+                                    :
+                                <p className="text-sm ">
+                                    No meal plan data found
+                                </p>
+                            }
+                        </div>
+                    </div>
+
+                    <div className="w-full mb-5 p-2 bg-white">
+                        <h2 className="text-lg font-medium text-green-primary flex items-center gap-2"><Moon size={20} color="#b53a31"/>Dinner</h2>
                         <div className="flex flex-col gap-3 justify-between">
                             {
                                 dinnerData.length > 0

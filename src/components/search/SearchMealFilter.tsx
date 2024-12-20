@@ -16,9 +16,9 @@ export default function SearchMealFilter(props: SearchMealFilterProps){
         <Sheet>
             <SheetTrigger asChild>
             <Button variant={'outline'} className="gap-2 text-green-primary">
-                    Filter
-                    <SlidersHorizontal size={18}/>
-                </Button>
+                Filter
+                <SlidersHorizontal size={18}/>
+            </Button>
             </SheetTrigger>
             <SheetContent>
                 <SheetHeader className="text-xl font-semibold">Filter</SheetHeader>
@@ -71,6 +71,66 @@ export default function SearchMealFilter(props: SearchMealFilterProps){
                                         id="calorie_range_to"
                                         label="To"
                                         placeholder="Maximum Calorie"
+                                        className=""
+                                    />
+                                </div>
+                            </div>
+                            <div className="mt-3">
+                                <h2 className="text-md font-medium">Protein Range</h2>
+                                <div className="flex items-end gap-5">
+                                    <NumericInput
+                                        control={props.form.control}
+                                        id="protein_range_from"
+                                        label="From"
+                                        placeholder="Minimum Protein"
+                                        className=""
+                                    />
+                                    <span className="mb-3">To</span>
+                                    <NumericInput
+                                        control={props.form.control}
+                                        id="protein_range_to"
+                                        label="To"
+                                        placeholder="Maximum Protein"
+                                        className=""
+                                    />
+                                </div>
+                            </div>
+                            <div className="mt-3">
+                                <h2 className="text-md font-medium">Carbohydrate Range</h2>
+                                <div className="flex items-end gap-5">
+                                    <NumericInput
+                                        control={props.form.control}
+                                        id="carbohydrate_range_from"
+                                        label="From"
+                                        placeholder="Minimum Carbohydrate"
+                                        className=""
+                                    />
+                                    <span className="mb-3">To</span>
+                                    <NumericInput
+                                        control={props.form.control}
+                                        id="carbohydrate_range_to"
+                                        label="To"
+                                        placeholder="Maximum Carbohydrate"
+                                        className=""
+                                    />
+                                </div>
+                            </div>
+                            <div className="mt-3">
+                                <h2 className="text-md font-medium">Fat Range</h2>
+                                <div className="flex items-end gap-5">
+                                    <NumericInput
+                                        control={props.form.control}
+                                        id="fat_range_from"
+                                        label="From"
+                                        placeholder="Minimum Fat"
+                                        className=""
+                                    />
+                                    <span className="mb-3">To</span>
+                                    <NumericInput
+                                        control={props.form.control}
+                                        id="fat_range_to"
+                                        label="To"
+                                        placeholder="Maximum Fat"
                                         className=""
                                     />
                                 </div>
