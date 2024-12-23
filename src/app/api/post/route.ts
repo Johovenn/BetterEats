@@ -116,6 +116,12 @@ export async function GET(req: Request) {
                         post_id: post.post_id,
                     }
                 })
+
+                const replyCount = await db.post.count({
+                    where: {
+                        reply_to_id: post.post_id,
+                    }
+                })
     
                 return {
                     user_id: post.user_id,
@@ -127,7 +133,7 @@ export async function GET(req: Request) {
                     post_date: post.post_date,
                     is_liked: is_liked,
                     like_count: likeCount,
-                    reply_count: 0,
+                    reply_count: replyCount,
                     meal_plan_id: mealPlan?.meal_plan_id,
                     meal_plan_data: {
                         meal_plan_id: mealPlan?.meal_plan_id,

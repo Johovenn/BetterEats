@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
 import { Heart, MessageCircle, Share } from "lucide-react"
-import { useAuth, useUser } from "@clerk/nextjs"
+import { useUser } from "@clerk/nextjs"
 import TextInput from "../form/TextInput"
 import { FormProvider, useForm } from "react-hook-form"
 import * as yup from 'yup'
@@ -14,6 +14,7 @@ import { Button } from "../ui/button"
 import { createPost } from "@/app/(app)/community/api/createPost"
 import { likePost } from "@/app/(app)/community/api/likePost"
 import { unlikePost } from "@/app/(app)/community/api/unlikePost"
+import { toast } from "sonner"
 
 interface PostProperties{
     post: PostProps
@@ -90,7 +91,7 @@ export default function Post(props: PostProperties){
     }
 
     return(
-        <div className="w-[500px] bg-white">
+        <div className="w-[500px]">
             <div className="border border-b-1 border-gray-300 hover:bg-gray-100 hover:cursor-pointer transition-all">
                 <div 
                     className="flex gap-3 w-[500px] p-3"
@@ -156,7 +157,15 @@ export default function Post(props: PostProperties){
                         {props.post.like_count}
                     </div>
                     <div className="flex gap-1 items-center text-xs">
-                        <Share size={16} color="gray"/>
+                        <Share 
+                            size={16}
+                            color={"gray"}
+                            onClick={() => {
+                                navigator.clipboard.writeText(`${window.location.origin}/community/${props.post.post_id}`).then(() => {
+                                    toast('Link copied to clipboard')
+                                })
+                            }} 
+                        />
                     </div>
                 </div>
             </div>
@@ -164,31 +173,35 @@ export default function Post(props: PostProperties){
                 props.showReplies
                     &&
                 <div className="">
-                    <div className="border-x border-b border-gray-300 p-3 flex items-center">
-                        <Image 
-                            src={user ? user.imageUrl : ""}
-                            alt="User Profile Picture"
-                            width={40}
-                            height={40}
-                            className="rounded-full"
-                        />
-                        <div className="w-full flex items-center justify-between">
-                            <FormProvider {...form}>
-                                <TextInput 
-                                    control={form.control}
-                                    id="post_body"
-                                    label=""
-                                    placeholder="Reply to the above post"
-                                    className="border-none outline-none focus:border-none focus:outline-none w-full ml-3" 
-                                    hideError
-                                />
-                                <Button className="" onClick={() => {
-                                    form.setValue('reply_to_id', props.post.post_id)
-                                    handleReplyButton()
-                                }}>Reply</Button>
-                            </FormProvider>
+                    {
+                        user?.id
+                            &&
+                        <div className="border-x border-b border-gray-300 p-3 flex items-center">
+                            <Image 
+                                src={user ? user.imageUrl : ""}
+                                alt="User Profile Picture"
+                                width={40}
+                                height={40}
+                                className="rounded-full"
+                            />
+                            <div className="w-full flex items-center justify-between">
+                                <FormProvider {...form}>
+                                    <TextInput 
+                                        control={form.control}
+                                        id="post_body"
+                                        label=""
+                                        placeholder="Reply to the above post"
+                                        className="border-none outline-none focus:border-none focus:outline-none w-full ml-3" 
+                                        hideError
+                                    />
+                                    <Button className="" onClick={() => {
+                                        form.setValue('reply_to_id', props.post.post_id)
+                                        handleReplyButton()
+                                    }}>Reply</Button>
+                                </FormProvider>
+                            </div>
                         </div>
-                    </div>
+                    }
                     <div>
                         {
                             replies

@@ -6,7 +6,7 @@ import { ReactNode } from "react"
 interface MenuProps{
     label: string | ReactNode
     items: {
-        label: string
+        label: string | ReactNode
         onClick: () => void
     }[]
     className?: string
@@ -23,7 +23,7 @@ export default function Menu(props: MenuProps){
                 <DropdownMenuSeparator />
                 {
                     props.items.map((item) => (
-                        <DropdownMenuItem key={item.label} onClick={item.onClick} className={props.className}>{item.label}</DropdownMenuItem>
+                        <DropdownMenuItem key={item.label?.toString()} onClick={item.onClick} className={props.className}>{item.label}</DropdownMenuItem>
                     ))
                 }
             </DropdownMenuContent>
