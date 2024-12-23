@@ -12,14 +12,16 @@ import PageHeader from "@/components/PageHeader"
 import AlertModal from "@/components/AlertModal"
 import { deleteMealPlan } from "./api/deleteMealPlan"
 import { toast } from "sonner"
-import { useRouter, useSearchParams } from "next/navigation"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import MealDetailModal from "@/components/meal-planner/MealDetailModal"
 import { driver } from "driver.js"
 import "driver.js/dist/driver.css"
 import { Button } from "@/components/ui/button"
-import { ChefHat, Moon, Share, Share2, Sun, Sunrise, Sunset } from "lucide-react"
+import { ChefHat, Link, Moon, Quote, Share, Share2, Sun, Sunrise, Sunset } from "lucide-react"
 import { generateMealPlan } from "./api/generateMealPlan"
 import PostModal from "@/components/community/PostModal"
+import Menu from "@/components/Menu"
+import MealSection from "@/components/meal-planner/MealSection"
 
 interface FormProps {
     meal_plan_id: number
@@ -36,6 +38,7 @@ interface FormProps {
 
 export default function MealPlannerPage(){
     const router = useRouter()
+    const pathname = usePathname()
     const searchParams = useSearchParams()
     const [isLoading, setIsLoading] = useState(false)
     const [mealPlanDetailId, setMealPlanDetailId] = useState<any>()
@@ -48,7 +51,12 @@ export default function MealPlannerPage(){
     const [detailModal, setDetailModal] = useState(false)
     const [postModal, setPostModal] = useState(false)
     const [mealPlanId, setMealPlanId] = useState<number>()
+    const [isClient, setIsClient] = useState(false)
     const mealPlanDate = searchParams.get('meal_plan_date')
+
+    useEffect(() => {
+        setIsClient(true)
+    }, [])
     
     const form = useForm<FormProps>({
         defaultValues: {
@@ -198,6 +206,14 @@ export default function MealPlannerPage(){
         setMealPlanId(form.getValues('meal_plan_id'))
     }
 
+    const handleCopyLinkButton = async () => {
+        const url = `${window.location.origin}${pathname}`
+
+        navigator.clipboard.writeText(url).then(() => {
+            toast('Link copied to clipboard')
+        })
+    }
+
     return (
         <>
             <Loading loading={isLoading} />
@@ -245,108 +261,56 @@ export default function MealPlannerPage(){
                                 Generate Meal Plan
                             </Button>
 
-                            <Button 
-                                className="flex items-center gap-2 generate-button"
-                                onClick={handleShareButton}
-                                variant={'outline'}
-                            >
-                                <Share2 size={16} color="gray"/>
-                                Share
-                            </Button>
-                        </div>
-                            
-                    </div>
-                    <div className="w-full mb-5 p-2">
-                    <h2 className="text-lg font-medium text-green-primary flex items-center gap-3"><Sunrise size={20} color="#b53a31"/>Breakfast</h2>
-                        <div className="flex flex-col gap-3 justify-between">
                             {
-                                breakfastData.length > 0
-                                    ?
-                                breakfastData.map((meal) => (
-                                    <MealCard 
-                                        key={meal.meal_plan_detail_id}
-                                        meal={meal}
-                                        mode="meal-plan"
-                                        handleDeleteButton={handleDeleteButton}
-                                        handleInfoButton={handleInfoButton}
-                                    />
-                                ))
-                                    :
-                                <p className="text-sm ">
-                                    No meal plan data found
-                                </p>
+                                isClient
+                                    &&
+                                <Menu 
+                                    items={[
+                                        {
+                                            label: <span className="flex items-center gap-3"><Link size={12} color="gray"/>Copy Link</span>,
+                                            onClick: handleCopyLinkButton
+                                        },
+                                        {
+                                            label: <span className="flex items-center gap-3"><Quote size={12} color="gray"/>Quote Meal Plan</span>,
+                                            onClick: handleShareButton
+                                        }
+                                    ]}
+                                    label={<Share size={16} color="#1A5319"/>}
+                                />
                             }
+                            
                         </div>
                     </div>
                     
-                    <div className="w-full mb-5 p-2 bg-white">
-                        <h2 className="text-lg font-medium text-green-primary flex items-center gap-2"><Sun size={20} color="#b53a31"/>Lunch</h2>
-                        <div className="flex flex-col gap-3 justify-between">
-                            {
-                                lunchData.length > 0
-                                    ?
-                                lunchData.map((meal) => (
-                                    <MealCard 
-                                        key={meal.meal_plan_detail_id}
-                                        meal={meal}
-                                        mode="meal-plan"
-                                        handleDeleteButton={handleDeleteButton}
-                                        handleInfoButton={handleInfoButton}
-                                    />
-                                ))
-                                    :
-                                <p className="text-sm ">
-                                    No meal plan data found
-                                </p>
-                            }
-                        </div>
-                    </div>
+                    <MealSection 
+                        title={"Breakfast"}
+                        icon={<Sunrise size={20} color="#b53a31"/>}
+                        meals={breakfastData}
+                        handleDeleteButton={handleDeleteButton}
+                        handleInfoButton={handleInfoButton}
+                    />
+                    <MealSection 
+                        title={"Lunch"}
+                        icon={<Sun size={20} color="#b53a31"/>}
+                        meals={lunchData}
+                        handleDeleteButton={handleDeleteButton}
+                        handleInfoButton={handleInfoButton}
+                    />
+                    <MealSection 
+                        title={"Snack"}
+                        icon={<Sunset size={20} color="#b53a31"/>}
+                        meals={snackData}
+                        handleDeleteButton={handleDeleteButton}
+                        handleInfoButton={handleInfoButton}
+                    />
+                    <MealSection 
+                        title={"Dinner"}
+                        icon={<Moon size={20} color="#b53a31"/>}
+                        meals={dinnerData}
+                        handleDeleteButton={handleDeleteButton}
+                        handleInfoButton={handleInfoButton}
+                    />
 
-                    <div className="w-full mb-5 p-2 bg-white">
-                        <h2 className="text-lg font-medium text-green-primary flex items-center gap-2"><Sunset size={20} color="#b53a31"/>Snack</h2>
-                        <div className="flex flex-col gap-3 justify-between">
-                            {
-                                snackData.length > 0
-                                    ?
-                                snackData.map((meal) => (
-                                    <MealCard 
-                                        key={meal.meal_plan_detail_id}
-                                        meal={meal}
-                                        mode="meal-plan"
-                                        handleDeleteButton={handleDeleteButton}
-                                        handleInfoButton={handleInfoButton}
-                                    />
-                                ))
-                                    :
-                                <p className="text-sm ">
-                                    No meal plan data found
-                                </p>
-                            }
-                        </div>
-                    </div>
-
-                    <div className="w-full mb-5 p-2 bg-white">
-                        <h2 className="text-lg font-medium text-green-primary flex items-center gap-2"><Moon size={20} color="#b53a31"/>Dinner</h2>
-                        <div className="flex flex-col gap-3 justify-between">
-                            {
-                                dinnerData.length > 0
-                                    ?
-                                dinnerData.map((meal) => (
-                                    <MealCard 
-                                        key={meal.meal_plan_detail_id}
-                                        meal={meal}
-                                        mode="meal-plan"
-                                        handleDeleteButton={handleDeleteButton}
-                                        handleInfoButton={handleInfoButton}
-                                    />
-                                ))
-                                    :
-                                <p className="text-sm ">
-                                    No meal plan data found
-                                </p>
-                            }
-                        </div>
-                    </div>
                     <span className="text-sm hover:cursor-pointer text-orange-primary hover:underline" onClick={triggerTutorial}>How does this work?</span>
                 </div>
                 <div className="w-[30%]">

@@ -58,6 +58,10 @@ export default function PostDetailPage() {
         );
     }
 
+    const handleAddReply = async (post_id: number) => {
+        setPost((prevPost) => prevPost ? {...prevPost, reply_count: prevPost.reply_count + 1} : prevPost)
+    }
+
     const handleBackButton = () => {
         router.push(`/community`)
     }
@@ -91,6 +95,8 @@ export default function PostDetailPage() {
                         post={post}
                         handleLike={handleLikePost}
                         handleUnlike={handleUnlikePost}
+                        handleAddReply={handleAddReply}
+                        showReplies
                     />
                 }
                 </div>

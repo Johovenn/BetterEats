@@ -48,11 +48,12 @@ export interface PostProps {
     username: string
     user_profile_picture: string
     post_body: string
-    post_date: string // ISO 8601 string
+    post_date: string
     meal_plan_id: number
     is_liked: boolean
     like_count: number
     reply_count: number
+    replies: PostProps[]
     meal_plan_data: MealPlanData
 }
 
