@@ -1,13 +1,15 @@
-import { createPaginationResponse } from "@/lib/api";
-import db from "@/lib/db";
-import { auth } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
+import { createPaginationResponse } from "@/lib/api"
+import db from "@/lib/db"
+import { auth } from "@clerk/nextjs/server"
+import { NextResponse } from "next/server"
+
+export const dynamic = "force-dynamic"
 
 export async function GET(req: Request) {
     try {
-        const { userId } = auth();
+        const { userId } = auth()
         if (!userId) {
-            return NextResponse.json(createPaginationResponse(401, "Unauthorized", null, 0, 10, 0), { status: 401 });
+            return NextResponse.json(createPaginationResponse(401, "Unauthorized", null, 0, 10, 0), { status: 401 })
         }
 
         const {searchParams} = new URL(req.url)
@@ -88,7 +90,7 @@ export async function GET(req: Request) {
             return NextResponse.json(
                 createPaginationResponse(200, "No popular meals found.", [], page, limit, 0),
                 { status: 200 }
-            );
+            )
         }
 
 
@@ -145,14 +147,14 @@ export async function GET(req: Request) {
                     },
                 }),
             }
-        });
+        })
 
         return NextResponse.json(
             createPaginationResponse(200, "Fetch data successful!", responseData, page, limit, totalRows),
             { status: 200 }
-        );
+        )
     } catch (error) {
-        console.error(error);
-        return NextResponse.json(createPaginationResponse(500, "Internal server error", [], 0, 0, 0), { status: 500 });
+        console.error(error)
+        return NextResponse.json(createPaginationResponse(500, "Internal server error", [], 0, 0, 0), { status: 500 })
     }
 }
