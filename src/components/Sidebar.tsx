@@ -61,15 +61,20 @@ export default function Sidebar(){
             link: '/admin/dashboard',
         },
         {
-            title: 'Add Meal',
+            title: 'Manage Meals',
             icon: <UtensilsIcon size={20}/>,
             link: '/admin/meal',
         },
         {
-            title: 'Add Article',
+            title: 'Manage Articles',
             icon: <NewspaperIcon size={20}/>,
             link: '/admin/article'
-        }
+        },
+        {
+            title: 'Manage Community',
+            icon: <Users size={20}/>,
+            link: '/community'
+        },
     ]
 
     if(pathname.startsWith('/sign-in') || pathname.startsWith('/sign-up') || pathname === '/'){

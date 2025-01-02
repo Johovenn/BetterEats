@@ -15,7 +15,7 @@ export default function SaveBMRAlertModal(props: SaveBMRAlertModalProps){
                 <AlertDialogHeader>
                     <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                     <AlertDialogDescription>
-                        Your food recommendations and meal plans will be based on the latest saved BMR data. This action cannot be undone
+                        Your food recommendations and meal plans will be based on the latest saved TDEE data. This action cannot be undone
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
