@@ -276,7 +276,7 @@ export default function TDEECalculator() {
                                     <RadioInput
                                         control={form.control}
                                         id="goal_code"
-                                        label="Activity Level"
+                                        label="Goal"
                                         inputValues={goalInputValues}
                                         radioId="value"
                                         radioLabel="label"
