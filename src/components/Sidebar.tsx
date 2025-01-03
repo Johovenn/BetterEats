@@ -1,7 +1,7 @@
 "use client"
 
 import { link } from "fs";
-import { Calculator, HomeIcon, Newspaper, NewspaperIcon, SearchIcon, Users, UsersIcon, UtensilsCrossed, UtensilsIcon } from "lucide-react";
+import { Calculator, Clover, HomeIcon, Leaf, Newspaper, NewspaperIcon, Salad, SearchIcon, Users, UsersIcon, UtensilsCrossed, UtensilsIcon } from "lucide-react";
 import { ReactNode } from "react";
 import { Separator } from "./ui/separator";
 import { usePathname } from "next/navigation";
@@ -28,14 +28,14 @@ export default function Sidebar(){
             link: '/dashboard',
         },
         {
+            title: 'Health Calculator',
+            icon: <Calculator size={20}/>,
+            link: '/health-calculator'
+        },
+        {
             title: 'Search',
             icon: <SearchIcon size={20}/>,
             link: '/search'
-        },
-        {
-            title: 'Health Calculators',
-            icon: <Calculator size={20}/>,
-            link: '/health-calculator'
         },
         {
             title: 'Meal Planner',
@@ -83,8 +83,9 @@ export default function Sidebar(){
 
     return(
         <aside className="h-screen p-3 flex flex-col items-center justify-between fixed">
-            <div className="w-[50px] h-[50px] shadow-lg flex justify-center items-center rounded-full bg-white"> 
-                <Image src="/BetterEats.png" alt="Logo" width={30} height={30} className="" priority/>
+            <div className="w-[45px] h-[45px] shadow-lg flex justify-center items-center rounded-full bg-white"> 
+                {/* <Image src="/BetterEats.png" alt="Logo" width={30} height={30} className="" priority/> */}
+                <Clover size={24} color="#B2533E"/>
             </div>
             <ul className="space-y-5 flex flex-col justify-center items-center">
                 <TooltipProvider>

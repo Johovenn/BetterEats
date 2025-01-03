@@ -184,17 +184,17 @@ export default function Post(props: PostProperties){
                                 height={40}
                                 className="rounded-full"
                             />
-                            <div className="w-full flex items-center justify-between">
+                            <div className="w-full flex items-center">
                                 <FormProvider {...form}>
                                     <TextInput 
                                         control={form.control}
                                         id="post_body"
                                         label=""
                                         placeholder="Reply to the above post"
-                                        className="border-none outline-none focus:border-none focus:outline-none w-full ml-3" 
+                                        className="border-none outline-none focus:border-none focus:outline-none w-fit ml-3" 
                                         hideError
                                     />
-                                    <Button className="" onClick={() => {
+                                    <Button className="ml-auto" onClick={() => {
                                         form.setValue('reply_to_id', props.post.post_id)
                                         handleReplyButton()
                                     }}>Reply</Button>
