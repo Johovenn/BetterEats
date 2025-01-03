@@ -13,8 +13,6 @@ export async function POST(req: Request){
             return NextResponse.json(createResponse(401, 'Unauthorized', null), {status: 401})
         }
 
-        // const request = await req.json()
-        // const mealPlanDate = request.meal_plan_date
         const {searchParams} = new URL(req.url)
         const mealPlanDate = searchParams.get('meal_plan_date')
         if(!mealPlanDate){
@@ -165,7 +163,7 @@ export async function POST(req: Request){
             }
 
             while(!lunchCreated){
-                const randomIndex = Math.floor(Math.random() * snackCount)
+                const randomIndex = Math.floor(Math.random() * lunchCount)
                 if(lunchMeals[randomIndex].meal_calories < calorieNeeds && lunchMeals[randomIndex].meal_protein < proteinNeeds && lunchMeals[randomIndex].meal_carbohydrate < carbsNeeds && lunchMeals[randomIndex].meal_fat < fatNeeds && mealIds.indexOf(lunchMeals[randomIndex].meal_id) === -1){
                     const createBreakfast = await db.mealPlanDetail.create({
                         data: {
@@ -186,7 +184,7 @@ export async function POST(req: Request){
             }
 
             while(!dinnerCreated){
-                const randomIndex = Math.floor(Math.random() * snackCount)
+                const randomIndex = Math.floor(Math.random() * dinnerCount)
                 if(dinnerMeals[randomIndex].meal_calories < calorieNeeds && dinnerMeals[randomIndex].meal_protein < proteinNeeds && dinnerMeals[randomIndex].meal_carbohydrate < carbsNeeds && dinnerMeals[randomIndex].meal_fat < fatNeeds && mealIds.indexOf(dinnerMeals[randomIndex].meal_id) === -1){
                     const createBreakfast = await db.mealPlanDetail.create({
                         data: {
@@ -302,7 +300,7 @@ export async function POST(req: Request){
 
             if(!lunchAvailable){
                 while(!lunchCreated){
-                    const randomIndex = Math.floor(Math.random() * snackCount)
+                    const randomIndex = Math.floor(Math.random() * lunchCount)
                     if(lunchMeals[randomIndex].meal_calories < calorieNeeds && lunchMeals[randomIndex].meal_protein < proteinNeeds && lunchMeals[randomIndex].meal_carbohydrate < carbsNeeds && lunchMeals[randomIndex].meal_fat < fatNeeds && mealIds.indexOf(lunchMeals[randomIndex].meal_id) === -1){
                         const createBreakfast = await db.mealPlanDetail.create({
                             data: {
@@ -325,7 +323,7 @@ export async function POST(req: Request){
 
             if(!dinnerAvailable){
                 while(!dinnerCreated){
-                    const randomIndex = Math.floor(Math.random() * snackCount)
+                    const randomIndex = Math.floor(Math.random() * dinnerCount)
                     if(dinnerMeals[randomIndex].meal_calories < calorieNeeds && dinnerMeals[randomIndex].meal_protein < proteinNeeds && dinnerMeals[randomIndex].meal_carbohydrate < carbsNeeds && dinnerMeals[randomIndex].meal_fat < fatNeeds && mealIds.indexOf(dinnerMeals[randomIndex].meal_id) === -1){
                         const createBreakfast = await db.mealPlanDetail.create({
                             data: {

@@ -22,6 +22,10 @@ import { generateMealPlan } from "./api/generateMealPlan"
 import PostModal from "@/components/community/PostModal"
 import Menu from "@/components/Menu"
 import MealSection from "@/components/meal-planner/MealSection"
+import { generateBreakfastMealPlan } from "./api/generateBreakfastMealPlan"
+import { generateLunchMealPlan } from "./api/generateLunchMealPlan"
+import { generateDinnerMealPlan } from "./api/generateDinnerMealPlan"
+import { generateSnackMealPlan } from "./api/generateSnackMealPlan"
 
 interface FormProps {
     meal_plan_id: number
@@ -193,10 +197,24 @@ export default function MealPlannerPage(){
     const handleGenerateMealPlanButton = async () => {
         setIsLoading(true)
 
-        await generateMealPlan(form.getValues()).then((response) => {
-            toast('Generate meal plan successful!')
-            getMealPlanData()
-        }).catch((error) => toast(error.response.data.message))
+        if(breakfastData.length === 0){
+            await generateBreakfastMealPlan(form.getValues()).catch((error) => toast(error.response.data.message))
+        }
+
+        if(lunchData.length === 0){
+            await generateLunchMealPlan(form.getValues()).catch((error) => toast(error.response.data.message))
+        }
+
+        if(dinnerData.length === 0){
+            await generateDinnerMealPlan(form.getValues()).catch((error) => toast(error.response.data.message))
+        }
+
+        if(snackData.length === 0){
+            await generateSnackMealPlan(form.getValues()).catch((error) => toast(error.response.data.message))
+        }
+
+        await getMealPlanData()
+        toast("Generate meal plan successful!")
 
         setIsLoading(false)
     }
@@ -222,7 +240,7 @@ export default function MealPlannerPage(){
                 isOpen={detailModal}
                 setIsOpen={setDetailModal}
                 handleClose={() => setDetailModal(false)}
-                mealId={1}
+                mealId={selectedMealId}
             />
 
             <PostModal
