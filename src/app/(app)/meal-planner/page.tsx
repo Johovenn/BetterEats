@@ -198,19 +198,19 @@ export default function MealPlannerPage(){
         setIsLoading(true)
 
         if(breakfastData.length === 0){
-            await generateBreakfastMealPlan(form.getValues()).catch((error) => toast(error.response.data.message))
+            await generateBreakfastMealPlan(form.getValues()).catch((error) => {})
         }
 
         if(lunchData.length === 0){
-            await generateLunchMealPlan(form.getValues()).catch((error) => toast(error.response.data.message))
+            await generateLunchMealPlan(form.getValues()).catch((error) => {})
         }
 
         if(dinnerData.length === 0){
-            await generateDinnerMealPlan(form.getValues()).catch((error) => toast(error.response.data.message))
+            await generateDinnerMealPlan(form.getValues()).catch((error) => {})
         }
 
         if(snackData.length === 0){
-            await generateSnackMealPlan(form.getValues()).catch((error) => toast(error.response.data.message))
+            await generateSnackMealPlan(form.getValues()).catch((error) => {})
         }
 
         await getMealPlanData()
