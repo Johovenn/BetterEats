@@ -260,7 +260,6 @@ export default function MealPlannerPage(){
                                 <ChefHat size={18}/> 
                                 Generate Meal Plan
                             </Button>
-
                             {
                                 isClient
                                     &&
@@ -269,7 +268,7 @@ export default function MealPlannerPage(){
                                         {
                                             label: <span className="flex items-center gap-3"><Link size={12} color="gray"/>Copy Link</span>,
                                             onClick: handleCopyLinkButton
-                                        },
+                                        },  
                                         {
                                             label: <span className="flex items-center gap-3"><Quote size={12} color="gray"/>Quote Meal Plan</span>,
                                             onClick: handleShareButton

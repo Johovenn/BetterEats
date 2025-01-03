@@ -2,22 +2,19 @@
 
 import NumericInput from "@/components/form/NumericInput";
 import Loading from "@/components/Loading";
-import SearchBar from "@/components/SearchBar";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import NutritionCard from "@/components/bmr-calculator/NutritionCard";
-import { Beef, Wheat } from "lucide-react";
+import { Beef, Calculator, Wheat } from "lucide-react";
 import SaveBMRAlertModal from "@/components/bmr-calculator/SaveBMRAlertModal";
 import { toast } from "sonner";
 import RadioInput from "@/components/form/RadioGroup";
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup'
-import PageHeader from "@/components/PageHeader";
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getUserBMR } from "../api/getUserBMR";
 import { getBMRValue } from "../api/calculateBMR";
 import { postUserBMR } from "../api/postUserBMR";
@@ -288,10 +285,10 @@ export default function TDEECalculator() {
                                         How does this work?
                                     </span>
                                     <Button
-                                        className="text-white rounded-lg py-2 px-4 ml-auto calculate-button"
+                                        className="text-white rounded-lg py-2 ml-auto calculate-button flex items-center gap-1"
                                         type="submit"
-                                        size={'lg'}
                                     >
+                                        <Calculator size={16}/>
                                         Calculate
                                     </Button>
                                 </form>
@@ -333,7 +330,7 @@ export default function TDEECalculator() {
                             onClick={form.handleSubmit(() => setAlertModal(true))}
                             size={'sm'}
                         >
-                            Save BMR
+                            Save TDEE
                         </Button>
                     </div>
                 </section>

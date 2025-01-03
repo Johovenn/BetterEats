@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Form } from "@/components/ui/form"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
-import { Beef, Calculator, Save, Wheat } from "lucide-react"
+import { Calculator, Save } from "lucide-react"
 import { toast } from "sonner"
 import RadioInput from "@/components/form/RadioGroup"
 import * as yup from 'yup'
@@ -32,7 +32,7 @@ const validationSchema = yup.object().shape({
     user_height: yup.number().nullable().required('Height is required!').min(1, "Height must be more than 0cm"),
     user_weight: yup.number().nullable().required('Weight is required!').min(1, "Weight must be more than 0kg"),
     user_age: yup.number().nullable().required('Age is required!').min(15, "Age must at least be 15 year old"),
-    user_gender: yup.string().required("Gender is required"),
+    user_gender: yup.string(),
 })
 
 const genderInputValues = [
@@ -46,7 +46,7 @@ const genderInputValues = [
     }
 ]
 
-export default function TDEECalculator() {
+export default function BMICalculator() {
     const [isLoading, setIsLoading] = useState(false)
     const [alertModal, setAlertModal] = useState(false)
 
@@ -126,7 +126,7 @@ export default function TDEECalculator() {
 
         await getBMIValue(form.getValues()).then((response) => {
             form.setValue('user_bmi_value', response.data.bmi_value)
-        }).catch((error) => {})
+        }).catch((error) => toast("Error Calculating BMI Value"))
 
         setIsLoading(false)
     }
@@ -170,7 +170,7 @@ export default function TDEECalculator() {
                     <div className="h-full w-[60%] min-w-[1000px] shadow bg-white p-5">
                         <div className="w-full flex flex-col">
                             <Form {...form} >
-                                <form action="" onSubmit={form.handleSubmit(handleCalculateButton)} className="form space-y-4 flex flex-col w-full">
+                                <form action="" className="form space-y-4 flex flex-col w-full">
                                     <NumericInput
                                         control={form.control}
                                         id="user_height"
@@ -211,7 +211,7 @@ export default function TDEECalculator() {
                                     </span>
                                     <Button
                                         className="text-white rounded-lg ml-auto flex items-center gap-1 calculate-button"
-                                        type="submit"
+                                        onClick={form.handleSubmit(handleCalculateButton)}
                                     >
                                         <Calculator size={16} />
                                         Calculate
@@ -236,7 +236,7 @@ export default function TDEECalculator() {
                             {form.watch('user_bmi_value') !== 0 && getRecommendationBasedOnBMI(form.getValues('user_bmi_value'))}
                         </p>
 
-                        <Button 
+                        <Button
                             disabled={!form.watch('user_bmi_value')}
                             className="mt-6 flex items-center gap-1 save-button"
                             onClick={form.handleSubmit(() => setAlertModal(true))}
