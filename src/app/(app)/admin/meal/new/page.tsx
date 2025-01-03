@@ -227,13 +227,13 @@ export default function CreateMealPage() {
                                     <CheckboxInput 
                                         control={form.control}
                                         id="is_lunch"
-                                        label="Dinner"
+                                        label="Lunch"
                                         classname="w-[110px]"
                                     />
                                     <CheckboxInput 
                                         control={form.control}
                                         id="is_dinner"
-                                        label="Lunch"
+                                        label="Dinner"
                                         classname="w-[110px]"
                                     />
                                     <CheckboxInput 
