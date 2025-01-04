@@ -14,6 +14,8 @@ import { useRouter } from "next/navigation"
 import { getAllPosts, PostProps } from "../../community/api/getAllPosts"
 import { likePost } from "../../community/api/likePost"
 import { unlikePost } from "../../community/api/unlikePost"
+import AlertModal from "@/components/AlertModal"
+import { deletePost } from "./api/deletePost"
 
 interface FormProps{
     page: number
@@ -27,6 +29,8 @@ export default function CommunityPage(){
     const [isLoading, setIsLoading] = useState(false)
     const [posts, setPosts] = useState<PostProps[]>([])
     const [postModal, setPostModal] = useState(false)
+    const [alertModal, setAlertModal] = useState(false)
+    const [selectedPostId, setSelectedPostId] = useState<any>(null)
 
     const form = useForm<FormProps>({
         mode: 'onBlur',
@@ -108,6 +112,26 @@ export default function CommunityPage(){
         )
     }
 
+    const handleDeletePost = async (post_id: number) => {
+        setSelectedPostId(post_id)
+        setAlertModal(true)
+    }
+    
+    const confirmDeletePost = async () => {
+        setIsLoading(true)
+
+        await deletePost(selectedPostId).then((response) => {
+            refreshPosts()
+            toast('Delete post successful!')
+        }).catch((error) => {
+            toast('Delete post Failed')
+        }).finally(() => {
+            setIsLoading(false)
+        })
+
+        setIsLoading(false)
+    }
+
     useEffect(() => {
         refreshPosts()
     }, [refreshPosts])
@@ -123,28 +147,36 @@ export default function CommunityPage(){
                 refreshPosts={refreshPosts}
             />
 
+            <AlertModal 
+                isOpen={alertModal}
+                setIsOpen={setAlertModal}
+                handleClose={() => setAlertModal(false)}
+                title="Delete Post"
+                description="Are you sure you want to delete this post? You should only delete a post if this post doesn't follow the community guidelines."
+                onConfirm={confirmDeletePost}
+            />
+
             <PageHeader 
                 title="Community Page"
-                subtitle={`Share your experience and see what others are up to.`}
+                subtitle={`Manage all the user's post`}
                 hideSearchBar
             />
 
             <main className="w-full flex flex-col items-center">
-                {/* <div className=""> */}
-                    {
-                        posts.length > 0 
-                            &&
-                        posts.map((post) => (
-                            <Post
-                                key={post.post_id} 
-                                post={post}
-                                handleLike={handleLikePost}
-                                handleUnlike={handleUnlikePost}
-                                handleAddReply={handleAddReply}
-                            />
-                        ))
-                    }
-                {/* </div> */}
+                {
+                    posts.length > 0 
+                        &&
+                    posts.map((post) => (
+                        <Post
+                            key={post.post_id} 
+                            post={post}
+                            handleLike={(post_id: number) => {}}
+                            handleUnlike={(post_id: number) => {}}
+                            handleAddReply={(post_id: number) => {}}
+                            handleDeletePost={handleDeletePost}
+                        />
+                    ))
+                }
                 {
                     ((form.watch('page') + 1) * form.watch('limit') < form.watch('total_rows') && form.getValues('total_rows') !== 0)
                         &&

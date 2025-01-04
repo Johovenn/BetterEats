@@ -4,7 +4,7 @@ import QuotedMealPlan from "./QuotedMealPlan"
 import { useEffect, useState } from "react"
 import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
-import { Heart, MessageCircle, Share } from "lucide-react"
+import { Heart, MessageCircle, Share, Trash, Trash2 } from "lucide-react"
 import { useUser } from "@clerk/nextjs"
 import TextInput from "../form/TextInput"
 import { FormProvider, useForm } from "react-hook-form"
@@ -21,6 +21,7 @@ interface PostProperties{
     handleLike: (post_id: number) => void
     handleUnlike: (post_id: number) => void
     handleAddReply: (post_id: number) => void
+    handleDeletePost?: (post_id: number) => void 
     showReplies?: boolean
 }
 
@@ -96,7 +97,7 @@ export default function Post(props: PostProperties){
                 <div 
                     className="flex gap-3 w-[500px] p-3"
                     onClick={() => {
-                        pathname === `/community/${props.post.post_id}` ? {} : router.push(`/community/${props.post.post_id}`)
+                        pathname === `/community/${props.post.post_id}` ? {} : (user?.publicMetadata.role === 'admin' ? router.push(`/admin/community/${props.post.post_id}`) : router.push(`/community/${props.post.post_id}`))
                     }}
                 >
                     <div>
@@ -141,11 +142,11 @@ export default function Post(props: PostProperties){
                     </div>
                 </div>
                 <div className="w-full px-3 py-1 mb-1 flex items-center justify-around">
-                    <div className="flex gap-1 items-center text-xs">
+                    <div className="flex gap-1 items-center text-xs hover:bg-gray-200 rounded-full p-2 transition-all">
                         <MessageCircle size={16} color="gray"/>
                         {props.post.reply_count}
                     </div>
-                    <div className="flex gap-1 items-center text-xs">
+                    <div className="flex gap-1 items-center text-xs hover:bg-gray-200 rounded-full p-2 transition-all">
                         <Heart 
                             size={16} 
                             color={props.post.is_liked ? "transparent" : "gray"}
@@ -156,7 +157,7 @@ export default function Post(props: PostProperties){
                         />
                         {props.post.like_count}
                     </div>
-                    <div className="flex gap-1 items-center text-xs">
+                    <div className="flex gap-1 items-center text-xs  hover:bg-gray-200 rounded-full p-2 transition-all">
                         <Share 
                             size={16}
                             color={"gray"}
@@ -167,6 +168,19 @@ export default function Post(props: PostProperties){
                             }} 
                         />
                     </div>
+                    {
+                        user?.publicMetadata.role === 'admin'
+                            &&
+                        (
+                            <div className="flex gap-1 items-center text-xs hover:bg-red-200 rounded-full p-2 transition-all">
+                                <Trash2
+                                    size={16}
+                                    color={"gray"}
+                                    onClick={() => props.handleDeletePost ?  props.handleDeletePost(props.post.post_id) : () => {}} 
+                                />
+                            </div>
+                        )
+                    }
                 </div>
             </div>
             {
