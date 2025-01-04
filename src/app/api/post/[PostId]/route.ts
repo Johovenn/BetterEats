@@ -199,3 +199,42 @@ export async function GET(req: Request, { params }: { params: { PostId: string }
     }
     
 }
+
+export async function DELETE(req: Request, { params }: { params: {PostId: string } }){
+    try {
+        const { userId } = auth()
+        if (!userId) {
+            return NextResponse.json(createResponse(401, "Unauthorized", null), { status: 401 })
+        }
+
+        const postId = parseInt(params.PostId)
+        if (isNaN(postId)) {
+            return NextResponse.json(createResponse(400, "Invalid Post ID", null), { status: 400 })
+        }
+
+        const postData = await db.post.findFirst({
+            where: {
+                post_id: postId
+            }
+        })
+        if(!postData){
+            return NextResponse.json(createResponse(404, "Post not found", null), { status: 400 })
+        }
+
+        const deletedPostLikes = await db.postLikes.deleteMany({
+            where: {
+                post_id: postData.post_id,
+            }
+        })
+        
+        const data = await db.post.delete({
+            where: {
+                post_id: postData.post_id
+            }
+        })
+
+        return NextResponse.json(createResponse(200, "Delete post success!", null), { status: 200 })
+    } catch (error) {
+        return NextResponse.json(createResponse(500, "Internal Server Error", null), { status: 500 })
+    }
+}

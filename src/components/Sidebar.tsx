@@ -73,7 +73,7 @@ export default function Sidebar(){
         {
             title: 'Manage Community',
             icon: <Users size={20}/>,
-            link: '/community'
+            link: '/admin/community'
         },
     ]
 
