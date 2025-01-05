@@ -18,6 +18,7 @@ import { getRecommendedMeals } from "../search/api/getRecommendedMeals"
 import AddMealPlanModal from "@/components/meal-planner/AddMealPlanModal"
 import AlertModal from "@/components/AlertModal"
 import { getUserBMR } from "../health-calculator/api/getUserBMR"
+import MealDetailModal from "@/components/meal-planner/MealDetailModal"
 
 interface FormProps {
     meal_plan_date: Date
@@ -169,6 +170,13 @@ export default function DashboardPage(){
                 onConfirm={() => {
                     router.push(`/health-calculator`)
                 }}
+            />
+
+            <MealDetailModal
+                isOpen={detailModal}
+                setIsOpen={setDetailModal}
+                handleClose={() => setDetailModal(false)}
+                mealId={selectedMealId}
             />
 
             <AddMealPlanModal
