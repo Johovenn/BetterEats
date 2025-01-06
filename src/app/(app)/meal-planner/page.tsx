@@ -198,23 +198,38 @@ export default function MealPlannerPage(){
         setIsLoading(true)
 
         if(breakfastData.length === 0){
-            await generateBreakfastMealPlan(form.getValues()).catch((error) => {})
+            await generateBreakfastMealPlan(form.getValues()).then((response) => {
+                toast("Generate breakfast meal successful!")
+            }).catch((error) => {
+                toast("Please calculate your TDEE first.")
+            })
         }
 
         if(lunchData.length === 0){
-            await generateLunchMealPlan(form.getValues()).catch((error) => {})
+            await generateLunchMealPlan(form.getValues()).then((response) => {
+                toast("Generate lunch successful!")
+            }).catch((error) => {
+                toast("Please calculate your TDEE first.")
+            })
         }
 
         if(dinnerData.length === 0){
-            await generateDinnerMealPlan(form.getValues()).catch((error) => {})
+            await generateDinnerMealPlan(form.getValues()).then((response) => {
+                toast("Generate dinner successful!")
+            }).catch((error) => {
+                toast("Please calculate your TDEE first.")
+            })
         }
 
         if(snackData.length === 0){
-            await generateSnackMealPlan(form.getValues()).catch((error) => {})
+            await generateSnackMealPlan(form.getValues()).then((response) => {
+                toast("Generate snack successful!")
+            }).catch((error) => {
+                toast("Please calculate your TDEE first.")
+            })
         }
 
         await getMealPlanData()
-        toast("Generate meal plan successful!")
 
         setIsLoading(false)
     }

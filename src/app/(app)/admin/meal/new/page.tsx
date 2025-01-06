@@ -263,10 +263,10 @@ export default function CreateMealPage() {
                     </FormProvider>
                 </div>
                     <Button
-                        className="w-fit ml-auto mt-3"
+                        className="w-fit ml-auto mt-3 flex items-center gap-2"
                         onClick={form.handleSubmit(handleSaveButton)}
                     >
-                        <Save />
+                        <Save size={16}/>
                         Save
                     </Button>
             </section>

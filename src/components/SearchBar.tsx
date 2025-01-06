@@ -4,7 +4,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface SearchBarProps{
-    mode: "article" | "meal"
+    mode: "article" | "meal" | "post"
 }
 
 export default function SearchBar(props: SearchBarProps){
@@ -30,12 +30,20 @@ export default function SearchBar(props: SearchBarProps){
                     router.push(`/admin/meal?keyword=${encodeURIComponent(inputValue)}`)
                 }
             }
-            else {
+            else if(props.mode === 'article') {
                 if(role !== 'admin'){
                     router.push(`/article?keyword=${encodeURIComponent(inputValue)}`)
                 }
                 else {
                     router.push(`/admin/article?keyword=${encodeURIComponent(inputValue)}`)
+                }
+            }
+            else {
+                if(role !== 'admin'){
+                    router.push(`/community?keyword=${encodeURIComponent(inputValue)}`)
+                }
+                else {
+                    router.push(`/admin/community?keyword=${encodeURIComponent(inputValue)}`)
                 }
             }
         } else {
@@ -47,12 +55,20 @@ export default function SearchBar(props: SearchBarProps){
                     router.push('/admin/meal')
                 }
             }
-            else {
+            else if (props.mode === 'article'){
                 if(pathname === '/article'){
                     router.push('/article')
                 }
                 else if(pathname === '/admin/article'){
                     router.push('/admin/article')
+                }
+            }
+            else {
+                if(pathname === '/community'){
+                    router.push('/community')
+                }
+                else if(pathname === '/admin/community'){
+                    router.push('/admin/community')
                 }
             }
         }
@@ -63,7 +79,7 @@ export default function SearchBar(props: SearchBarProps){
             <Search color="gray" size={20}/>
             <input 
                 type="text" 
-                placeholder={props.mode === 'meal' ? 'Search for food' : 'Search for articles'} 
+                placeholder={props.mode === 'meal' ? 'Search for food' : props.mode === 'article' ? 'Search for articles' : 'Search for posts'} 
                 className="bg-white focus:outline-none text-sm"
                 onChange={(e) => setInputValue(e.target.value)} 
                 onBlur={handleSearch}

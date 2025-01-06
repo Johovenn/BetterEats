@@ -5,7 +5,7 @@ interface PageHeaderProps{
     title: string | ReactNode
     subtitle?: string | ReactNode
     hideSearchBar?: boolean
-    searchMode?: 'article' | 'meal'
+    searchMode?: 'article' | 'meal' | 'post'
 }
 
 export default function PageHeader(props: PageHeaderProps){

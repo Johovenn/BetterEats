@@ -12,7 +12,7 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import PostModal from "@/components/community/PostModal"
 import { useAuth } from "@clerk/nextjs"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { likePost } from "./api/likePost"
 import { unlikePost } from "./api/unlikePost"
 
@@ -20,21 +20,25 @@ interface FormProps{
     page: number
     limit: number
     total_rows: number
+    post_body: string
 }
 
 export default function CommunityPage(){
     const user = useAuth()
     const router = useRouter()
+    const searchParams = useSearchParams()
     const [isLoading, setIsLoading] = useState(false)
     const [posts, setPosts] = useState<PostProps[]>([])
     const [postModal, setPostModal] = useState(false)
+    const keyword = searchParams.get('keyword')
 
     const form = useForm<FormProps>({
         mode: 'onBlur',
         defaultValues: {
             page: 0,
-            limit: 10,
+            limit: 5,
             total_rows: 0,
+            post_body: '',
         }
     })
 
@@ -110,8 +114,15 @@ export default function CommunityPage(){
     }
 
     useEffect(() => {
+        if(keyword){
+            form.setValue('post_body', keyword)
+        }
+        else{
+            form.setValue('post_body', '')
+        }
+
         refreshPosts()
-    }, [refreshPosts])
+    }, [form, keyword, refreshPosts])
 
     return(
         <>
@@ -127,25 +138,23 @@ export default function CommunityPage(){
             <PageHeader 
                 title="Community Page"
                 subtitle={`Share your experience and see what others are up to.`}
-                hideSearchBar
+                searchMode="post"
             />
 
             <main className="w-full flex flex-col items-center ">
-                {/* <div className=""> */}
-                    {
-                        posts.length > 0 
-                            &&
-                        posts.map((post) => (
-                            <Post
-                                key={post.post_id} 
-                                post={post}
-                                handleLike={handleLikePost}
-                                handleUnlike={handleUnlikePost}
-                                handleAddReply={handleAddReply}
-                            />
-                        ))
-                    }
-                {/* </div> */}
+                {
+                    posts.length > 0 
+                        &&
+                    posts.map((post) => (
+                        <Post
+                            key={post.post_id} 
+                            post={post}
+                            handleLike={handleLikePost}
+                            handleUnlike={handleUnlikePost}
+                            handleAddReply={handleAddReply}
+                        />
+                    ))
+                }
                 {
                     ((form.watch('page') + 1) * form.watch('limit') < form.watch('total_rows') && form.getValues('total_rows') !== 0)
                         &&

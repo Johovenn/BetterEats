@@ -34,8 +34,8 @@ export default function PostDetailPage() {
                     }
                 })
                 .catch((error) => {
-                    router.push('/article')
-                    toast('Error loading article data, please try again.')
+                    router.push('/community')
+                    toast('Post not found.')
                 })
 
             setIsLoading(false)
