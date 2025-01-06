@@ -60,11 +60,11 @@ export interface PostProps {
 interface GetAllMealRequest{
     page: number
     limit: number
-
+    post_body: string
 }
 
 export async function getAllPosts(request: GetAllMealRequest): Promise<ResponseProps<PostProps[]>>{
     let url = `/api/post?page=${request.page}&limit=${request.limit}`
-    // if(request.meal_name) url += `&meal_name=${request.meal_name}`
+    if(request.post_body) url += `&post_body=${request.post_body}`
     return (await axios.get(url)).data
 }

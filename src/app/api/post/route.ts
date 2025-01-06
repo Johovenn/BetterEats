@@ -10,6 +10,7 @@ export async function GET(req: Request) {
         const { searchParams } = new URL(req.url)
         const page = parseInt(searchParams.get("page") || "1")
         const limit = parseInt(searchParams.get("limit") || "10")
+        const post_body = searchParams.get("post_body") || ""
 
         const posts = await db.post.findMany({
             take: limit,
@@ -17,6 +18,12 @@ export async function GET(req: Request) {
             orderBy: { post_date: "desc" },
             where: {
                 reply_to_id: null,
+                ...(post_body && {
+                    post_body: {
+                        contains: post_body,
+                        mode: "insensitive",
+                    },
+                }),
             },
             include: {
                 MealPlan: {
@@ -151,6 +158,12 @@ export async function GET(req: Request) {
         const totalRows = await db.post.count({
             where: {
                 reply_to_id: null,
+                ...(post_body && {
+                    post_body: {
+                        contains: post_body,
+                        mode: "insensitive",
+                    },
+                }),
             }
         })
 

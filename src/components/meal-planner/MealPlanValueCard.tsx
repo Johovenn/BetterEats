@@ -40,25 +40,25 @@ export default function MealPlanValueCard(props: MealPlanValueProps){
                 <MealPlanNutritionProgress 
                     nutritionName="Calories"    
                     nutritionValue={props.calorieValue}
-                    maxValue={props.maxCalorie}
+                    maxValue={props.maxCalorie | 0}
                     className="[&>*]:bg-gradient-to-r from-[#8FD694] to-[#8FD694]"
                 />
                 <MealPlanNutritionProgress 
                     nutritionName="Protein"
                     nutritionValue={props.proteinValue}
-                    maxValue={props.maxProtein}
+                    maxValue={props.maxProtein | 0}
                     className="[&>*]:bg-gradient-to-r from-[#71B340] to-[#71B340]"
                 />
                 <MealPlanNutritionProgress 
                     nutritionName="Carbohydrate"
                     nutritionValue={props.carbohydrateValue}
-                    maxValue={props.maxCarbohydrate}
+                    maxValue={props.maxCarbohydrate | 0}
                     className="[&>*]:bg-gradient-to-r from-[#669D31] to-[#669D31]"
                 />
                 <MealPlanNutritionProgress 
                     nutritionName="Fat"
                     nutritionValue={props.fatValue}
-                    maxValue={props.maxFat}
+                    maxValue={props.maxFat | 0}
                     className="[&>*]:bg-gradient-to-r from-[#598B2C] to-[#598B2C]"
                 />
             </div>

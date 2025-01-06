@@ -82,7 +82,7 @@ export default function ArticleDetailPage() {
                         {
                             article
                                 ?
-                            <h3 className="text-xl text-green-primary">
+                            <h3 className="indent-8 text-justify mt-5">
                                 {article.article_description}
                             </h3>
                                 :

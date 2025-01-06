@@ -23,7 +23,7 @@ export default function ArticleCard(props: ArticleCardProps){
         else{
             router.push(`/article/${props.article.article_id}`)
         }
-    }
+    }   
 
     return(
         <div 
@@ -44,7 +44,7 @@ export default function ArticleCard(props: ArticleCardProps){
                     <h3 className="text-lg font-semibold mb-2">{props.article.article_title}</h3>
                     <span className="text-gray-600">{`${formattedDate}`}</span>
                 </div>
-                <span className="line-clamp-3">{props.article.article_body}</span>
+                <span className="line-clamp-3">{props.article.article_description}</span>
             </div>
         </div>
     )

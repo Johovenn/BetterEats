@@ -86,6 +86,7 @@ export default function PostModal(props: PostModalProps){
 
         await createPost(form.getValues()).then((response) => {
             props.refreshPosts()
+            
         }).catch((error) => {
             toast(error.response.data.message)
         })
@@ -115,7 +116,6 @@ export default function PostModal(props: PostModalProps){
                         (props.mealPlanId && !isLoading)
                             &&
                         <div className="mt-3">
-                            <p className="text-sm font-medium mb-1">Meal Plan</p>
                             <QuotedMealPlan
                                 mealPlanDetail={mealPlanDetails}
                                 mealPlanDate={form.watch('meal_plan_date') ? form.getValues('meal_plan_date').toString() : new Date().toString()}

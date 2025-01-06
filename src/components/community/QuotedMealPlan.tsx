@@ -29,14 +29,14 @@ export default function QuotedMealPlan(props: QuotedMealPlanProps){
     return(
         <div className="min-w-full border-2 rounded-lg border-gray-300 px-2 py-1 hover:bg-gray-200 hover:cursor-pointer transition-all">
             <div className="flex items-center justify-between gap-3">
-                <span className="font-medium text-sm">Jonathan&apos;s meal plan</span>
+                <span className="font-medium text-sm">Meal plan</span>
                 <span className="text-xs text-gray-400">{`${formattedDate}`}</span>
             </div>
             <div className="flex justify-around items-center mt-1">
                 <span className="text-xs text-black flex item-center gap-1"><Flame size={18} color="#b53a31"/>{props.totalCalories} calories</span>
-                <span className="text-xs text-black flex item-center gap-1"><Beef size={18} color="#6e0e07"/>{props.totalProtein} protein</span>
-                <span className="text-xs text-black flex item-center gap-1"><Wheat size={18} color="#f2a929"/>{props.totalCarbs} carbs</span>
-                <span className="text-xs text-black flex item-center gap-1"><Droplet size={18} color="#bd7006"/>{props.totalFat} fat</span>
+                <span className="text-xs text-black flex item-center gap-1"><Beef size={18} color="#6e0e07"/>{props.totalProtein}g protein</span>
+                <span className="text-xs text-black flex item-center gap-1"><Wheat size={18} color="#f2a929"/>{props.totalCarbs}g carbs</span>
+                <span className="text-xs text-black flex item-center gap-1"><Droplet size={18} color="#bd7006"/>{props.totalFat}g fat</span>
             </div>
             {
                 props.mealPlanDetail?.breakfast
