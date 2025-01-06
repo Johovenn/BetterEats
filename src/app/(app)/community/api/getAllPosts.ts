@@ -60,7 +60,7 @@ export interface PostProps {
 interface GetAllMealRequest{
     page: number
     limit: number
-    post_body: string
+    post_body?: string
 }
 
 export async function getAllPosts(request: GetAllMealRequest): Promise<ResponseProps<PostProps[]>>{
