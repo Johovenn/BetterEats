@@ -134,6 +134,8 @@ export default function BMICalculator() {
     const handleSaveBMI = async () => {
         setIsLoading(true)
 
+        console.log(form.getValues())
+
         await postUserBMI(form.getValues()).then((response) => {
             if(response.data){
                 toast('BMI data saved successfully!')

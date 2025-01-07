@@ -11,16 +11,22 @@ export async function POST(req: Request){
             return NextResponse.json(createResponse(401, "Unauthorized", null), {status: 401})
         }
 
-        const request = await req.json()
+        const {
+            user_height,
+            user_weight,
+            user_age,
+            user_bmi_value,
+            user_gender = 'M'
+        } = await req.json()
 
         const data = await db.userBMI.create({
             data: {
                 user_id: userId,
-                user_height: parseInt(request.user_height),
-                user_weight: parseInt(request.user_weight),
-                user_age: parseInt(request.user_age),
-                user_bmi_value: parseFloat(request.user_bmi_value),
-                user_gender: request.user_gender,
+                user_height: parseInt(user_height),
+                user_weight: parseInt(user_weight),
+                user_age: parseInt(user_age),
+                user_bmi_value: parseFloat(user_bmi_value),
+                user_gender: user_gender,
             }
         })
 
@@ -31,7 +37,8 @@ export async function POST(req: Request){
             return NextResponse.json(createResponse(201, "Create data succesful!", data), {status: 201})
         }
     } catch (error) {
-        return NextResponse.json(createResponse(500, "Internal Server Error", null), {status: 500})
+        console.error(error)
+        return NextResponse.json(createResponse(500, "Something went wrong, please try again.", null), {status: 500})
     }
 }
 
