@@ -148,8 +148,7 @@ export default function AdminMealPage(){
         else{
             getMeals()
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchMeals, getMeals])
+    }, [searchMeals, getMeals, keyword, form])
 
     const handleInfoButton = (meal_id: number) => {
         setSelectedMealDetailId(meal_id)

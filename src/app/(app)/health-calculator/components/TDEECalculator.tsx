@@ -239,6 +239,7 @@ export default function TDEECalculator() {
                                         label="Height (cm)"
                                         placeholder="Input your height in cm"
                                         className="w-full"
+                                        error={form.formState.errors.user_height?.message}
                                     />
                                     <NumericInput
                                         control={form.control}
@@ -246,6 +247,7 @@ export default function TDEECalculator() {
                                         label="Weight (kg)"
                                         placeholder="Input your weight in kg"
                                         className="w-full"
+                                        error={form.formState.errors.user_weight?.message}
                                     />
                                     <NumericInput
                                         control={form.control}
@@ -253,6 +255,7 @@ export default function TDEECalculator() {
                                         label="Age"
                                         placeholder="Input your Age"
                                         className="w-full"
+                                        error={form.formState.errors.user_age?.message}
                                     />
                                     <RadioInput
                                         control={form.control}
