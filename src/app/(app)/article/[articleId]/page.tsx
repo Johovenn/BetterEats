@@ -82,7 +82,7 @@ export default function ArticleDetailPage() {
                         {
                             article
                                 ?
-                            <h3 className="indent-8 text-justify mt-5">
+                            <h3 className="indent-8 text-justify text-sm w-[600px] mt-5">
                                 {article.article_description}
                             </h3>
                                 :
@@ -92,7 +92,7 @@ export default function ArticleDetailPage() {
                         }
                     </div>
                 </header>
-                <div className="">
+                <div className="w-full flex flex-col justify-center items-center">
                     <div className="flex justify-center items-center relative w-full h-[200px]">
                         {
                             article
@@ -112,7 +112,7 @@ export default function ArticleDetailPage() {
                             />
                         }
                     </div>
-                    <div className="flex flex-col gap-y-2 items-center my-5">
+                    <div className="flex flex-col gap-y-2 items-center my-5 w-[600px]">
                         {
                             article
                                 && 

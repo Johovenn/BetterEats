@@ -18,6 +18,6 @@ interface GetAllArticleRequest{
 
 export async function getAllArticles(request: GetAllArticleRequest): Promise<ResponseProps<ArticleProps[]>>{
     let url = `/api/article?page=${request.page}&limit=${request.limit}`
-    if(request.limit) url += `&limit=${request.limit}`
+    if(request.article_title) url += `&article_title=${request.article_title}`
     return (await axios.get(url)).data
 }
