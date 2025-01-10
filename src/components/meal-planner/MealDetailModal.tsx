@@ -42,7 +42,7 @@ export default function MealDetailModal(props: MealDetailModalProps) {
 
     return (
         <Dialog open={props.isOpen} onOpenChange={props.setIsOpen}>
-            <DialogContent className="max-h-[80vh] max-w-[600px] overflow-y-auto"> {/* Enable scroll */}
+            <DialogContent className="max-h-[80vh] max-w-[600px] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>
                         Meal Detail
@@ -69,9 +69,9 @@ export default function MealDetailModal(props: MealDetailModalProps) {
                         {mealData ? (
                             <div className="space-y-2 mt-2">
                                 <p className="text-sm text-gray-700 flex item-center w-[150px] gap-1"><FlameIcon size={18} />{mealData.meal_calories} calories</p>
-                                <p className="text-sm text-gray-700 flex item-center w-[150px] gap-1"><BeefIcon size={18} />{mealData.meal_protein} protein</p>
-                                <p className="text-sm text-gray-700 flex item-center w-[150px] gap-1"><WheatIcon size={18} />{mealData.meal_carbohydrate} carbohydrate</p>
-                                <p className="text-sm text-gray-700 flex item-center w-[150px] gap-1"><DropletIcon size={18} />{mealData.meal_fat} fat</p>
+                                <p className="text-sm text-gray-700 flex item-center w-[150px] gap-1"><BeefIcon size={18} />{mealData.meal_protein}g protein</p>
+                                <p className="text-sm text-gray-700 flex item-center w-[150px] gap-1"><WheatIcon size={18} />{mealData.meal_carbohydrate}g carbohydrate</p>
+                                <p className="text-sm text-gray-700 flex item-center w-[150px] gap-1"><DropletIcon size={18} />{mealData.meal_fat}g fat</p>
                             </div>
                         ) : (
                             <Skeleton className="w-[200px] h-[155px]" />

@@ -200,7 +200,7 @@ export default function TDEECalculator() {
 
         await postUserBMR(form.getValues()).then((response) => {
             if(response.data){
-                toast('BMR data saved successfully!')
+                toast('TDEE data saved successfully!')
             }
         }).catch((error) => {
             toast(error.response.data.message)
