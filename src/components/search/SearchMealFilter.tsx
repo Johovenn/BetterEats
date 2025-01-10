@@ -39,13 +39,13 @@ export default function SearchMealFilter(props: SearchMealFilterProps){
                                 <CheckboxInput 
                                     control={props.form.control}
                                     id="is_lunch"
-                                    label="Dinner"
+                                    label="Lunch"
                                     classname="w-[110px]"
                                 />
                                 <CheckboxInput 
                                     control={props.form.control}
                                     id="is_dinner"
-                                    label="Lunch"
+                                    label="Dinner"
                                     classname="w-[110px]"
                                 />
                                 <CheckboxInput 
