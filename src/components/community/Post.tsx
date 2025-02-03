@@ -4,7 +4,7 @@ import QuotedMealPlan from "./QuotedMealPlan"
 import { useEffect, useState } from "react"
 import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
-import { Heart, MessageCircle, Share, Trash, Trash2 } from "lucide-react"
+import { Heart, MessageCircle, Share, Trash2 } from "lucide-react"
 import { useUser } from "@clerk/nextjs"
 import TextInput from "../form/TextInput"
 import { FormProvider, useForm } from "react-hook-form"
@@ -92,22 +92,22 @@ export default function Post(props: PostProperties){
     }
 
     return(
-        <div className="w-[500px]">
+        <div className="w-full max-w-md mx-auto">
             <div className="border border-b-1 border-gray-300 hover:bg-gray-100 hover:cursor-pointer transition-all">
                 <div 
-                    className="flex gap-3 w-[500px] p-3"
+                    className="flex gap-3 w-full p-3"
                     onClick={() => {
                         pathname === `/community/${props.post.post_id}` ? {} : (user?.publicMetadata.role === 'admin' ? router.push(`/admin/community/${props.post.post_id}`) : router.push(`/community/${props.post.post_id}`))
                     }}
                 >
-                    <div>
+                    <div className="flex-shrink-0">
                         {
                             props.post.user_profile_picture
                                 ?
                             <Image 
                                 alt="Profile Picture"
                                 src={props.post.user_profile_picture}
-                                className="rounded-full"
+                                className="rounded-full object-cover"
                                 width={50}
                                 height={50}
                             />
@@ -115,16 +115,16 @@ export default function Post(props: PostProperties){
                             <Skeleton className="w-10 h-10 rounded-full border border-black"/>
                         }
                     </div>
-                    <div className="w-full">
-                        <div className="flex items-center gap-2">
-                            <span className="font-semibold">
+                    <div className="w-full min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                            <span className="font-semibold truncate max-w-full">
                                 {props.post.user_name}
                             </span>
-                            <span className="text-gray-500">
+                            <span className="text-gray-500 text-sm truncate max-w-full">
                                 @{props.post.username}
                             </span>
                         </div>
-                        <p className="mb-2">
+                        <p className="mb-2 break-words">
                             {props.post.post_body}
                         </p>
                         {
@@ -142,11 +142,11 @@ export default function Post(props: PostProperties){
                     </div>
                 </div>
                 <div className="w-full px-3 py-1 mb-1 flex items-center justify-around">
-                    <div className="flex gap-1 items-center text-xs hover:bg-gray-200 rounded-full p-2 transition-all">
+                    <div className="flex gap-1 items-center text-xs hover:bg-gray-200 rounded-full p-2 transition-all cursor-pointer">
                         <MessageCircle size={16} color="gray"/>
-                        {props.post.reply_count}
+                        <span className="hidden sm:inline">{props.post.reply_count}</span>
                     </div>
-                    <div className="flex gap-1 items-center text-xs hover:bg-gray-200 rounded-full p-2 transition-all">
+                    <div className="flex gap-1 items-center text-xs hover:bg-gray-200 rounded-full p-2 transition-all cursor-pointer">
                         <Heart 
                             size={16} 
                             color={props.post.is_liked ? "transparent" : "gray"}
@@ -155,9 +155,9 @@ export default function Post(props: PostProperties){
                                 props.post.is_liked ? props.handleUnlike(props.post.post_id) : props.handleLike(props.post.post_id)
                             }}
                         />
-                        {props.post.like_count}
+                        <span className="hidden sm:inline">{props.post.like_count}</span>
                     </div>
-                    <div className="flex gap-1 items-center text-xs  hover:bg-gray-200 rounded-full p-2 transition-all">
+                    <div className="flex gap-1 items-center text-xs hover:bg-gray-200 rounded-full p-2 transition-all cursor-pointer">
                         <Share 
                             size={16}
                             color={"gray"}
@@ -172,7 +172,7 @@ export default function Post(props: PostProperties){
                         user?.publicMetadata.role === 'admin'
                             &&
                         (
-                            <div className="flex gap-1 items-center text-xs hover:bg-red-200 rounded-full p-2 transition-all">
+                            <div className="flex gap-1 items-center text-xs hover:bg-red-200 rounded-full p-2 transition-all cursor-pointer">
                                 <Trash2
                                     size={16}
                                     color={"gray"}
@@ -186,26 +186,26 @@ export default function Post(props: PostProperties){
             {
                 props.showReplies
                     &&
-                <div className="">
+                <div className="w-full">
                     {
                         user?.id
                             &&
-                        <div className="border-x border-b border-gray-300 p-3 flex items-center">
+                        <div className="border-x border-b border-gray-300 p-3 flex items-center space-x-3">
                             <Image 
                                 src={user ? user.imageUrl : ""}
                                 alt="User Profile Picture"
                                 width={40}
                                 height={40}
-                                className="rounded-full"
+                                className="rounded-full object-cover flex-shrink-0"
                             />
-                            <div className="w-full flex items-center">
+                            <div className="w-full flex items-center space-x-2">
                                 <FormProvider {...form}>
                                     <TextInput 
                                         control={form.control}
                                         id="post_body"
                                         label=""
                                         placeholder="Reply to the above post"
-                                        className="border-none outline-none focus:border-none focus:outline-none w-fit ml-3" 
+                                        className="flex-grow border-none outline-none focus:border-none focus:outline-none" 
                                         hideError
                                     />
                                     <Button className="ml-auto" onClick={() => {

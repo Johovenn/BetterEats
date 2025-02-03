@@ -31,8 +31,8 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className={kanit.variable}>
-        <body className="min-w-screen min-h-screen flex bg-paper-default">
+      <html lang="en" className={`${kanit.variable} overflow-x-hidden`}>
+        <body className="min-w-screen min-h-screen w-screen h-screen flex flex-col bg-paper-default overflow-x-hidden">
           {children}
           <Toaster />
         </body>
@@ -40,3 +40,4 @@ export default function RootLayout({
     </ClerkProvider>
   );
 }
+

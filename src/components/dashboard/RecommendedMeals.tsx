@@ -16,7 +16,7 @@ export default function RecommendedMeals(props: RecommendedMealsProps){
     return(
         <div className="col-span-3 px-5 py-4 bg-white rounded-lg shadow-lg">
             <div className="flex items-start justify-between">
-                <h3 className="font-medium text-lg">
+                <h3 className="font-medium lg:text-lg">
                     Recommended Meals
                 </h3>
                 <Button

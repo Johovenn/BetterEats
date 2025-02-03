@@ -2,12 +2,12 @@ import { ArticleProps } from "@/app/(app)/article/api/getAllArticles"
 import { CldImage } from "next-cloudinary"
 import { useRouter } from "next/navigation"
 
-interface ArticleCardProps{
+interface ArticleCardProps {
     article: ArticleProps
     mode: 'admin' | 'search'
 }
 
-export default function ArticleCard(props: ArticleCardProps){
+export default function ArticleCard(props: ArticleCardProps) {
     const router = useRouter()
 
     const formattedDate = new Date(props.article.article_creation_date).toLocaleDateString('en-US', {
@@ -17,34 +17,35 @@ export default function ArticleCard(props: ArticleCardProps){
     })
 
     const handleClickArticle = () => {
-        if(props.mode === 'admin'){
+        if(props.mode === 'admin') {
             router.push(`/admin/article/${props.article.article_id}`)
-        }
-        else{
+        } else {
             router.push(`/article/${props.article.article_id}`)
         }
     }   
 
-    return(
+    return (
         <div 
-            className="flex w-full p-2 rounded-lg hover:shadow-lg hover:bg-slate-50 shadow-md bg-white transition-all hover:cursor-pointer"
+            className="flex flex-col sm:flex-row w-full p-2 rounded-lg hover:shadow-lg hover:bg-slate-50 shadow-md bg-white transition-all hover:cursor-pointer gap-3 sm:gap-0"
             onClick={handleClickArticle}
         >
-            <CldImage 
-                alt={`${props.article.article_title} Image`}
-                src={props.article.article_image}
-                width={100}
-                height={100}
-                className="object-cover rounded-lg my-1"
-                crop={"fill"}
-                gravity="center"
-            />
+            <div className="w-full sm:w-auto flex justify-center sm:block">
+                <CldImage 
+                    alt={`${props.article.article_title} Image`}
+                    src={props.article.article_image}
+                    width={100}
+                    height={100}
+                    className="object-cover rounded-lg my-1 w-full sm:w-[100px] h-[200px] sm:h-[100px]"
+                    crop="fill"
+                    gravity="center"
+                />
+            </div>
             <div className="px-3 w-full">
-                <div className="flex justify-between w-full items-center">
-                    <h3 className="text-lg font-semibold mb-2">{props.article.article_title}</h3>
-                    <span className="text-gray-600">{`${formattedDate}`}</span>
+                <div className="flex flex-col sm:flex-row justify-between w-full items-start sm:items-center gap-2 sm:gap-0">
+                    <h3 className="text-lg font-semibold mb-2 line-clamp-2">{props.article.article_title}</h3>
+                    <span className="text-gray-600 text-sm">{formattedDate}</span>
                 </div>
-                <span className="line-clamp-3">{props.article.article_description}</span>
+                <span className="line-clamp-3 text-sm sm:text-base">{props.article.article_description}</span>
             </div>
         </div>
     )

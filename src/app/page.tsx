@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useAuth, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import { Clover } from "lucide-react";
 import { motion } from "framer-motion";
 import {
     BookOpen,
@@ -13,9 +14,7 @@ import {
     Eye,
     HomeIcon,
     Newspaper,
-    NewspaperIcon,
     SearchIcon,
-    UsersIcon,
     UtensilsCrossed,
     UtensilsIcon,
 } from "lucide-react";
@@ -49,33 +48,32 @@ export default function LandingPage() {
             <MotionWrapper>
                 <div
                     id="home"
-                    className="flex items-center rounded-lg px-20 py-10 mt-10"
+                    className="flex flex-wrap lg:flex flex-col-reverse lg:text-right items-center rounded-lg px-6 sm:px-10 py-10 mt-10 gap-6 lg:px-20"
                 >
-                    <div className="w-1/2 pr-10 flex flex-col items-end">
-                        <h2 className="text-3xl font-bold text-green-primary mb-4 text-right">
+                    <div className="w-full lg:w-1/2 lg:pr-10 flex-col items-start lg:items-end">
+                        <h2 className="text-2xl lg:text-4xl text-center font-bold text-green-primary mb-4">
                             Diet planning made easy.
                         </h2>
-                        <p className="text-gray-700 mb-6 text-right">
-                            Achieve your desired diet goal with our personalized
+                        <p className="text-gray-700 text-justify mb-6">
+                        Achieve your desired diet goal with our personalized
                             meal planner and explore trusted health articles to
                             learn more about your body and health.
                         </p>
                         <Button
-                            className="ml-auto"
+                            className="lg:self-end"
                             onClick={() => router.push("/sign-in")}
                         >
                             Join for free
                         </Button>
                     </div>
 
-                    <div className="w-1/2">
+                    <div className="w-full lg:w-1/2">
                         <Image
                             src="/health.jpg"
                             alt="Food"
-                            layout="responsive"
                             width={500}
                             height={400}
-                            className="rounded-lg"
+                            className="rounded-lg object-cover"
                         />
                     </div>
                 </div>
@@ -88,13 +86,12 @@ export default function LandingPage() {
                     </h3>
                     <div
                         id="about"
-                        className="px-10 py-16 mx-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center"
+                        className="px-6 sm:px-10 pb-16 lg:py-16 mx-4 grid grid-cols-1 md:grid-cols-2 gap-12 items-center"
                     >
                         <div>
-                            <h1 className="text-2xl font-medium flex items-center gap-2">
-                                Better
-                                <UtensilsCrossed size={32} color="green" />
-                                Eats
+                            <h1 className="text-2xl font-medium flex items-center gap-2 max-lg:hidden">
+                                BetterEats
+                                <Clover size={28} color="#B2533E" />
                             </h1>
                             <p className="text-gray-700 mt-4">
                                 Our journey began as a simple idea for a college
@@ -129,7 +126,7 @@ export default function LandingPage() {
                         <div className="grid grid-cols-1 gap-6">
                             <div className="p-6 bg-white shadow-md rounded-lg">
                                 <div className="flex items-center space-x-4">
-                                    <Eye size={20} color="green"/>
+                                    <Eye size={20} color="green" />
                                     <h4 className="text-xl font-semibold text-gray-900">
                                         Our Vision
                                     </h4>
@@ -143,13 +140,13 @@ export default function LandingPage() {
 
                             <div className="p-6 bg-white shadow-md rounded-lg">
                                 <div className="flex items-center space-x-4">
-                                    <BookOpen size={20} color="green"/>
+                                    <BookOpen size={20} color="green" />
                                     <h4 className="text-xl font-semibold text-gray-900">
                                         Our Mission
                                     </h4>
                                 </div>
                                 <ul className="text-gray-700 mt-4 list-disc list-inside">
-                                    <li className="">
+                                    <li>
                                         To provide customizable meal planning
                                         solutions that cater to your daily
                                         nutritional needs.
@@ -182,7 +179,7 @@ export default function LandingPage() {
                     top choice.
                 </p>
 
-                <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
                     <motion.div
                         className="flex flex-col items-center"
                         variants={featureVariant}
@@ -281,6 +278,7 @@ export default function LandingPage() {
                     </motion.div>
                 </div>
             </section>
+
             <motion.div
                 className="items-center"
                 variants={featureVariant}

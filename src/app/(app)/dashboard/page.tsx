@@ -145,7 +145,6 @@ export default function DashboardPage(){
         setDetailModal(true)
     }
 
-
     useEffect(() => {
         getTotalNutrition()
         getBMI()
@@ -191,31 +190,43 @@ export default function DashboardPage(){
                 subtitle={`It's ${formattedDate}`}
             />
 
-            <section className="mt-2 grid grid-cols-4 grid-rows-2 gap-4">
-                <BMRCard 
-                    bmrValue={form.watch('user_calorie_requirement')}
-                />
-                <MealPlanValueCard 
-                    date={form.watch('meal_plan_date')}
-                    calorieValue={form.watch('meal_plan_total_calorie')}
-                    maxCalorie={form.watch('user_calorie_requirement')}
-                    proteinValue={form.watch('meal_plan_total_protein')}
-                    maxProtein={form.watch('user_protein_requirement')}
-                    carbohydrateValue={form.watch('meal_plan_total_carbohydrate')}
-                    maxCarbohydrate={form.watch('user_carbohydrate_requirement')}
-                    fatValue={form.watch('meal_plan_total_fat')}
-                    maxFat={form.watch('user_fat_requirement')}
-                    handleChangeDate={handleChangeDate}
-                />
-                <BMICard
-                    bmiValue={form.watch('user_bmi_value')}
-                />
-                <RecommendedMeals 
-                    meals={recommendedMeals}
-                    handleAddMealButton={handleAddMealButton}
-                    handleInfoButton={handleInfoButton}
-                />
-            </section>
+            <div className="mt-2 px-4 md:px-0">
+                <div className="grid gap-4 grid-cols-1 lg:grid-cols-4 md:grid-cols-2">
+                    {/* First row on larger screens */}
+                    <div className="lg:col-span-1">
+                        <BMRCard 
+                            bmrValue={form.watch('user_calorie_requirement')}
+                        />
+                    </div>
+                    <div className="lg:col-span-3 md:col-span-2">
+                        <MealPlanValueCard 
+                            date={form.watch('meal_plan_date')}
+                            calorieValue={form.watch('meal_plan_total_calorie')}
+                            maxCalorie={form.watch('user_calorie_requirement')}
+                            proteinValue={form.watch('meal_plan_total_protein')}
+                            maxProtein={form.watch('user_protein_requirement')}
+                            carbohydrateValue={form.watch('meal_plan_total_carbohydrate')}
+                            maxCarbohydrate={form.watch('user_carbohydrate_requirement')}
+                            fatValue={form.watch('meal_plan_total_fat')}
+                            maxFat={form.watch('user_fat_requirement')}
+                            handleChangeDate={handleChangeDate}
+                        />
+                    </div>
+                    <div className="lg:col-span-1">
+                        <BMICard
+                            bmiValue={form.watch('user_bmi_value')}
+                        />
+                    </div>
+                    {/* Second row */}
+                    <div className="lg:col-span-3 md:col-span-2">
+                        <RecommendedMeals 
+                            meals={recommendedMeals}
+                            handleAddMealButton={handleAddMealButton}
+                            handleInfoButton={handleInfoButton}
+                        />
+                    </div>
+                </div>
+            </div>
         </>
     )
 }

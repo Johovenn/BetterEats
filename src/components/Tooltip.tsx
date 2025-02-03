@@ -14,7 +14,7 @@ export default function HoverTooltip(props: HoverTooltipProps){
                 <TooltipTrigger asChild>
                     {props.children}
                 </TooltipTrigger>
-                <TooltipContent side="right" sideOffset={10} className="py-1 px-2 bg-paper-default border shadow-md rounded-lg text-sm w-[350px] z-50">
+                <TooltipContent side="right" sideOffset={10} className="py-1 px-2 bg-paper-default border shadow-md rounded-lg text-sm w-[350px] z-50 max-lg:hidden">
                     {props.tooltipContent}
                 </TooltipContent>
             </Tooltip>

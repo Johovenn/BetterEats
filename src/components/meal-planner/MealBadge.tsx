@@ -21,6 +21,6 @@ export default function MealBadge(props: MealBadgeProps){
     }
 
     return(
-        <Badge className={cn(color, "text-white text-[10px]")}>{props.text}</Badge>
+        <Badge className={cn(color, "text-white text-[10px] w-min")}>{props.text}</Badge>
     )
 }
