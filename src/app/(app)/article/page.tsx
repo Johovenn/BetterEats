@@ -55,7 +55,7 @@ export default function ArticlePage(){
                 searchMode="article"
             />
 
-            <main>
+            <main className="max-lg:px-5">
                 {
                     articles.length > 0
                         ?
@@ -84,8 +84,4 @@ export default function ArticlePage(){
             </main>
         </>
     )
-
-            
-            
-            
 }

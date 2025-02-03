@@ -295,18 +295,20 @@ export default function SearchPage(){
                 title="Search for Food"
             />
 
-            <section className="mt-5 min-w-full">
-                <div className="flex justify-between items-center">
-                    <FormProvider {...form}>
-                        <RadioInput 
-                            control={form.control}
-                            id="category"
-                            inputValues={mealCategories}
-                            label=""
-                            radioId="value"
-                            radioLabel="label"                    
-                        />
-                    </FormProvider>
+            <section className="mt-5 min-w-full max-sm:px-4">
+                <div className="flex justify-between items-center space-x-4">
+                    <div className="w-full max-sm:overflow-x-scroll">
+                        <FormProvider {...form}>
+                            <RadioInput 
+                                control={form.control}
+                                id="category"
+                                inputValues={mealCategories}
+                                label=""
+                                radioId="value"
+                                radioLabel="label"                    
+                            />
+                        </FormProvider>
+                    </div>
                     <SearchMealFilter
                         form={form}
                         onConfirm={getMeals}
@@ -314,7 +316,7 @@ export default function SearchPage(){
                     />
                 </div>
                 <div className="mt-3">
-                    <div className="w-full gap-y-5 grid grid-cols-4">
+                    <div className="w-full gap-y-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 place-items-center">
                         {
                             searchResults.length > 0
                                 ?

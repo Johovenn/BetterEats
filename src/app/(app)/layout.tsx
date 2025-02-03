@@ -14,7 +14,7 @@ export default function AppLayout({children}: {children: ReactNode}){
                     &&
                 <Sidebar />
             }
-            <main className="ml-10 w-full px-20 py-8">
+            <main className="lg:ml-10 w-full lg:px-20 py-5 lg:py-8">
                 {children}
             </main>
         </>

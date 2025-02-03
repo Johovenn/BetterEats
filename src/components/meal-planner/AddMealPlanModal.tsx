@@ -130,7 +130,7 @@ export default function AddMealPlanModal(props: AddMealModalProps){
 
     return(
         <Dialog open={props.isOpen} onOpenChange={props.setIsOpen}>
-            <DialogContent className="max-w-xl w-full h-auto p-6">
+            <DialogContent className="max-w-full sm:max-w-xl w-[95%] sm:w-full h-auto p-4 sm:p-6 rounded-lg mx-auto">
                 <DialogHeader>
                     <DialogTitle>Add to meal plan</DialogTitle>
                 </DialogHeader>
@@ -157,7 +157,7 @@ export default function AddMealPlanModal(props: AddMealModalProps){
                             fatValue={isLoading ? 0 : form.watch('meal_plan_total_fat') + props.meal.meal_fat}
                             maxFat={form.watch('user_fat_requirement')}
                             handleChangeDate={handleChangeDate}
-                            className="w-[500px] border mb-4"
+                            className="w-full max-w-[500px] border mb-4"
                         />
                         <DropdownInput
                             control={form.control}
@@ -171,10 +171,11 @@ export default function AddMealPlanModal(props: AddMealModalProps){
                         />
                     </FormProvider>
                 </div>
-                <DialogFooter>
+                <DialogFooter className="mt-4">
                     <Button
                         disabled={isLoading} 
                         onClick={form.handleSubmit(handleConfirmButton)}
+                        className="w-full sm:w-auto"
                     >
                         Confirm
                     </Button>

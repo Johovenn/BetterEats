@@ -125,7 +125,7 @@ export default function CommunityPage(){
     }, [form, keyword, refreshPosts])
 
     return(
-        <>
+        <div className="container mx-auto px-4 pb-6">
             <Loading loading={isLoading}></Loading>
 
             <PostModal
@@ -141,24 +141,26 @@ export default function CommunityPage(){
                 searchMode="post"
             />
 
-            <main className="w-full flex flex-col items-center ">
+            <main className="w-full flex flex-col items-center space-y-4">
                 {
                     posts.length > 0 
                         &&
                     posts.map((post) => (
-                        <Post
-                            key={post.post_id} 
-                            post={post}
-                            handleLike={handleLikePost}
-                            handleUnlike={handleUnlikePost}
-                            handleAddReply={handleAddReply}
-                        />
+                        <div key={post.post_id} className="w-full max-w-xl">
+                            <Post
+                                key={post.post_id}
+                                post={post}
+                                handleLike={handleLikePost}
+                                handleUnlike={handleUnlikePost}
+                                handleAddReply={handleAddReply}
+                            />
+                        </div>
                     ))
                 }
                 {
                     ((form.watch('page') + 1) * form.watch('limit') < form.watch('total_rows') && form.getValues('total_rows') !== 0)
                         &&
-                    <div className="w-full mt-3">
+                    <div className="w-full max-w-xl mt-3">
                         <Button 
                             variant={'outline'} 
                             className="w-full hover:bg-green-primary/10"
@@ -170,13 +172,13 @@ export default function CommunityPage(){
                 }
 
                 <Button 
-                    className="fixed bottom-0 right-0 gap-2 mb-8 mr-8"
+                    className="fixed bottom-4 right-4 z-50 gap-2"
                     onClick={() => {user.isSignedIn ? setPostModal(true) : router.push(`/sign-up`)}}
                 >
                     <PlusIcon size={16}/>
                     Create Post
                 </Button>
             </main>
-        </>
+        </div>
     )
 }

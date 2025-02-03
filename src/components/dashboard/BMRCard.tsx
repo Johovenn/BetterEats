@@ -18,9 +18,9 @@ export default function BMRCard(props: BMRCardProps){
     }
 
     return(
-        <div className={cn('h-[285px] bg-white shadow-lg rounded-xl border p-3 flex flex-col', props.className)}>
+        <div className={cn('h-[240px] lg:h-[285px] w-full bg-white shadow-lg rounded-xl border p-3 flex flex-col', props.className)}>
             <div className="flex items-center justify-between gap-1 mb-4">
-                <h1 className="text-lg font-medium">
+                <h1 className="lg:text-lg font-medium">
                     Total Daily Energy Expenditure
                 </h1>
                 <HoverTooltip
@@ -42,10 +42,8 @@ export default function BMRCard(props: BMRCardProps){
                 </HoverTooltip>
             </div>
             
-            {/* <p className="text-5xl font-semibold text-right">{props.bmrValue} <span className="text-lg font-medium">Calories</span></p> */}
-            
-            <div className="bg-gradient-to-b from-slate-200 to-green-primary w-[180px] h-[180px] rounded-full flex justify-center items-center mx-auto">
-                <div className="rounded-full w-[140px] h-[140px] p-4 text-center flex flex-col justify-center mx-auto my-auto bg-white">
+            <div className="bg-gradient-to-b from-slate-200 to-green-primary w-[140px] h-[140px] lg:w-[180px] lg:h-[180px] rounded-full flex justify-center items-center mx-auto">
+                <div className="rounded-full w-[110px] h-[110px] lg:w-[140px] lg:h-[140px] p-4 text-center flex flex-col justify-center mx-auto my-auto bg-white">
                     <span className="text-2xl font-bold">{props.bmrValue}</span>
                     <span className="text-md text-slate-500 font-medium">kCal</span>
                 </div>

@@ -1,11 +1,8 @@
 "use client"
 
 import Loading from "@/components/Loading"
-import MealCard from "@/components/meal-planner/MealCard."
-import SearchBar from "@/components/SearchBar"
 import { useCallback, useEffect, useState } from "react"
 import { getMealPlan, MealPlanDetailProps } from "./api/getMealPlan"
-import { MealProps } from "../search/api/getAllMeals"
 import MealPlanValueCard from "@/components/meal-planner/MealPlanValueCard"
 import { useForm } from "react-hook-form"
 import PageHeader from "@/components/PageHeader"
@@ -248,7 +245,7 @@ export default function MealPlannerPage(){
     }
 
     return (
-        <>
+        <div className="container mx-auto px-4 pb-6">
             <Loading loading={isLoading} />
 
             <MealDetailModal
@@ -279,15 +276,15 @@ export default function MealPlannerPage(){
                 setIsOpen={setAlertDeleteModal}
             />
 
-            <section className="w-full flex justify-between">
-                <div className="w-[65%] mb-5 px-4 py-2 bg-[#fefefe] shadow-lg rounded-lg meal-plans">
-                    <div className="p-2 flex items-center justify-between w-full">
-                        <h3 className="text-xl font-semibold text-green-primary">
+            <section className="w-full flex flex-col-reverse lg:flex-row justify-between gap-6">
+                <div className="w-full lg:w-[65%] mb-5 px-4 py-2 bg-[#fefefe] shadow-lg rounded-lg meal-plans">
+                    <div className="p-2 flex flex-col sm:flex-row items-center justify-between w-full gap-4">
+                        <h3 className="text-xl font-semibold text-green-primary text-center sm:text-left">
                             Your Meal Plan
                         </h3>
-                        <div className="flex items-center gap-2">
+                        <div className="flex flex-row items-center gap-2">
                             <Button 
-                                className="flex items-center gap-2 generate-button"
+                                className="flex items-center gap-2 generate-button w-full sm:w-auto"
                                 onClick={handleGenerateMealPlanButton}
                             >
                                 <ChefHat size={18}/> 
@@ -345,7 +342,7 @@ export default function MealPlannerPage(){
 
                     <span className="text-sm hover:cursor-pointer text-orange-primary hover:underline" onClick={triggerTutorial}>How does this work?</span>
                 </div>
-                <div className="w-[30%]">
+                <div className="w-full lg:w-[30%]">
                     <MealPlanValueCard 
                         date={form.watch('meal_plan_date')}
                         calorieValue={form.watch('meal_plan_total_calorie')}
@@ -360,6 +357,6 @@ export default function MealPlannerPage(){
                     />
                 </div>
             </section>
-        </>
+        </div>
     )
 }

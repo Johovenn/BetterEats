@@ -3,7 +3,6 @@ import MealPlanNutritionProgress from "./MealPlanNutritionProgress"
 import { Button } from "../ui/button"
 import { cn } from "@/lib/utils"
 import { ReactNode, useState } from "react"
-import DateInput from "../form/DatePicker"
 import DatePicker from "../form/DatePicker"
 
 interface MealPlanValueProps{
@@ -24,9 +23,9 @@ interface MealPlanValueProps{
 
 export default function MealPlanValueCard(props: MealPlanValueProps){
     return(
-        <div className={cn("shadow-lg bg-white rounded-lg px-5 py-4 min-w-min meal-plan-value col-span-3", props.className)}>
-            <div className="flex justify-between items-start gap-5">
-                <h3 className="font-medium text-lg">{props.title ? props.title : "Meal Plan Value"}</h3>
+        <div className={cn("shadow-lg bg-white rounded-lg px-4 sm:px-5 py-4 w-full", props.className)}>
+            <div className="flex justify-between items-start gap-3 sm:gap-5">
+                <h3 className="font-medium text-base sm:text-lg">{props.title ? props.title : "Meal Plan Value"}</h3>
                 {
                     !props.disableChangeDate
                         &&
@@ -36,7 +35,7 @@ export default function MealPlanValueCard(props: MealPlanValueProps){
                     />
                 }
             </div>
-            <div className="mt-5 flex flex-col gap-4">  
+            <div className="mt-4 sm:mt-5 flex flex-col gap-3 sm:gap-4">  
                 <MealPlanNutritionProgress 
                     nutritionName="Calories"    
                     nutritionValue={props.calorieValue}

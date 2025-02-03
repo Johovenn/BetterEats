@@ -20,7 +20,7 @@ export default function DropdownInput(props: DropdownInputProps){
             control={props.control}
             name={props.id}
             render={({field}) => (
-                <FormItem className="w-[500px]">
+                <FormItem className="w-full">
                     <FormLabel className="text-sm">{props.label}</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value} disabled={props.disabled || props.options.length === 0}>
                         <FormControl>

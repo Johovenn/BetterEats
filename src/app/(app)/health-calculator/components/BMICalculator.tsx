@@ -63,7 +63,6 @@ export default function BMICalculator() {
         resolver: yupResolver<any>(validationSchema),
     })
     
-    
     const driverObj = driver({
         popoverClass: 'driverjs-theme',
         nextBtnText: 'Next',
@@ -134,8 +133,6 @@ export default function BMICalculator() {
     const handleSaveBMI = async () => {
         setIsLoading(true)
 
-        console.log(form.getValues())
-
         await postUserBMI(form.getValues()).then((response) => {
             if(response.data){
                 toast('BMI data saved successfully!')
@@ -165,13 +162,15 @@ export default function BMICalculator() {
                 description="Are you sure you want to save the calculated BMI data? By doing so, you don't have to re entry your data the next time you want to calculate your data."
             />
 
-            <section className="w-full">
-                <h1 className="text-[28px] font-bold text-green-primary">BMI Calculator</h1>
-                <p className="text-green-primary">Find out how healthy your body is.</p>
-                <section className="mt-5 flex gap-5 w-full">
-                    <div className="h-full w-[60%] min-w-[1000px] shadow bg-white p-5">
+            <section className="px-4 sm:px-6 lg:px-8 lg:mt-4 lg:ml-[-25px]">
+                <h1 className="text-2xl sm:text-[28px] font-bold text-green-primary">BMI Calculator</h1>
+                <p className="text-green-primary mb-5">Find out how healthy your body is.</p>
+
+                <div className="flex flex-col lg:flex-row gap-5">
+                    {/* Form Section */}
+                    <div className="w-full lg:w-[70%] shadow bg-white p-5">
                         <div className="w-full flex flex-col">
-                            <Form {...form} >
+                            <Form {...form}>
                                 <form action="" className="form space-y-4 flex flex-col w-full">
                                     <NumericInput
                                         control={form.control}
@@ -222,32 +221,34 @@ export default function BMICalculator() {
                             </Form>
                         </div>
                     </div>
-                    <div className="h-fit w-[40%] shadow bg-white p-5 flex flex-col justify-center items-center results-card min-w-min">
-                        <h2 className="text-xl font-medium mb-5">
+
+                    {/* Results Section */}
+                    <div className="w-full lg:w-[30%] shadow bg-white p-5 flex flex-col justify-center items-center results-card">
+                        <h2 className="text-xl font-medium mb-5 text-center">
                             Your BMI Value
                         </h2>
 
-                        <div className="bg-gradient-to-b from-slate-200 to-green-primary w-[220px] h-[220px] rounded-full flex justify-center items-center">
+                        <div className="bg-gradient-to-b from-slate-200 to-green-primary w-[220px] h-[220px] rounded-full flex justify-center items-center mx-auto">
                             <div className="rounded-full w-[170px] h-[170px] p-4 text-center flex flex-col justify-center mx-auto my-auto bg-white">
                                 <span className="text-2xl font-bold">{form.watch('user_bmi_value')}</span>
                                 <span className="text-md text-slate-500 font-medium">kg/m&sup2;</span>
                             </div>
                         </div>
 
-                        <p className="text-sm text-center text-green-primary mt-5">
+                        <p className="text-sm text-center text-green-primary mt-5 px-2">
                             {form.watch('user_bmi_value') !== 0 && getRecommendationBasedOnBMI(form.getValues('user_bmi_value'))}
                         </p>
 
                         <Button
                             disabled={!form.watch('user_bmi_value')}
-                            className="mt-6 flex items-center gap-1 save-button"
+                            className="mt-6 flex items-center gap-1 save-button w-full"
                             onClick={form.handleSubmit(() => setAlertModal(true))}
                         >
                             <Save size={16}/>
                             Save BMI
                         </Button>
                     </div>
-                </section>
+                </div>
             </section>
         </>
     )

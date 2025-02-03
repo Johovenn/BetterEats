@@ -7,16 +7,16 @@ import BMICalculator from "./components/BMICalculator";
 export default function HealthCalculatorPage() {
     return (
         <>
-            <section className="flex justify-between items-start w-full mb-5">
-                <Tabs defaultValue="bmi">
+            <section className="w-full">
+                <Tabs defaultValue="bmi" className="ml-20 md:m-0">
                     <TabsList>
                         <TabsTrigger value="bmi">BMI Calculator</TabsTrigger>
                         <TabsTrigger value="tdee">TDEE Calculator</TabsTrigger>
                     </TabsList>
-                    <TabsContent value="tdee">
+                    <TabsContent value="tdee" className="ml-[-80px] md:ml-[-25px] mt-5">
                         <TDEECalculator />
                     </TabsContent>
-                    <TabsContent value="bmi">
+                    <TabsContent value="bmi" className="ml-[-80px] md:ml-[-25px] md:m-0">
                         <BMICalculator />
                     </TabsContent>
                 </Tabs>

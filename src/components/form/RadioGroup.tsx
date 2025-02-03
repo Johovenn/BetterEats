@@ -27,7 +27,7 @@ export default function RadioInput(props: RadioInputProps){
                             value={field.value?.toString()}
                             onValueChange={(val) => field.onChange(val)}
                             defaultValue={field.value}
-                            className="flex"
+                            className="flex flex-wrap"
                         >
                             {
                                 props.inputValues.length > 0

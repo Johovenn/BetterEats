@@ -18,6 +18,7 @@ import "driver.js/dist/driver.css";
 import { getUserBMR } from "../api/getUserBMR";
 import { getBMRValue } from "../api/calculateBMR";
 import { postUserBMR } from "../api/postUserBMR";
+
 interface FormProps{
     user_height: number
     user_weight: number
@@ -46,59 +47,29 @@ const validationSchema = yup.object().shape({
     fat: yup.number().nullable().optional(),
 });
 
-
 const genderInputValues = [
-    {
-        label: 'Male',
-        value: 'M'
-    },
-    {
-        label: 'Female',
-        value: 'F'
-    }
+    { label: 'Male', value: 'M' },
+    { label: 'Female', value: 'F' }
 ]
 
 const activityLevelInputValues = [
-    {
-        label: 'Little to no exercise',
-        value: 'AL1'
-    },
-    {
-        label: 'Light exercise (1-2 days a week)',
-        value: 'AL2'
-    },
-    {
-        label: 'Moderate exercise (3-5 days a week)',
-        value: 'AL3'
-    },
-    {
-        label: 'Very Active (6-7 days a week)',
-        value: 'AL4'
-    },
-    {
-        label: 'Extra Active (Very active / physical job)',
-        value: 'AL5'
-    }
+    { label: 'Little to no exercise', value: 'AL1' },
+    { label: 'Light exercise (1-2 days a week)', value: 'AL2' },
+    { label: 'Moderate exercise (3-5 days a week)', value: 'AL3' },
+    { label: 'Very Active (6-7 days a week)', value: 'AL4' },
+    { label: 'Extra Active (Very active / physical job)', value: 'AL5' }
 ]
 
 const goalInputValues = [
-    {
-        label: 'Gain Muscle / Weight',
-        value: 'GM'
-    },
-    {
-        label: 'Maintain Weight',
-        value: 'MW'
-    },
-    {
-        label: 'Lose Weight',
-        value: 'LW'
-    },
+    { label: 'Gain Muscle / Weight', value: 'GM' },
+    { label: 'Maintain Weight', value: 'MW' },
+    { label: 'Lose Weight', value: 'LW' },
 ]
 
 export default function TDEECalculator() {
     const [isLoading, setIsLoading] = useState(false)
     const [alertModal, setAlertModal] = useState(false)
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
     const form = useForm<FormProps>({
         mode: 'onChange',
@@ -117,7 +88,6 @@ export default function TDEECalculator() {
         },
         resolver: yupResolver<any>(validationSchema),
     });
-    
     
     const driverObj = driver({
         popoverClass: 'driverjs-theme',
@@ -223,15 +193,17 @@ export default function TDEECalculator() {
                 onConfirm={form.handleSubmit(handleSaveBMR)}
             />
 
-            <section>
+            <section className="px-4 sm:px-6 lg:px-8">
                 <Loading loading={isLoading} />
 
-                <h1 className="text-[28px] font-bold text-green-primary">TDEE Calculator</h1>
-                <p className="text-green-primary">Find out how many calories you burn everyday.</p>
-                <section className="mt-5 flex gap-5 w-full">
-                    <div className="h-full w-[70%] shadow bg-white p-5">
+                <h1 className="text-2xl sm:text-[28px] font-bold text-green-primary">TDEE Calculator</h1>
+                <p className="text-green-primary mb-5">Find out how many calories you burn everyday.</p>
+
+                <div className="flex flex-col lg:flex-row gap-5">
+                    {/* Form Section */}
+                    <div className="w-full lg:w-[70%] shadow bg-white p-5">
                         <div className="w-full flex flex-col">
-                            <Form {...form} >
+                            <Form {...form}>
                                 <form action="" onSubmit={form.handleSubmit(handleCalculateButton)} className="form space-y-4 flex flex-col">
                                     <NumericInput
                                         control={form.control}
@@ -298,11 +270,13 @@ export default function TDEECalculator() {
                             </Form>
                         </div>
                     </div>
-                    <div className="h-fit w-[30%] shadow bg-white p-5 flex flex-col justify-center items-center results-card">
-                        <h2 className="text-xl font-medium mb-5">
+
+                    {/* Results Section */}
+                    <div className="w-full lg:w-[30%] shadow bg-white p-5 flex flex-col justify-center items-center results-card">
+                        <h2 className="text-xl font-medium mb-5 text-center">
                             Your daily nutrition needs
                         </h2>
-                        <div className="bg-gradient-to-b from-slate-200 to-green-primary w-[220px] h-[220px] rounded-full flex justify-center items-center">
+                        <div className="bg-gradient-to-b from-slate-200 to-green-primary w-[220px] h-[220px] rounded-full flex justify-center items-center mx-auto">
                             <div className="rounded-full w-[170px] h-[170px] p-4 text-center flex flex-col justify-center mx-auto my-auto bg-white">
                                 <span className="text-lg text-slate-500 font-medium">Total</span>
                                 <span className="text-2xl font-bold">{form.watch('user_bmr_value')}</span>
@@ -329,14 +303,14 @@ export default function TDEECalculator() {
 
                         <Button 
                             disabled={!form.watch('user_bmr_value') || !form.getValues('protein') || !form.getValues('carbohydrate') || !form.getValues('fat')}
-                            className="text-white rounded-xl mt-6 save-button"
+                            className="text-white rounded-xl mt-6 save-button w-full"
                             onClick={form.handleSubmit(() => setAlertModal(true))}
                             size={'sm'}
                         >
                             Save TDEE
                         </Button>
                     </div>
-                </section>
+                </div>
             </section>
         </>
     )
