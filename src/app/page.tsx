@@ -48,16 +48,15 @@ export default function LandingPage() {
             <MotionWrapper>
                 <div
                     id="home"
-                    className="flex flex-wrap lg:flex flex-col-reverse lg:text-right items-center rounded-lg px-6 sm:px-10 py-10 mt-10 gap-6 lg:px-20"
+                    className="flex flex-col-reverse lg:flex-row items-center text-center lg:text-right rounded-lg px-6 sm:px-10 py-10 mt-10 gap-6 lg:px-20"
                 >
-                    <div className="w-full lg:w-1/2 lg:pr-10 flex-col items-start lg:items-end">
-                        <h2 className="text-2xl lg:text-4xl text-center font-bold text-green-primary mb-4">
+                    {/* Text Section */}
+                    <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-end text-center lg:text-right">
+                        <h2 className="text-2xl lg:text-4xl font-bold text-green-primary mb-4">
                             Diet planning made easy.
                         </h2>
                         <p className="text-gray-700 text-justify mb-6">
-                        Achieve your desired diet goal with our personalized
-                            meal planner and explore trusted health articles to
-                            learn more about your body and health.
+                            Achieve your desired diet goal with our personalized meal planner and explore trusted health articles to learn more about your body and health.
                         </p>
                         <Button
                             className="lg:self-end"
@@ -67,7 +66,8 @@ export default function LandingPage() {
                         </Button>
                     </div>
 
-                    <div className="w-full lg:w-1/2">
+                    {/* Image Section */}
+                    <div className="w-full lg:w-1/2 flex justify-center">
                         <Image
                             src="/health.jpg"
                             alt="Food"
@@ -78,6 +78,7 @@ export default function LandingPage() {
                     </div>
                 </div>
             </MotionWrapper>
+
 
             <MotionWrapper>
                 <section className="bg-gray-50 ">
