@@ -1,5 +1,5 @@
 import { createResponse } from "@/lib/api";
-import { calculateBMR, calculateCarbs, calculateFat, calculateProtein } from "@/lib/bmrUtils";
+import { calculateTDEE, calculateCarbs, calculateFat, calculateProtein } from "@/lib/tdeeUtils";
 import db from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";

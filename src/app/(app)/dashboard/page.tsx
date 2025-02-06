@@ -9,7 +9,7 @@ import MealPlanValueCard from "@/components/meal-planner/MealPlanValueCard"
 import { getMealPlanTotalNutrition } from "../meal-planner/api/getMealPlanTotalNutrition"
 import { useForm } from "react-hook-form"
 import PageHeader from "@/components/PageHeader"
-import BMRCard from "@/components/dashboard/BMRCard"
+import TDEECard from "@/components/dashboard/TDEECard"
 import BMICard from "@/components/dashboard/BMICard"
 import { getUserBMI } from "../health-calculator/api/getUserBMI"
 import RecommendedMeals from "@/components/dashboard/RecommendedMeals"
@@ -17,8 +17,8 @@ import { getAllMeals, MealProps } from "../search/api/getAllMeals"
 import { getRecommendedMeals } from "../search/api/getRecommendedMeals"
 import AddMealPlanModal from "@/components/meal-planner/AddMealPlanModal"
 import AlertModal from "@/components/AlertModal"
-import { getUserBMR } from "../health-calculator/api/getUserBMR"
 import MealDetailModal from "@/components/meal-planner/MealDetailModal"
+import { getUserTDEE } from "../health-calculator/api/getUserTDEE"
 
 interface FormProps {
     meal_plan_date: Date
@@ -36,7 +36,7 @@ interface FormProps {
 export default function DashboardPage(){
     const router = useRouter()
     const [isLoading, setIsLoading] = useState(false)
-    const [bmrValue, setBmrValue] = useState(0)
+    const [tdeeValue, setTdeeValue] = useState(0)
     const [addMealModal, setAddMealModal] = useState(false)
     const [selectedMeal, setSelectedMeal] = useState<MealProps>()
     const [recommendedMeals, setRecommendedMeals] = useState<any>([])
@@ -103,7 +103,7 @@ export default function DashboardPage(){
     const getTDEE = useCallback(async () => {
         setIsLoading(true)
 
-        await getUserBMR().then((response) => {
+        await getUserTDEE().then((response) => {
             if(response.data === null){
                 setAlertModal(true)
             }
@@ -167,7 +167,7 @@ export default function DashboardPage(){
                 setIsOpen={setAlertModal}
                 handleClose={() => setAlertModal(false)}
                 onConfirm={() => {
-                    router.push(`/health-calculator`)
+                    router.push(`/health-calculator?tab=tdee`)
                 }}
             />
 
@@ -192,10 +192,9 @@ export default function DashboardPage(){
 
             <div className="mt-2 px-4 md:px-0">
                 <div className="grid gap-4 grid-cols-1 lg:grid-cols-4 md:grid-cols-2">
-                    {/* First row on larger screens */}
                     <div className="lg:col-span-1">
-                        <BMRCard 
-                            bmrValue={form.watch('user_calorie_requirement')}
+                        <TDEECard 
+                            tdeeValue={form.watch('user_calorie_requirement')}
                         />
                     </div>
                     <div className="lg:col-span-3 md:col-span-2">
@@ -217,7 +216,6 @@ export default function DashboardPage(){
                             bmiValue={form.watch('user_bmi_value')}
                         />
                     </div>
-                    {/* Second row */}
                     <div className="lg:col-span-3 md:col-span-2">
                         <RecommendedMeals 
                             meals={recommendedMeals}

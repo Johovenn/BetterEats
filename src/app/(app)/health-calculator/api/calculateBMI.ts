@@ -1,6 +1,5 @@
 import { ResponseProps } from "@/lib/api";
 import axios from "axios";
-import { UserBMRProps } from "./getUserBMR";
 
 interface CalculateBMIRequestProps{
     user_height: number

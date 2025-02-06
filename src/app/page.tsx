@@ -50,7 +50,6 @@ export default function LandingPage() {
                     id="home"
                     className="flex flex-col-reverse lg:flex-row items-center text-center lg:text-right rounded-lg px-6 sm:px-10 py-10 mt-10 gap-6 lg:px-20"
                 >
-                    {/* Text Section */}
                     <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-end text-center lg:text-right">
                         <h2 className="text-2xl lg:text-4xl font-bold text-green-primary mb-4">
                             Diet planning made easy.
@@ -66,7 +65,6 @@ export default function LandingPage() {
                         </Button>
                     </div>
 
-                    {/* Image Section */}
                     <div className="w-full lg:w-1/2 flex justify-center">
                         <Image
                             src="/health.jpg"

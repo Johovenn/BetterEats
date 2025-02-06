@@ -7,16 +7,16 @@ import HoverTooltip from "../Tooltip"
 import { cn } from "@/lib/utils"
 import { getRecommendationBasedOnBMI } from "@/lib/bmiUtils"
 
-interface BMRCardProps{
+interface BMICardProps{
     bmiValue: number
     className?: string
 }
 
-export default function BMICard(props: BMRCardProps){
+export default function BMICard(props: BMICardProps){
     const router = useRouter()
 
     const handleUpdateButton = () => {
-        router.push(`/health-calculator`)
+        router.push(`/health-calculator?tab=bmi`)
     }
 
     return(

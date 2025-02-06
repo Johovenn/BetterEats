@@ -6,26 +6,26 @@ import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import NutritionCard from "@/components/bmr-calculator/NutritionCard";
+import NutritionCard from "@/components/tdee-calculator/NutritionCard";
 import { Beef, Calculator, Wheat } from "lucide-react";
-import SaveBMRAlertModal from "@/components/bmr-calculator/SaveBMRAlertModal";
+import SaveTDEEAlertModal from "@/components/tdee-calculator/SaveTDEEAlertModal";
 import { toast } from "sonner";
 import RadioInput from "@/components/form/RadioGroup";
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup'
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
-import { getUserBMR } from "../api/getUserBMR";
-import { getBMRValue } from "../api/calculateBMR";
-import { postUserBMR } from "../api/postUserBMR";
+import { getUserTDEE } from "../api/getUserTDEE";
+import { getTDEEValue } from "../api/calculateTDEE";
+import { postUserTDEE } from "../api/postUserTDEE";
 
 interface FormProps{
     user_height: number
     user_weight: number
     user_age: number
-    user_bmr_date: Date
+    user_tdee_date: Date
     user_gender: string
-    user_bmr_value: number
+    user_tdee_value: number
     activity_level_code: string
     goal_code: string
     protein: number
@@ -38,8 +38,8 @@ const validationSchema = yup.object().shape({
     user_weight: yup.number().nullable().required('Weight is required!').min(1, "Weight must be more than 0kg"),
     user_age: yup.number().nullable().required('Age is required!').min(15, "Age must at least be 15 years old"),
     user_gender: yup.string().required("Gender is required"),
-    user_bmr_date: yup.date().default(() => new Date()),
-    user_bmr_value: yup.number().nullable().required("BMR value is required"),
+    user_tdee_date: yup.date().default(() => new Date()),
+    user_tdee_value: yup.number().nullable().required("TDEE value is required"),
     activity_level_code: yup.string().required("Activity Level is required"),
     goal_code: yup.string().required("Goal is required"),
     protein: yup.number().nullable().optional(),
@@ -77,9 +77,9 @@ export default function TDEECalculator() {
             user_height: 0,
             user_weight: 0,
             user_age: 0,
-            user_bmr_date: new Date(),
+            user_tdee_date: new Date(),
             user_gender: 'M',
-            user_bmr_value: 0,
+            user_tdee_value: 0,
             activity_level_code: "AL1",
             goal_code: "GM",
             protein: 0,
@@ -130,20 +130,20 @@ export default function TDEECalculator() {
         const getUserData = async () => {
             setIsLoading(true)
 
-            await getUserBMR().then((response) => {
+            await getUserTDEE().then((response) => {
                 if(response.data){
                     form.setValue('user_height', response.data.user_height)
                     form.setValue('user_weight', response.data.user_weight)
                     form.setValue('user_age', response.data.user_age)
                     form.setValue('activity_level_code', response.data.activity_level_code)
                     form.setValue('goal_code', response.data.goal_code)
-                    form.setValue('user_bmr_value', response.data.user_bmr_value)
+                    form.setValue('user_tdee_value', response.data.user_tdee_value)
                     form.setValue('protein', response.data.protein)
                     form.setValue('carbohydrate', response.data.carbohydrate)
                     form.setValue('fat', response.data.fat)
                 }
             }).catch((error) => [
-                toast("Error retrieving user BMR data.")
+                toast("Error retrieving user TDEE data.")
             ])
 
             setIsLoading(false)
@@ -155,8 +155,8 @@ export default function TDEECalculator() {
     const handleCalculateButton = async () => {
         setIsLoading(true)
 
-        await getBMRValue(form.getValues()).then((response) => {
-            form.setValue('user_bmr_value', response.data.bmr_value)
+        await getTDEEValue(form.getValues()).then((response) => {
+            form.setValue('user_tdee_value', response.data.tdee_value)
             form.setValue('protein', response.data.protein)
             form.setValue('fat', response.data.fat)
             form.setValue('carbohydrate', response.data.carbohydrate)
@@ -165,10 +165,10 @@ export default function TDEECalculator() {
         setIsLoading(false)
     }
 
-    const handleSaveBMR = async () => {
+    const handleSaveTDEE = async () => {
         setIsLoading(true)
 
-        await postUserBMR(form.getValues()).then((response) => {
+        await postUserTDEE(form.getValues()).then((response) => {
             if(response.data){
                 toast('TDEE data saved successfully!')
             }
@@ -186,11 +186,11 @@ export default function TDEECalculator() {
 
     return (
         <>
-            <SaveBMRAlertModal 
+            <SaveTDEEAlertModal 
                 isOpen={alertModal}
                 setIsOpen={setAlertModal}
                 handleClose={() => setAlertModal(true)}
-                onConfirm={form.handleSubmit(handleSaveBMR)}
+                onConfirm={form.handleSubmit(handleSaveTDEE)}
             />
 
             <section className="px-4 sm:px-6 lg:px-8">
@@ -200,7 +200,6 @@ export default function TDEECalculator() {
                 <p className="text-green-primary mb-5">Find out how many calories you burn everyday.</p>
 
                 <div className="flex flex-col lg:flex-row gap-5">
-                    {/* Form Section */}
                     <div className="w-full lg:w-[70%] shadow bg-white p-5">
                         <div className="w-full flex flex-col">
                             <Form {...form}>
@@ -271,15 +270,14 @@ export default function TDEECalculator() {
                         </div>
                     </div>
 
-                    {/* Results Section */}
-                    <div className="w-full lg:w-[30%] shadow bg-white p-5 flex flex-col justify-center items-center results-card">
+                    <div className="w-full lg:w-[30%] shadow bg-white p-5 flex flex-col justify-center items-center results-card lg:h-fit">
                         <h2 className="text-xl font-medium mb-5 text-center">
                             Your daily nutrition needs
                         </h2>
                         <div className="bg-gradient-to-b from-slate-200 to-green-primary w-[220px] h-[220px] rounded-full flex justify-center items-center mx-auto">
                             <div className="rounded-full w-[170px] h-[170px] p-4 text-center flex flex-col justify-center mx-auto my-auto bg-white">
                                 <span className="text-lg text-slate-500 font-medium">Total</span>
-                                <span className="text-2xl font-bold">{form.watch('user_bmr_value')}</span>
+                                <span className="text-2xl font-bold">{form.watch('user_tdee_value')}</span>
                                 <span className="text-md text-slate-500 font-medium">kCal</span>
                             </div>
                         </div>
@@ -302,7 +300,7 @@ export default function TDEECalculator() {
                         </div>
 
                         <Button 
-                            disabled={!form.watch('user_bmr_value') || !form.getValues('protein') || !form.getValues('carbohydrate') || !form.getValues('fat')}
+                            disabled={!form.watch('user_tdee_value') || !form.getValues('protein') || !form.getValues('carbohydrate') || !form.getValues('fat')}
                             className="text-white rounded-xl mt-6 save-button w-full"
                             onClick={form.handleSubmit(() => setAlertModal(true))}
                             size={'sm'}

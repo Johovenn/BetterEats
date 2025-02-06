@@ -31,12 +31,12 @@ export async function GET(req: Request){
         }
     })
 
-    const userData=  await db.userBMR.findFirst({
+    const userData=  await db.userTDEE.findFirst({
         where: {
             user_id: userId,
         },
         orderBy: {
-            user_bmr_date: 'desc'
+            user_tdee_date: 'desc'
         },
     })
 
@@ -46,7 +46,7 @@ export async function GET(req: Request){
         meal_plan_total_protein: mealPlanData ? mealPlanData.meal_plan_total_protein : 0,
         meal_plan_total_carbohydrate: mealPlanData ? mealPlanData.meal_plan_total_carbohydrate : 0,
         meal_plan_total_fat: mealPlanData ? mealPlanData.meal_plan_total_fat : 0,   
-        user_calorie_requirement: userData ? userData.user_bmr_value : 0,
+        user_calorie_requirement: userData ? userData.user_tdee_value : 0,
         user_protein_requirement: userData ? userData.protein : 0,
         user_carbohydrate_requirement: userData ? userData.carbohydrate : 0,
         user_fat_requirement: userData ? userData.fat : 0,

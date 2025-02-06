@@ -23,20 +23,20 @@ export async function GET(req: Request) {
 
         const mealPlanDate = new Date(meal_plan_date)
 
-        const userBmr = await db.userBMR.findFirst({
+        const userTdee = await db.userTDEE.findFirst({
             where: { 
                 user_id: userId 
             },
             orderBy: { 
-                user_bmr_date: 'desc' 
+                user_tdee_date: 'desc' 
             },
         })
 
-        if (!userBmr) {
-            return NextResponse.json(createPaginationResponse(404, 'No BMR record found for the user', null, 0, 0, 0), { status: 404 })
+        if (!userTdee) {
+            return NextResponse.json(createPaginationResponse(404, 'No TDEE record found for the user', null, 0, 0, 0), { status: 404 })
         }
 
-        const { user_bmr_value, protein, carbohydrate, fat } = userBmr
+        const { user_tdee_value, protein, carbohydrate, fat } = userTdee
 
         const mealPlan = await db.mealPlan.findFirst({
             where: {
@@ -57,7 +57,7 @@ export async function GET(req: Request) {
         const consumedCarbs = mealPlan ? mealPlan.meal_plan_total_carbohydrate : 0
         const consumedFat = mealPlan ? mealPlan.meal_plan_total_fat : 0
 
-        const remainingCalories = user_bmr_value - consumedCalories
+        const remainingCalories = user_tdee_value - consumedCalories
         const remainingProtein = protein - consumedProtein
         const remainingCarbs = carbohydrate - consumedCarbs
         const remainingFat = fat - consumedFat
