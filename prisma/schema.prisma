@@ -64,14 +64,14 @@ model MealType {
   mealDetails              MealPlanDetail[]
 }
 
-model UserBMR {
-  user_bmr_id       Int @id @default(autoincrement())
+model UserTDEE {
+  user_tdee_id       Int @id @default(autoincrement())
   user_id           String
-  user_bmr_date     DateTime
+  user_tdee_date     DateTime
   user_weight       Float
   user_height       Float
   user_age          Int
-  user_bmr_value    Int
+  user_tdee_value    Int
   user_gender       String
   activity_level_id Int
   goal_id           Int
@@ -100,7 +100,7 @@ model ActivityLevel {
   activity_level_multiplier   Float
   activity_level_description  String
 
-  userBmrs UserBMR[]
+  userTdees UserTDEE[]
 }
 
 model Goal {
@@ -112,7 +112,7 @@ model Goal {
   goal_carbohydrate_multiplier  Float
   goal_fat_multiplier           Float
 
-  userBmrs UserBMR[]
+  userTdees UserTDEE[]
 }
 
 model Article {

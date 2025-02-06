@@ -1,10 +1,10 @@
 import { createResponse } from "@/lib/api";
-import { calculateBMR, calculateCarbs, calculateFat, calculateProtein } from "@/lib/bmrUtils";
+import { calculateTDEE, calculateCarbs, calculateFat, calculateProtein } from "@/lib/tdeeUtils";
 import db from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request){ //create new bmr record
+export async function POST(req: Request){
     try {
         const {userId} = auth()
         if(!userId){
@@ -39,14 +39,14 @@ export async function POST(req: Request){ //create new bmr record
             return NextResponse.json(createResponse(400, "Goal Invalid", null), {status: 400})
         }
 
-        const data = await db.userBMR.create({
+        const data = await db.userTDEE.create({
             data: {
                 user_id: userId,
                 user_height: parseInt(request.user_height),
                 user_weight: parseInt(request.user_weight),
                 user_age: parseInt(request.user_age),
-                user_bmr_date: request.user_bmr_date,
-                user_bmr_value: request.user_bmr_value,
+                user_tdee_date: request.user_tdee_date,
+                user_tdee_value: request.user_tdee_value,
                 protein: request.protein,
                 carbohydrate: request.carbohydrate,
                 fat: request.fat,
@@ -57,7 +57,7 @@ export async function POST(req: Request){ //create new bmr record
         })
 
         if(!data){
-            return NextResponse.json(createResponse(500, "Error creating BMR data", null), {status: 500})
+            return NextResponse.json(createResponse(500, "Error creating TDEE data", null), {status: 500})
         }
         else{
             return NextResponse.json(createResponse(201, "Create data succesful!", data), {status: 201})
@@ -67,14 +67,14 @@ export async function POST(req: Request){ //create new bmr record
     }
 }
 
-export async function GET(req: Request){//get user latest bmr record
+export async function GET(req: Request){
     try {
         const {userId} = auth()
         if(!userId){
             return NextResponse.json(createResponse(401, "Unauthorized", null), {status: 401})
         }
 
-        const bmrData = await db.userBMR.findFirst({
+        const tdeeData = await db.userTDEE.findFirst({
             where: {
                 user_id: userId,
             },
@@ -83,18 +83,18 @@ export async function GET(req: Request){//get user latest bmr record
                 activityLevel: true
             },
             orderBy:{
-                user_bmr_date: 'desc'
+                user_tdee_date: 'desc'
             }
         })
 
-        if(!bmrData){
+        if(!tdeeData){
             return NextResponse.json(createResponse(200, "No existing data", null), {status: 200}) //belum ada data user
         }
         else{
             let response = {
-                ...bmrData,
-                goal_code: bmrData.goal.goal_code,
-                activity_level_code: bmrData.activityLevel.activity_level_code
+                ...tdeeData,
+                goal_code: tdeeData.goal.goal_code,
+                activity_level_code: tdeeData.activityLevel.activity_level_code
             }
 
             return NextResponse.json(createResponse(200, "Fetch data succesful!", response), {status: 200})

@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Work_Sans } from "next/font/google";
-import { Anton } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
-import Sidebar from "@/components/Sidebar";
 import { Toaster } from "@/components/ui/sonner";
 
 const kanit = Work_Sans({ 

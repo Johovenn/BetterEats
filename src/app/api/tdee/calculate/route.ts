@@ -1,10 +1,10 @@
 import { createResponse } from "@/lib/api"
-import { calculateBMR, calculateCarbs, calculateFat, calculateProtein } from "@/lib/bmrUtils"
+import { calculateTDEE, calculateCarbs, calculateFat, calculateProtein } from "@/lib/tdeeUtils"
 import db from "@/lib/db"
 import { auth } from "@clerk/nextjs/server"
 import { NextResponse } from "next/server"
 
-export async function POST(req: Request){ //create new bmr record
+export async function POST(req: Request){
     try {
         const {userId} = auth()
         if(!userId){
@@ -39,7 +39,7 @@ export async function POST(req: Request){ //create new bmr record
             return NextResponse.json(createResponse(400, "Goal Invalid", null), {status: 400})
         }
 
-        const bmrValue = calculateBMR({
+        const tdeeValue = calculateTDEE({
             user_weight: request.user_weight,
             user_height: request.user_height,
             user_age: request.user_age,
@@ -47,21 +47,21 @@ export async function POST(req: Request){ //create new bmr record
             activity_level_multiplier: activityLevelData.activity_level_multiplier,
             goal_calorie_multiplier: goalData.goal_calorie_multiplier
         })
-        const proteinGrams = calculateProtein(bmrValue, goalData.goal_protein_multiplier)
-        const fatGrams = calculateFat(bmrValue, goalData.goal_fat_multiplier)
-        const carbsGrams = calculateCarbs(bmrValue, goalData.goal_carbohydrate_multiplier)
+        const proteinGrams = calculateProtein(tdeeValue, goalData.goal_protein_multiplier)
+        const fatGrams = calculateFat(tdeeValue, goalData.goal_fat_multiplier)
+        const carbsGrams = calculateCarbs(tdeeValue, goalData.goal_carbohydrate_multiplier)
 
-        if(!bmrValue || !proteinGrams || !fatGrams || !carbsGrams){
-            return NextResponse.json(createResponse(500, "Error calculating BMR data", null), {status: 500})
+        if(!tdeeValue || !proteinGrams || !fatGrams || !carbsGrams){
+            return NextResponse.json(createResponse(500, "Error calculating TDEE data", null), {status: 500})
         }
 
         const result = {
-            bmr_value: bmrValue,
+            tdee_value: tdeeValue,
             protein: proteinGrams,
             fat: fatGrams,
             carbohydrate: carbsGrams
         }
-        return NextResponse.json(createResponse(200, "Calculate BMR succesful!", result), {status: 200})
+        return NextResponse.json(createResponse(200, "Calculate TDEE succesful!", result), {status: 200})
     } catch (error) {
         return NextResponse.json(createResponse(500, "Internal Server Error", null), {status: 500})
     }

@@ -1,13 +1,13 @@
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "../ui/alert-dialog"
 
-interface SaveBMRAlertModalProps{
+interface SaveTDEEAlertModalProps{
     isOpen: boolean
     handleClose: () => void
     setIsOpen: (value: boolean) => void
     onConfirm: () => void
 }
 
-export default function SaveBMRAlertModal(props: SaveBMRAlertModalProps){
+export default function SaveTDEEAlertModal(props: SaveTDEEAlertModalProps){
 
     return(
         <AlertDialog open={props.isOpen} onOpenChange={props.setIsOpen}>

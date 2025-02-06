@@ -25,16 +25,16 @@ export async function POST(req: Request){
         const endOfDay = new Date(mealPlanDate)
         endOfDay.setUTCHours(23, 59, 59, 999)
 
-        const userBmr = await db.userBMR.findFirst({
+        const userTdee = await db.userTDEE.findFirst({
         where: {
                 user_id: userId,
             },
             orderBy: {
-                user_bmr_date: 'desc'
+                user_tdee_date: 'desc'
             }
         })
 
-        if(!userBmr){
+        if(!userTdee){
             return NextResponse.json(createResponse(400, 'TDEE data not recorded, please calculate your TDEE first.', null), {status: 400})
         }
 
@@ -78,10 +78,10 @@ export async function POST(req: Request){
                 }
             })
 
-            let calorieNeeds = userBmr.user_bmr_value
-            let proteinNeeds = userBmr.protein
-            let carbsNeeds = userBmr.carbohydrate
-            let fatNeeds = userBmr.fat
+            let calorieNeeds = userTdee.user_tdee_value
+            let proteinNeeds = userTdee.protein
+            let carbsNeeds = userTdee.carbohydrate
+            let fatNeeds = userTdee.fat
 
             let mealIds: number[] = []
 
@@ -110,10 +110,10 @@ export async function POST(req: Request){
 
             const updateMealPlan = await db.mealPlan.update({
                 data: {
-                    meal_plan_total_calorie: userBmr.user_bmr_value - calorieNeeds,
-                    meal_plan_total_fat: userBmr.fat - fatNeeds,
-                    meal_plan_total_carbohydrate: userBmr.carbohydrate - carbsNeeds,
-                    meal_plan_total_protein: userBmr.protein - proteinNeeds,
+                    meal_plan_total_calorie: userTdee.user_tdee_value - calorieNeeds,
+                    meal_plan_total_fat: userTdee.fat - fatNeeds,
+                    meal_plan_total_carbohydrate: userTdee.carbohydrate - carbsNeeds,
+                    meal_plan_total_protein: userTdee.protein - proteinNeeds,
                 },
                 where: {
                     meal_plan_id: newMealPlan.meal_plan_id
@@ -127,10 +127,10 @@ export async function POST(req: Request){
                 }
             })
 
-            let calorieNeeds = userBmr.user_bmr_value - mealPlanData.meal_plan_total_calorie
-            let proteinNeeds = userBmr.protein - mealPlanData.meal_plan_total_protein
-            let carbsNeeds = userBmr.carbohydrate - mealPlanData.meal_plan_total_carbohydrate
-            let fatNeeds = userBmr.fat - mealPlanData.meal_plan_total_fat
+            let calorieNeeds = userTdee.user_tdee_value - mealPlanData.meal_plan_total_calorie
+            let proteinNeeds = userTdee.protein - mealPlanData.meal_plan_total_protein
+            let carbsNeeds = userTdee.carbohydrate - mealPlanData.meal_plan_total_carbohydrate
+            let fatNeeds = userTdee.fat - mealPlanData.meal_plan_total_fat
             let dinnerAvailable = false
 
             let mealIds: number[] = []
@@ -168,10 +168,10 @@ export async function POST(req: Request){
 
             const updateMealPlan = await db.mealPlan.update({
                 data: {
-                    meal_plan_total_calorie: userBmr.user_bmr_value - calorieNeeds,
-                    meal_plan_total_fat: userBmr.fat - fatNeeds,
-                    meal_plan_total_carbohydrate: userBmr.carbohydrate - carbsNeeds,
-                    meal_plan_total_protein: userBmr.protein - proteinNeeds,
+                    meal_plan_total_calorie: userTdee.user_tdee_value - calorieNeeds,
+                    meal_plan_total_fat: userTdee.fat - fatNeeds,
+                    meal_plan_total_carbohydrate: userTdee.carbohydrate - carbsNeeds,
+                    meal_plan_total_protein: userTdee.protein - proteinNeeds,
                 },
                 where: {
                     meal_plan_id: mealPlanData.meal_plan_id

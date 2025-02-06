@@ -5,16 +5,16 @@ import { useRouter } from "next/navigation"
 import HoverTooltip from "../Tooltip"
 import { cn } from "@/lib/utils"
 
-interface BMRCardProps{
-    bmrValue: number
+interface TDEECardProps{
+    tdeeValue: number
     className?: string
 }
 
-export default function BMRCard(props: BMRCardProps){
+export default function TDEECard(props: TDEECardProps){
     const router = useRouter()
 
     const handleUpdateButton = () => {
-        router.push(`/health-calculator`)
+        router.push(`/health-calculator?tab=tdee`)
     }
 
     return(
@@ -25,15 +25,15 @@ export default function BMRCard(props: BMRCardProps){
                 </h1>
                 <HoverTooltip
                     tooltipContent={
-                        props.bmrValue !== 0
+                        props.tdeeValue !== 0
                             ?
-                        "This BMR value will be used to create food recommendations for you."
+                        "This TDEE value will be used to create food recommendations for you."
                             :
                         "You haven't calculated your TDEE yet, please go to the TDEE Calculator page."
                     }
                 >
                     {
-                        props.bmrValue !== 0
+                        props.tdeeValue !== 0
                             ? 
                         <InfoIcon size={15} color="gray"></InfoIcon>
                             :
@@ -44,7 +44,7 @@ export default function BMRCard(props: BMRCardProps){
             
             <div className="bg-gradient-to-b from-slate-200 to-green-primary w-[140px] h-[140px] lg:w-[180px] lg:h-[180px] rounded-full flex justify-center items-center mx-auto">
                 <div className="rounded-full w-[110px] h-[110px] lg:w-[140px] lg:h-[140px] p-4 text-center flex flex-col justify-center mx-auto my-auto bg-white">
-                    <span className="text-2xl font-bold">{props.bmrValue}</span>
+                    <span className="text-2xl font-bold">{props.tdeeValue}</span>
                     <span className="text-md text-slate-500 font-medium">kCal</span>
                 </div>
             </div>

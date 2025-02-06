@@ -1,6 +1,6 @@
 import { ResponseProps } from "@/lib/api";
 import axios from "axios";
-import { UserBMRProps } from "./getUserBMR";
+import { UserBMIProps } from "./getUserBMI";
 
 interface PostUserBMIRequestProps{
     user_weight: number
@@ -10,6 +10,6 @@ interface PostUserBMIRequestProps{
     user_bmi_value: number
 }
 
-export async function postUserBMI(request: PostUserBMIRequestProps): Promise<ResponseProps<UserBMRProps>>{
+export async function postUserBMI(request: PostUserBMIRequestProps): Promise<ResponseProps<UserBMIProps>>{
     return (await axios.post(`/api/bmi`, request)).data
 }
