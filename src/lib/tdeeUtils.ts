@@ -13,10 +13,10 @@ export function calculateTDEE(request: TdeeCalculationProps){
     let tdeeValue = 0
 
     if(request.user_gender === 'M'){
-        tdeeValue = (88.362 + (13.397 * request.user_weight) + (4.799 * request.user_height) - (5.677 * request.user_age)) * request.activity_level_multiplier * request.goal_calorie_multiplier
+        tdeeValue = ((9.99 * request.user_weight) + (6.25 * request.user_height) - (4.92 * request.user_age) + 5) * request.activity_level_multiplier * request.goal_calorie_multiplier
     }
     else if(request.user_gender === 'F'){
-        tdeeValue = (447.593 + (9.247 * request.user_weight) + (3.098 * request.user_height) - (4.330 * request.user_age)) *  request.activity_level_multiplier * request.goal_calorie_multiplier
+        tdeeValue = ((9.99 * request.user_weight) + (6.25 * request.user_height) - (4.92 * request.user_age) - 161) * request.activity_level_multiplier * request.goal_calorie_multiplier
     }
 
     return Math.ceil(tdeeValue)
